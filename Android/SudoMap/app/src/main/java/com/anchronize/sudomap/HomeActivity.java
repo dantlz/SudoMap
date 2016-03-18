@@ -17,7 +17,9 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 /**
  * Created by jasonlin on 3/15/16.
@@ -85,7 +87,26 @@ public class HomeActivity extends AppCompatActivity
             Location location = locationManager.getLastKnownLocation(locationManager
                     .getBestProvider(criteria, false));
 
-            mMap.moveCamera( CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 14.0f) );
+//            mMap.moveCamera( CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 17) );
+            // Customize camera position:https://developers.google.com/maps/documentation/android-api/views#the_camera_position
+            CameraPosition currentPosition = new CameraPosition.Builder()
+//                    .target(new LatLng(location.getLatitude(), location.getLongitude()))
+                    .target(new LatLng(34.0213578, -118.2846286))
+                    .zoom(16) // this is the zoom level
+                    .bearing(35)   // this is the rotation angle
+                    .tilt(40)   // this is the degree of elevation
+                    .build();
+
+            mMap.moveCamera(CameraUpdateFactory.newCameraPosition(currentPosition));
+            mMap.animateCamera(CameraUpdateFactory.scrollBy(-100,-50));
+
+            mMap.setBuildingsEnabled(true);
+
+            // adding marker and testing anchor
+            mMap.addMarker(new MarkerOptions()
+//                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.red_pin))
+                    .anchor(0.0f, 1.0f) // Anchors the marker on the bottom left
+                    .position(new LatLng(location.getLatitude(), location.getLongitude())));
         }
     }
 
