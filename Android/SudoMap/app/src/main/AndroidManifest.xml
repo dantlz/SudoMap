@@ -37,9 +37,12 @@
             android:name=".RegisterActivity"
             android:label="@string/title_activity_register" />
         <activity
-            android:name=".NavigationDrawer"
-            android:label="@string/title_activity_navigation_drawer"
-            android:theme="@style/AppTheme"></activity>
+            android:name=".NavigationDrawer.YourEventActivity"
+            android:label="@string/title_activity_your_event"
+            android:theme="@style/AppTheme" />
+        <activity android:name=".NavigationDrawer.SettingActivity" />
+        <activity android:name=".NavigationDrawer.TrendingActivity" />
+        <activity android:name=".NavigationDrawer.AddEventActivity"></activity>
     </application>
 
 </manifest>

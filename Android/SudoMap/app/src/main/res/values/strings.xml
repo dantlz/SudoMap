@@ -25,16 +25,7 @@
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
     <string name="registerButton">Register</string>
-    <string name="title_activity_navigation_drawer">NavigationDrawer</string>
-
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-
+    <string name="title_activity_your_event">YourEventActivity</string>
     <string name="action_settings">Settings</string>
-
-    <!-- Navigation Drawer -->
-    <string name="trending_events_string">Trending Events</string>
-    <string name="your_events_string">"Your Events"</string>
-    <string name="log_out_string">"Log Out"</string>
-    <string name="settings_string">"Settings"</string>
+    <string name="section_format">Hello World from section: %1$d</string>
 </resources>
