@@ -22,5 +22,4 @@
         android:background="@drawable/round_button"
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"/>
-
 </RelativeLayout>
