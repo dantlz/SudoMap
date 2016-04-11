@@ -1,4 +1,4 @@
-package com.anchronize.sudomap.NavigationDrawer;
+package com.anchronize.sudomap.navigationDrawerActivities;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
