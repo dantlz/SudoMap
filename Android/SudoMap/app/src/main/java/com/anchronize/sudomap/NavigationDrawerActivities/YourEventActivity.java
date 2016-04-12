@@ -17,9 +17,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.anchronize.sudomap.NavigationDrawer;
 import com.anchronize.sudomap.R;
 
-public class YourEventActivity extends AppCompatActivity {
+public class YourEventActivity extends NavigationDrawer {
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide

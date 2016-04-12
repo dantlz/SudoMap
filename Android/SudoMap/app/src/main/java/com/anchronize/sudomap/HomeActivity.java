@@ -27,7 +27,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 //public class HomeActivity {
 //}
 
-public class HomeActivity extends AppCompatActivity
+public class HomeActivity extends NavigationDrawer
         implements
         GoogleMap.OnMyLocationButtonClickListener,
         OnMapReadyCallback,

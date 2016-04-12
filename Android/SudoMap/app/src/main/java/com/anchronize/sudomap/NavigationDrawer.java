@@ -1,5 +1,6 @@
 package com.anchronize.sudomap;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -12,6 +13,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
+
+import com.anchronize.sudomap.navigationDrawerActivities.SettingActivity;
+import com.anchronize.sudomap.navigationDrawerActivities.TrendingActivity;
+import com.anchronize.sudomap.navigationDrawerActivities.YourEventActivity;
 
 public class NavigationDrawer extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -81,17 +87,16 @@ public class NavigationDrawer extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_trending_events) {
-            // Handle the camera action
+            Intent i = new Intent(getApplicationContext(), TrendingActivity.class);
+            startActivity(i);
         } else if (id == R.id.nav_your_events) {
-
+            Intent i = new Intent(getApplicationContext(), YourEventActivity.class);
+            startActivity(i);
         } else if (id == R.id.nav_settings) {
-
+            Intent i = new Intent(getApplicationContext(), SettingActivity.class);
+            startActivity(i);
         } else if (id == R.id.nav_log_out) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+            Toast.makeText(this, "You have logged out, YAY!", Toast.LENGTH_SHORT).show();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
