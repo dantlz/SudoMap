@@ -1,4 +1,4 @@
-package com.anchronize.sudomap.navigationDrawerActivities;
+package com.anchronize.sudomap.NavigationDrawerActivities;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
