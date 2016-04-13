@@ -15,9 +15,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.anchronize.sudomap.navigationDrawerActivities.SettingActivity;
-import com.anchronize.sudomap.navigationDrawerActivities.TrendingActivity;
-import com.anchronize.sudomap.navigationDrawerActivities.YourEventActivity;
+import com.anchronize.sudomap.navigationdrawer.SettingActivity;
+import com.anchronize.sudomap.navigationdrawer.TrendingActivity;
+import com.anchronize.sudomap.navigationdrawer.YourEventActivity;
 
 public class NavigationDrawer extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
