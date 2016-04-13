@@ -4,6 +4,7 @@ package com.anchronize.sudomap.objects;
         import android.location.Location;
 
         import java.sql.Timestamp;
+        import java.util.ArrayList;
         import java.util.HashMap;
         import java.util.List;
         import java.util.Vector;
@@ -89,7 +90,7 @@ public class Event extends SudoMarker{
         }
     }
 
-    public boolean isPrivacy() {
+    public boolean getPrivacy() {
         return privacy;
     }
 
@@ -97,12 +98,20 @@ public class Event extends SudoMarker{
         this.privacy = privacy;
     }
 
-    public Location getLocation() {
-        return location;
+    public double getLongitude() {
+        return longitude;
     }
 
-    public void setLocation(Location location) {
-        this.location = location;
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
     }
 
     public boolean isVisible() {
@@ -117,7 +126,7 @@ public class Event extends SudoMarker{
         return numOfPostsAtTime;
     }
 
-    public Timestamp getcreationTime() {
+    public String getcreationTime() {
         return creationTime;
     }
 
@@ -129,8 +138,9 @@ public class Event extends SudoMarker{
     private List<User> attendants;
     private List<Post> posts;
     private boolean privacy;
-    private Location location;
+    private double longitude;
+    private double latitude;
     private boolean visible;
     private HashMap<Integer, Integer> numOfPostsAtTime;
-    private Timestamp creationTime;
+    private String creationTime;
 }

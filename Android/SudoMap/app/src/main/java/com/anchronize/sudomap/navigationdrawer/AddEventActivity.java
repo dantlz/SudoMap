@@ -47,7 +47,7 @@ public class AddEventActivity extends NavigationDrawer {
             @Override
             public void onClick(View v) {
                 String title = titleEditText.getText().toString();
-                String description = titleEditText.getText().toString();
+                String description = descriptionEditText.getText().toString();
                 boolean isPrivate = privacyCheckbox.isChecked();
                 String category = categorySpinner.getSelectedItem().toString();
 
