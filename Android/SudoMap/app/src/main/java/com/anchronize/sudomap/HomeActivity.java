@@ -13,6 +13,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
+import com.firebase.client.Firebase;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -48,6 +49,8 @@ public class HomeActivity extends NavigationDrawer
 
     private GoogleMap mMap;
 
+    private Firebase ref;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,6 +59,50 @@ public class HomeActivity extends NavigationDrawer
         SupportMapFragment mapFragment =
                 (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        //set context for firebase
+        Firebase.setAndroidContext(this);
+
+        ref = new Firebase("https://anchronize.firebaseio.com");
+        //create a Firebase reference to the child tree "event"
+        Firebase refEvents = ref.child("events");
+        Firebase refUsers = ref.child("users");
+
+//        //Create some hard-coded event
+//        Event springfest = new Event("2132131");
+//        springfest.setTitle("USC springfest");
+//        springfest.setDescription("Snoop do2g");
+//        Firebase temp = refEvents.push();
+//        temp.setValue(springfest);
+//
+//        Event rohanHourseParty = new Event("23424324");
+//        rohanHourseParty.setDescription("It's in rohan's house!");
+//        rohanHourseParty.setTitle("Rohan's house party");
+//        temp = refEvents.push();
+//        temp.setValue(rohanHourseParty);
+//
+//        //Createa some hard-coded users
+//        User tianlin = new User("123");
+//        tianlin.setInAppName("Tianlin");
+//        springfest.setOrganizer(tianlin);
+//        refUsers.setValue(tianlin);
+
+//        //query data once for to get all the events
+//        refEvents.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot snapshot) {
+//                System.out.println(snapshot.getValue());
+//                System.out.println("There are " + snapshot.getChildrenCount() + " events");
+//                for (DataSnapshot postSnapshot: snapshot.getChildren()) {
+//                    Event event = postSnapshot.getValue(Event.class);
+//                    System.out.println(event.getTitle() + " - ");
+//                 }
+//            }
+//            @Override
+//            public void onCancelled(FirebaseError firebaseError) {
+//
+//            }
+//        });
     }
 
     @Override
@@ -102,11 +149,11 @@ public class HomeActivity extends NavigationDrawer
 
             mMap.setBuildingsEnabled(true);
 
-            // adding marker and testing anchor
-            mMap.addMarker(new MarkerOptions()
-//                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.red_pin))
-                    .anchor(0.0f, 1.0f) // Anchors the marker on the bottom left
-                    .position(new LatLng(location.getLatitude(), location.getLongitude())));
+//            // adding marker and testing anchor
+//            mMap.addMarker(new MarkerOptions()
+////                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.red_pin))
+//                    .anchor(0.0f, 1.0f) // Anchors the marker on the bottom left
+//                    .position(new LatLng(location.getLatitude(), location.getLongitude())));
         }
     }
 
