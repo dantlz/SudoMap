@@ -24,11 +24,11 @@
             android:label="@string/app_name">
 
             <!-- android:theme="@android:style/Theme.NoTitleBar.Fullscreen"> -->
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
         </activity>
         <activity
             android:name=".HomeActivity"
@@ -42,7 +42,13 @@
             android:theme="@style/AppTheme" />
         <activity android:name=".navigationdrawer.SettingActivity" />
         <activity android:name=".navigationdrawer.TrendingActivity" />
-        <activity android:name=".navigationdrawer.AddEventActivity"></activity>
+        <activity android:name=".navigationdrawer.AddEventActivity">
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+        </activity>
     </application>
 
 </manifest>

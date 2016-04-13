@@ -13,6 +13,10 @@ package com.anchronize.sudomap.objects;
  */
 public class Event extends SudoMarker{
 
+    public Event(){
+
+    }
+
     public Event(String ID){
         eventID = ID;
     }
@@ -85,11 +89,11 @@ public class Event extends SudoMarker{
         }
     }
 
-    public String getPrivacy() {
+    public boolean isPrivacy() {
         return privacy;
     }
 
-    public void setPrivacy(String privacy) {
+    public void setPrivacy(boolean privacy) {
         this.privacy = privacy;
     }
 
@@ -124,7 +128,7 @@ public class Event extends SudoMarker{
     private User organizer;
     private List<User> attendants;
     private List<Post> posts;
-    private String privacy;
+    private boolean privacy;
     private Location location;
     private boolean visible;
     private HashMap<Integer, Integer> numOfPostsAtTime;
