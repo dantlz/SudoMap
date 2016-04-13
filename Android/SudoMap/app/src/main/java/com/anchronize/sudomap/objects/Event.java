@@ -22,6 +22,10 @@ public class Event extends SudoMarker{
         eventID = ID;
     }
 
+    public void setEventID(String eventID){
+        this.eventID = eventID;
+    }
+
     public String getEventID(){
         return eventID;
     }
@@ -58,37 +62,37 @@ public class Event extends SudoMarker{
         this.organizer = organizer;
     }
 
-    public List<User> getAttendants() {
-        return attendants;
-    }
+//    public List<User> getAttendants() {
+//        return attendants;
+//    }
+//
+//    public void addAttendant(User attendant) {
+//        this.attendants.add(attendant);
+//    }
+//
+//    public void removeAttendant(String attendantID){
+//        for(User atdnt: attendants){
+//            if(atdnt.getUserID().equals(attendantID)){
+//                attendants.remove(atdnt);
+//            }
+//        }
+//    }
 
-    public void addAttendant(User attendant) {
-        this.attendants.add(attendant);
-    }
-
-    public void removeAttendant(String attendantID){
-        for(User atdnt: attendants){
-            if(atdnt.getUserID().equals(attendantID)){
-                attendants.remove(atdnt);
-            }
-        }
-    }
-
-    public List<Post> getPosts() {
-        return posts;
-    }
-
-    public void addPost(Post post) {
-        posts.add(post);
-    }
-
-    public void removePost(String postID){
-        for(Post post: posts){
-            if(post.getPostID().equals(postID)){
-                posts.remove(post);
-            }
-        }
-    }
+//    public List<Post> getPosts() {
+//        return posts;
+//    }
+//
+//    public void addPost(Post post) {
+//        posts.add(post);
+//    }
+//
+//    public void removePost(String postID){
+//        for(Post post: posts){
+//            if(post.getPostID().equals(postID)){
+//                posts.remove(post);
+//            }
+//        }
+//    }
 
     public boolean getPrivacy() {
         return privacy;
@@ -122,25 +126,25 @@ public class Event extends SudoMarker{
         this.visible = visible;
     }
 
-    public HashMap<Integer, Integer> getnumOfPostsAtTime() {
-        return numOfPostsAtTime;
-    }
-
-    public String getcreationTime() {
-        return creationTime;
-    }
+//    public HashMap<Integer, Integer> getnumOfPostsAtTime() {
+//        return numOfPostsAtTime;
+//    }
+//
+//    public String getcreationTime() {
+//        return creationTime;
+//    }
 
     private String eventID;
     private String title;
     private String description;
     private String category;
     private User organizer;
-    private List<User> attendants;
-    private List<Post> posts;
+//    private List<User> attendants;
+//    private List<Post> posts;
     private boolean privacy;
     private double longitude;
     private double latitude;
     private boolean visible;
-    private HashMap<Integer, Integer> numOfPostsAtTime;
-    private String creationTime;
+//    private HashMap<Integer, Integer> numOfPostsAtTime;
+//    private String creationTime;
 }

@@ -13,7 +13,12 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
+import com.anchronize.sudomap.objects.Event;
+import com.anchronize.sudomap.objects.User;
+import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -66,37 +71,37 @@ public class HomeActivity extends NavigationDrawer
         ref = new Firebase("https://anchronize.firebaseio.com");
         //create a Firebase reference to the child tree "event"
         Firebase refEvents = ref.child("events");
-        Firebase refUsers = ref.child("users");
+        Firebase refUsers = ref.child("user");
 
-//        //Create some hard-coded event
-//        Event springfest = new Event("2132131");
-//        springfest.setTitle("USC springfest");
-//        springfest.setDescription("Snoop do2g");
-//        Firebase temp = refEvents.push();
-//        temp.setValue(springfest);
-//
-//        Event rohanHourseParty = new Event("23424324");
-//        rohanHourseParty.setDescription("It's in rohan's house!");
-//        rohanHourseParty.setTitle("Rohan's house party");
-//        temp = refEvents.push();
-//        temp.setValue(rohanHourseParty);
-//
-//        //Createa some hard-coded users
-//        User tianlin = new User("123");
-//        tianlin.setInAppName("Tianlin");
-//        springfest.setOrganizer(tianlin);
-//        refUsers.setValue(tianlin);
+        //query data once for to get all the events
+        refEvents.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                System.out.println(snapshot.getValue());
+                System.out.println("There are " + snapshot.getChildrenCount() + " events");
+                for (DataSnapshot postSnapshot: snapshot.getChildren()) {
+                    System.out.println(postSnapshot.getValue());
+                    Event event = postSnapshot.getValue(Event.class);
 
+                 }
+            }
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
+//
 //        //query data once for to get all the events
-//        refEvents.addListenerForSingleValueEvent(new ValueEventListener() {
+//        refUsers.addListenerForSingleValueEvent(new ValueEventListener() {
 //            @Override
 //            public void onDataChange(DataSnapshot snapshot) {
 //                System.out.println(snapshot.getValue());
 //                System.out.println("There are " + snapshot.getChildrenCount() + " events");
 //                for (DataSnapshot postSnapshot: snapshot.getChildren()) {
-//                    Event event = postSnapshot.getValue(Event.class);
-//                    System.out.println(event.getTitle() + " - ");
-//                 }
+//                    System.out.println(postSnapshot.getValue());
+//                    User user = postSnapshot.getValue(User.class);
+//                    System.out.println(user.getUserBio() + " - ");
+//                }
 //            }
 //            @Override
 //            public void onCancelled(FirebaseError firebaseError) {
