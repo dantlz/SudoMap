@@ -4,6 +4,7 @@ package com.anchronize.sudomap.objects;
         import android.location.Location;
 
         import java.sql.Timestamp;
+        import java.util.ArrayList;
         import java.util.HashMap;
         import java.util.List;
         import java.util.Vector;
@@ -12,6 +13,10 @@ package com.anchronize.sudomap.objects;
  * Created by tianlinz on 3/25/16.
  */
 public class Event extends SudoMarker{
+
+    public Event(){
+
+    }
 
     public Event(String ID){
         eventID = ID;
@@ -85,20 +90,28 @@ public class Event extends SudoMarker{
         }
     }
 
-    public String getPrivacy() {
+    public boolean getPrivacy() {
         return privacy;
     }
 
-    public void setPrivacy(String privacy) {
+    public void setPrivacy(boolean privacy) {
         this.privacy = privacy;
     }
 
-    public Location getLocation() {
-        return location;
+    public double getLongitude() {
+        return longitude;
     }
 
-    public void setLocation(Location location) {
-        this.location = location;
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
     }
 
     public boolean isVisible() {
@@ -113,7 +126,7 @@ public class Event extends SudoMarker{
         return numOfPostsAtTime;
     }
 
-    public Timestamp getcreationTime() {
+    public String getcreationTime() {
         return creationTime;
     }
 
@@ -124,9 +137,10 @@ public class Event extends SudoMarker{
     private User organizer;
     private List<User> attendants;
     private List<Post> posts;
-    private String privacy;
-    private Location location;
+    private boolean privacy;
+    private double longitude;
+    private double latitude;
     private boolean visible;
     private HashMap<Integer, Integer> numOfPostsAtTime;
-    private Timestamp creationTime;
+    private String creationTime;
 }

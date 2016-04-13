@@ -1,6 +1,9 @@
 package com.anchronize.sudomap.objects;
 
 
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.drawable.Drawable;
 import android.widget.ImageView;
 
 import java.util.List;
@@ -34,9 +37,26 @@ public class User extends SudoMarker {
         this.inAppName = inAppName;
     }
 
-    public ImageView getProfileImg() {
-        return profileImg;
-    }
+//    public ImageView getProfileImg() {
+//        Bitmap bmp =  BitmapFactory.decodeResource(getResources(),
+//                R.drawable.chicken);//your image
+//        ByteArrayOutputStream bYtE = new ByteArrayOutputStream();
+//        bmp.compress(Bitmap.CompressFormat.PNG, 100, bYtE);
+//        bmp.recycle();
+//        byte[] byteArray = bYtE.toByteArray();
+//        String imageFile = Base64.encodeToString(byteArray, Base64.DEFAULT);
+//
+//        return profileImg;
+//    }
+//
+//    public Bitmap convertToBitmap(Drawable drawable, int widthPixels, int heightPixels) {
+//        Bitmap mutableBitmap = Bitmap.createBitmap(widthPixels, heightPixels, Bitmap.Config.ARGB_8888);
+//        Canvas canvas = new Canvas(mutableBitmap);
+//        drawable.setBounds(0, 0, widthPixels, heightPixels);
+//        drawable.draw(canvas);
+//
+//        return mutableBitmap;
+//    }
 
     public void setProfileImg(ImageView profileImg) {
         this.profileImg = profileImg;
@@ -93,6 +113,7 @@ public class User extends SudoMarker {
     private boolean premium;
     private String userID;
     private String inAppName;
+    //We don't know if we can store profile image.
     private ImageView profileImg;
     private String userBio;
     private UserPreference userPreferences;
