@@ -86,8 +86,10 @@ public class EventDetailActivity extends AppCompatActivity implements
     public void populateDetails(){
 
         titleView.setText(mEvent.getTitle());
-        locationNameView.setText(nameFromLatLng(mEvent.getLatitude(),mEvent.getLongitude()));
-        locationAddress.setText(addressFromLatLng(mEvent.getLatitude(), mEvent.getLongitude()));
+        locationNameView.setText(
+                "Location: "+ nameFromLatLng(mEvent.getLatitude(),mEvent.getLongitude()));
+        locationAddress.setText(
+                "Address: "+ addressFromLatLng(mEvent.getLatitude(), mEvent.getLongitude()));
         descriptionView.setText(mEvent.getDescription());
         mMap.addMarker(new MarkerOptions().position(new
                 LatLng(mEvent.getLatitude(), mEvent.getLongitude())).title("Hello world"));
