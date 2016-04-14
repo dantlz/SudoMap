@@ -164,7 +164,6 @@ public class HomeActivity extends NavigationDrawer
         return false;
     }
 
-
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
@@ -181,7 +180,6 @@ public class HomeActivity extends NavigationDrawer
             mPermissionDenied = true;
         }
     }
-
     @Override
     protected void onResumeFragments() {
         super.onResumeFragments();

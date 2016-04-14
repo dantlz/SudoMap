@@ -1,5 +1,6 @@
 package com.anchronize.sudomap;
 
+import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
 import android.support.v4.app.ActivityCompat;
@@ -105,9 +106,9 @@ public class EventDetailActivity extends AppCompatActivity implements
 
     public void chatButtonClicked(){
         Toast.makeText(EventDetailActivity.this, "Chat Button Clicked", Toast.LENGTH_SHORT).show();
+        Intent i = new Intent(this, ChatActivity.class);
+        startActivity(i);
     }
-
-
 
     public String addressFromLatLng(double lat, double lng){
         Geocoder geocoder;
