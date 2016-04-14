@@ -8,55 +8,63 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.anchronize.sudomap.EventDetailActivity">
+    <ScrollView
+    android:id="@+id/scrollView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+        <RelativeLayout
+            android:id="@+id/container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-    <fragment
-        android:id="@+id/eventsMap"
-        class="com.google.android.gms.maps.SupportMapFragment"
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="220dp"
-        android:layout_alignParentEnd="true" />
+            <TextView
+                android:id="@+id/eventTitle"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="Title placeholder"
+                android:layout_alignParentStart="true" />
+            <fragment
+                android:id="@+id/eventsMap"
+                class="com.google.android.gms.maps.SupportMapFragment"
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_below="@+id/eventTitle"
+                android:layout_width="match_parent"
+                android:layout_height="220dp"/>
+            <TextView
+                android:id="@+id/eventLocationNameTextView"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="Location name placeholder"
+                android:layout_below="@+id/eventsMap"/>
 
-
-
-    <TextView
-        android:id="@+id/eventLocationNameTextView"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Location name placeholder"
-        android:layout_below="@+id/eventsMap"
-        android:layout_alignParentStart="true" />
-
-    <TextView
-        android:id="@+id/eventLocationAddressTextView"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Location address placeholder"
-        android:layout_below="@+id/eventLocationNameTextView"
-        android:layout_alignParentStart="true" />
-
-    <HorizontalScrollView
-        android:id="@+id/attendantsScrollView"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_below="@+id/eventLocationNameTextView"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="50dp">
-
-    </HorizontalScrollView>
-
-    <TextView
-        android:id="@+id/eventDescriptionView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Description placeholder"
-        android:layout_below="@+id/attendantsScrollView"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentBottom="true"
-        android:layout_alignEnd="@+id/attendantsScrollView" />
-
-
+            <TextView
+                android:id="@+id/eventLocationAddressTextView"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="Location address placeholder"
+                android:layout_below="@+id/eventLocationNameTextView"/>
+            <TextView
+                android:id="@+id/eventDescriptionView"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Description placeholder"
+                android:layout_below="@+id/eventLocationAddressTextView"/>
+            <HorizontalScrollView
+                android:id="@+id/attendantsScrollView"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_below="@+id/eventDescriptionView"/>
+            <Button
+                android:id="@+id/chatButton"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:text="Event Chat/Posts"
+                android:layout_below="@+id/attendantsScrollView"
+                android:layout_alignParentBottom="true"/>
+        </RelativeLayout>
+    </ScrollView>
 </RelativeLayout>
