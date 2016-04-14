@@ -3,6 +3,7 @@ package com.anchronize.sudomap.objects;
 
         import android.location.Location;
 
+        import java.io.*;
         import java.sql.Timestamp;
         import java.util.ArrayList;
         import java.util.HashMap;
@@ -12,7 +13,9 @@ package com.anchronize.sudomap.objects;
 /**
  * Created by tianlinz on 3/25/16.
  */
-public class Event{
+public class Event implements Serializable{
+
+    public static final long serialVersionUID = 1L;
 
     public Event(){
 

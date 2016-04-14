@@ -13,6 +13,11 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.widget.Toast;
 
+import com.anchronize.sudomap.objects.Event;
+import com.firebase.client.DataSnapshot;
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -22,6 +27,9 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by jasonlin on 3/15/16.
@@ -53,11 +61,16 @@ public class HomeActivity extends NavigationDrawer
 
     private GoogleMap mMap;
 
-    private static final LatLng USC = new LatLng(34.0224, -118.2851);
+//    //Test Marker LatLng
+//    private static final LatLng USC = new LatLng(34.0224 , -118.2851);
 
     private Marker lastSelectedMarker;
 
-    private Marker mUSC;
+    private Firebase ref;
+
+    private ArrayList<Event> allEventsinFirebase;   //store all events in database
+
+    private HashMap<Marker, Event> markerEventHashMap; //maintain a map from maker to event
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +80,35 @@ public class HomeActivity extends NavigationDrawer
         SupportMapFragment mapFragment =
                 (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        allEventsinFirebase = new ArrayList<Event>();
+        markerEventHashMap = new HashMap<Marker,Event>();
+        //set context for firebase
+        Firebase.setAndroidContext(this);
+        ref = new Firebase("https://anchronize.firebaseio.com");
+        //create a Firebase reference to the child tree "event"
+        Firebase refEvents = ref.child("events");
+        Firebase refUsers = ref.child("user");
+
+        //query data once for to get all the events
+        refEvents.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                allEventsinFirebase.clear();
+//                System.out.println(snapshot.getValue());
+//                System.out.println("There are " + snapshot.getChildrenCount() + " events");
+                for (DataSnapshot postSnapshot: snapshot.getChildren()) {
+                    Event event = postSnapshot.getValue(Event.class);
+                    allEventsinFirebase.add(event);
+                }
+                addMapMarkers();
+            }
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
+
     }
 
     @Override
@@ -77,7 +119,7 @@ public class HomeActivity extends NavigationDrawer
         enableMyLocation();
 
 
-        addMapMarkers();
+       // addMapMarkers();
 
         mMap.setOnMarkerClickListener(this);
         mMap.setOnInfoWindowClickListener(this);
@@ -94,7 +136,11 @@ public class HomeActivity extends NavigationDrawer
 
     @Override
     public void onInfoWindowClick(Marker marker) {
-        Intent i = new Intent(this, EventDetailActivity.class);
+
+        Event e = markerEventHashMap.get(lastSelectedMarker);
+        Intent i = new Intent(getApplicationContext(), EventDetailActivity.class);
+        i.putExtra(EventDetailActivity.EVENT_KEY, e);
+        //// TODO: 4/14/16  startActivity for result 
         startActivity(i);
     }
 
@@ -104,11 +150,18 @@ public class HomeActivity extends NavigationDrawer
     }
 
     private void addMapMarkers(){
-        mUSC = mMap.addMarker(new MarkerOptions()
-                .position(USC)
-                .title("USC")
-                .snippet("Fun")
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+
+        markerEventHashMap.clear();
+        for(Event e : allEventsinFirebase){
+
+            Marker marker = mMap.addMarker(new MarkerOptions()
+                    .position(new LatLng(e.getLatitude(), e.getLongitude()))
+                    .title(e.getTitle())
+                    .snippet(e.getCategory())
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+            markerEventHashMap.put(marker, e);
+        }
+
     }
 
     /**
