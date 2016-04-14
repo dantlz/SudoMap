@@ -4,6 +4,7 @@ package com.anchronize.sudomap.objects;
         import android.location.Location;
 
         import java.sql.Timestamp;
+        import java.util.ArrayList;
         import java.util.HashMap;
         import java.util.List;
         import java.util.Vector;
@@ -13,8 +14,16 @@ package com.anchronize.sudomap.objects;
  */
 public class Event extends SudoMarker{
 
+    public Event(){
+
+    }
+
     public Event(String ID){
         eventID = ID;
+    }
+
+    public void setEventID(String eventID){
+        this.eventID = eventID;
     }
 
     public String getEventID(){
@@ -53,52 +62,60 @@ public class Event extends SudoMarker{
         this.organizer = organizer;
     }
 
-    public List<User> getAttendants() {
-        return attendants;
-    }
+//    public List<User> getAttendants() {
+//        return attendants;
+//    }
+//
+//    public void addAttendant(User attendant) {
+//        this.attendants.add(attendant);
+//    }
+//
+//    public void removeAttendant(String attendantID){
+//        for(User atdnt: attendants){
+//            if(atdnt.getUserID().equals(attendantID)){
+//                attendants.remove(atdnt);
+//            }
+//        }
+//    }
 
-    public void addAttendant(User attendant) {
-        this.attendants.add(attendant);
-    }
+//    public List<Post> getPosts() {
+//        return posts;
+//    }
+//
+//    public void addPost(Post post) {
+//        posts.add(post);
+//    }
+//
+//    public void removePost(String postID){
+//        for(Post post: posts){
+//            if(post.getPostID().equals(postID)){
+//                posts.remove(post);
+//            }
+//        }
+//    }
 
-    public void removeAttendant(String attendantID){
-        for(User atdnt: attendants){
-            if(atdnt.getUserID().equals(attendantID)){
-                attendants.remove(atdnt);
-            }
-        }
-    }
-
-    public List<Post> getPosts() {
-        return posts;
-    }
-
-    public void addPost(Post post) {
-        posts.add(post);
-    }
-
-    public void removePost(String postID){
-        for(Post post: posts){
-            if(post.getPostID().equals(postID)){
-                posts.remove(post);
-            }
-        }
-    }
-
-    public String getPrivacy() {
+    public boolean getPrivacy() {
         return privacy;
     }
 
-    public void setPrivacy(String privacy) {
+    public void setPrivacy(boolean privacy) {
         this.privacy = privacy;
     }
 
-    public Location getLocation() {
-        return location;
+    public double getLongitude() {
+        return longitude;
     }
 
-    public void setLocation(Location location) {
-        this.location = location;
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
     }
 
     public boolean isVisible() {
@@ -109,24 +126,25 @@ public class Event extends SudoMarker{
         this.visible = visible;
     }
 
-    public HashMap<Integer, Integer> getnumOfPostsAtTime() {
-        return numOfPostsAtTime;
-    }
-
-    public Timestamp getcreationTime() {
-        return creationTime;
-    }
+//    public HashMap<Integer, Integer> getnumOfPostsAtTime() {
+//        return numOfPostsAtTime;
+//    }
+//
+//    public String getcreationTime() {
+//        return creationTime;
+//    }
 
     private String eventID;
     private String title;
     private String description;
     private String category;
     private User organizer;
-    private List<User> attendants;
-    private List<Post> posts;
-    private String privacy;
-    private Location location;
+//    private List<User> attendants;
+//    private List<Post> posts;
+    private boolean privacy;
+    private double longitude;
+    private double latitude;
     private boolean visible;
-    private HashMap<Integer, Integer> numOfPostsAtTime;
-    private Timestamp creationTime;
+//    private HashMap<Integer, Integer> numOfPostsAtTime;
+//    private String creationTime;
 }
