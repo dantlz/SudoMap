@@ -147,11 +147,12 @@ public class HomeActivity extends NavigationDrawer
 
             mMap.setBuildingsEnabled(true);
 
-            // adding marker and testing anchor
-            mMap.addMarker(new MarkerOptions()
-//                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.red_pin))
-                    .anchor(0.0f, 1.0f) // Anchors the marker on the bottom left
-                    .position(new LatLng(location.getLatitude(), location.getLongitude())));
+//            Commented out so it doesn't crash
+//            // adding marker and testing anchor
+//            mMap.addMarker(new MarkerOptions()
+////                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.red_pin))
+//                    .anchor(0.0f, 1.0f) // Anchors the marker on the bottom left
+//                    .position(new LatLng(location.getLatitude(), location.getLongitude())));
         }
     }
 
