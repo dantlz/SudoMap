@@ -12,7 +12,7 @@ package com.anchronize.sudomap.objects;
 /**
  * Created by tianlinz on 3/25/16.
  */
-public class Event extends SudoMarker{
+public class Event{
 
     public Event(){
 

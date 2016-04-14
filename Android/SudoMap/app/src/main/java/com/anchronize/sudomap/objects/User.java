@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * Created by tianlinz on 4/2/16.
  */
-public class User extends SudoMarker {
+public class User {
 
     public User(){
 
