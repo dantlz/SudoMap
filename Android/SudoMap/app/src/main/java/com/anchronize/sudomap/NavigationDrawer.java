@@ -17,7 +17,7 @@ import android.widget.Toast;
 
 import com.anchronize.sudomap.navigationdrawer.SettingActivity;
 import com.anchronize.sudomap.navigationdrawer.TrendingActivity;
-import com.anchronize.sudomap.navigationdrawer.YourEventActivity;
+//import com.anchronize.sudomap.navigationdrawer.YourEventActivity;
 
 public class NavigationDrawer extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -89,9 +89,9 @@ public class NavigationDrawer extends AppCompatActivity
         if (id == R.id.nav_trending_events) {
             Intent i = new Intent(getApplicationContext(), TrendingActivity.class);
             startActivity(i);
-        } else if (id == R.id.nav_your_events) {
-            Intent i = new Intent(getApplicationContext(), YourEventActivity.class);
-            startActivity(i);
+//        } else if (id == R.id.nav_your_events) {
+//            Intent i = new Intent(getApplicationContext(), YourEventActivity.class);
+//            startActivity(i);
         } else if (id == R.id.nav_settings) {
             Intent i = new Intent(getApplicationContext(), SettingActivity.class);
             startActivity(i);
