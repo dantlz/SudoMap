@@ -24,7 +24,6 @@ public class Chat {
         return votes;
     }
 
-
     public String getMessage() {
         return message;
     }

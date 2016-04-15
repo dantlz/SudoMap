@@ -13,7 +13,6 @@ import android.widget.TextView;
 import com.firebase.client.Firebase;
 import com.firebase.client.Query;
 
-
 public class ChatListAdapter extends FirebaseListAdapter<Chat> {
 
     // The mUsername for this client. We use this to indicate which messages originated from this user
@@ -55,7 +54,4 @@ public class ChatListAdapter extends FirebaseListAdapter<Chat> {
         //display votes
         ((TextView) view.findViewById(R.id.list_item_counter)).setText(Integer.toString(chat.getVotes()));
     }
-
-
-
 }

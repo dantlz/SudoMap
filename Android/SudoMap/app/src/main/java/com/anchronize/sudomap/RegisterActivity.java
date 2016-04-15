@@ -106,8 +106,6 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
         mProgressView = findViewById(R.id.login_progress);
     }
 
-
-
     private void populateAutoComplete() {
         if (!mayRequestContacts()) {
             return;
@@ -150,8 +148,6 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
             }
         }
     }
-
-
     /**
      * Attempts to sign in or register the account specified by the login form.
      * If there are form errors (invalid email, missing fields, etc.), the
@@ -297,7 +293,6 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
         int ADDRESS = 0;
         int IS_PRIMARY = 1;
     }
-
 
     private void addEmailsToAutoComplete(List<String> emailAddressCollection) {
         //Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.

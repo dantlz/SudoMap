@@ -250,5 +250,4 @@ public class HomeActivity extends NavigationDrawer
         com.anchronize.sudomap.PermissionUtils.PermissionDeniedDialog
                 .newInstance(true).show(getSupportFragmentManager(), "dialog");
     }
-
 }

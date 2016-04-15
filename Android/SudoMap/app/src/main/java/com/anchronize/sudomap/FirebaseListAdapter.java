@@ -37,7 +37,6 @@ public abstract class FirebaseListAdapter<T> extends BaseAdapter {
     private List<Firebase> refList = new ArrayList<Firebase>();
     private Firebase mVoteRef;
 
-
     /**
      * @param mRef        The Firebase location to watch for data changes. Can also be a slice of a location, using some
      *                    combination of <code>limit()</code>, <code>startAt()</code>, and <code>endAt()</code>,
@@ -197,7 +196,6 @@ public abstract class FirebaseListAdapter<T> extends BaseAdapter {
         return view;
     }
 
-
     public void setReference(Firebase inRef){
         refList.add(inRef);
 
@@ -244,11 +242,9 @@ public abstract class FirebaseListAdapter<T> extends BaseAdapter {
         }
     }
 
-
     public class ViewHolder{
         Button upvoteButton;
     }
-
 
     /**
      * Each time the data at the given Firebase location changes, this method will be called for each item that needs
