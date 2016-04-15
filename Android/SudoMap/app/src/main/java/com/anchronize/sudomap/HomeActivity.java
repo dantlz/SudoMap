@@ -11,9 +11,13 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.anchronize.sudomap.objects.Event;
+import com.arlib.floatingsearchview.FloatingSearchView;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
@@ -72,10 +76,34 @@ public class HomeActivity extends NavigationDrawer
 
     private HashMap<Marker, Event> markerEventHashMap; //maintain a map from maker to event
 
+    private final String TAG = "HomeActivity";
+    private FloatingSearchView mSearchView;
+    private DrawerLayout mDrawerLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home_demo);
+
+        // UI code
+        mSearchView = (FloatingSearchView)findViewById(R.id.floating_search_view);
+        mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
+        mSearchView.setOnLeftMenuClickListener(
+                new FloatingSearchView.OnLeftMenuClickListener() {
+                    @Override
+                    public void onMenuOpened() {
+                        Log.d(TAG, "onMenuOpened()");
+
+                        mDrawerLayout.openDrawer(GravityCompat.START);
+                    }
+
+                    @Override
+                    public void onMenuClosed() {
+                        Log.d(TAG, "onMenuClosed()");
+
+                        mDrawerLayout.closeDrawer(GravityCompat.START);
+                    }
+                } );
 
         SupportMapFragment mapFragment =
                 (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);

@@ -41,4 +41,5 @@ dependencies {
     compile 'com.google.android.gms:play-services-maps:8.4.0'
     compile files('libs/mpandroidchartlibrary-2-2-4.jar')
     compile 'com.github.PhilJay:MPAndroidChart:v2.1.6'
+    compile 'com.github.arimorty:floatingsearchview:1.1.2'
 }

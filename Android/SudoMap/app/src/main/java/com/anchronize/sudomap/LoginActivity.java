@@ -18,6 +18,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -28,6 +29,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.anchronize.sudomap.objects.User;
 import com.firebase.client.AuthData;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
@@ -352,6 +354,20 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 public void onAuthenticated(AuthData authData) {
                     System.out.println("User ID: " + authData.getUid() + ", Provider: " + authData.getProvider());
                     System.out.println(authData.getProviderData().get("email"));
+
+                    // unsure
+                    String currentUserID = authData.getUid();
+//                    String currentUserReference =
+//                    Query userRef = ref.child("users").orderByChild("userID").equalTo(currentUserID);
+
+//                    String currentUserReference =
+//                    ref.child("users").get;
+                    Log.d("currentUser", currentUserID);
+
+
+                    ((SudoMapApplication)getApplication()).setCurrentUser(new User(currentUserID));
+                    ((SudoMapApplication)getApplication()).setCurrentUserID(currentUserID);
+
                 }
 
                 @Override

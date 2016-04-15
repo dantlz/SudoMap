@@ -1,5 +1,6 @@
 package com.anchronize.sudomap;
 
+import com.anchronize.sudomap.objects.User;
 import com.firebase.client.Firebase;
 
 /**
@@ -8,6 +9,8 @@ import com.firebase.client.Firebase;
 public class SudoMapApplication extends android.app.Application{
 
     private boolean isAuthenticated;
+    private User currentUser;
+    private String currentUserID;
 
     @Override
     public void onCreate() {
@@ -15,6 +18,7 @@ public class SudoMapApplication extends android.app.Application{
         Firebase.setAndroidContext(this);
 
         isAuthenticated = false;
+        currentUserID = null;
     }
 
     public void setAuthenticateStatus(boolean authStatus) {
@@ -24,4 +28,21 @@ public class SudoMapApplication extends android.app.Application{
     public boolean getAuthenticateStatus() {
         return isAuthenticated;
     }
+
+    public void setCurrentUser(User current) {
+        this.currentUser = current;
+    }
+
+    public User getCurrentUser() {
+        return currentUser;
+    }
+
+    public void setCurrentUserID(String currentID) {
+        this.currentUserID = currentID;
+    }
+
+    public String getCurrentUserID() {
+        return currentUserID;
+    }
+
 }

@@ -3,23 +3,21 @@ package com.anchronize.sudomap;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
 import android.app.LoaderManager.LoaderCallbacks;
-
 import android.content.CursorLoader;
 import android.content.Loader;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
-
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -30,7 +28,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.firebase.client.AuthData;
+import com.anchronize.sudomap.objects.User;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 
@@ -332,6 +330,13 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
                 public void onSuccess(Map<String, Object> result) {
                     System.out.println("Successfully created user account with uid: " + result.get("uid"));
                     registerStatus = true;
+
+                    User newUser = new User(result.get("uid").toString());
+                    Firebase refEvent = ref.child("users");
+                    Firebase temp = refEvent.push();
+                    String id = temp.getKey();
+                    Log.d("id", id);
+                    temp.setValue(newUser);
                 }
                 @Override
                 public void onError(FirebaseError firebaseError) {

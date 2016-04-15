@@ -1,6 +1,5 @@
 package com.anchronize.sudomap.navigationdrawer;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -39,7 +38,7 @@ public class AddEventActivity extends NavigationDrawer {
         privacyCheckbox =(CheckBox)findViewById(R.id.privateCheckbox);
 
 
-        Firebase.setAndroidContext(this);
+//        Firebase.setAndroidContext(this);
         ref = new Firebase("https://anchronize.firebaseio.com");
         refEvent = ref.child("events");
 
@@ -72,7 +71,7 @@ public class AddEventActivity extends NavigationDrawer {
                 String id = temp.getKey();
                 Log.d("id", id);
                 temp.setValue(event);
-                event.setEventID(id);
+//                event.setEventID(id);
 
 
 
