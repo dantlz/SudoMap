@@ -43,10 +43,28 @@ public class EventDetailActivity extends AppCompatActivity implements
     private Event mEvent;
     private GoogleMap mMap;
 
+    //TODO Delete this dummy method
+    public Event hardCodedEvent(){
+        Event e = new Event();
+        e.setTitle("Dope Event");
+        e.setDescription("THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING ");
+        e.setCategory(EnumerationClasses.Categories.FUN.toString());
+        e.setLongitude(-118.279838);
+        e.setLatitude(34.022799);
+        e.setPrivacy(true);
+        e.setVisible(true);
+        e.setOrganizer(new User("TEST organizer"));
+        return e;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_detail);
+
+        SupportMapFragment mapFragment =
+                (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.eventsMap);
+        mapFragment.getMapAsync(this);
 
         titleView = (TextView) findViewById(R.id.eventTitle);
         locationNameView = (TextView) findViewById(R.id.eventLocationNameTextView);
@@ -55,43 +73,18 @@ public class EventDetailActivity extends AppCompatActivity implements
         attendantsScrollView = (HorizontalScrollView) findViewById(R.id.attendantsScrollView);
         chatButton = (Button) findViewById(R.id.chatButton);
 
-        //retrive the event that get passed in
+        //Get the event that get passed in
         Intent i = getIntent();
         mEvent = (Event)i.getSerializableExtra(EVENT_KEY);
-
-        SupportMapFragment mapFragment =
-                (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.eventsMap);
-        mapFragment.getMapAsync(this);
-    }
-
-    public void setEvent(Event event){
-        this.mEvent = event;
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-
-        //Toast.makeText(EventDetailActivity.this, "MAP READY", Toast.LENGTH_SHORT).show();
-
         mMap = googleMap;
-
-        //Pass in an event from HomeActivity by calling setEvent.
-        //Delete the hardcoded event below
-//        mEvent = new Event("TEST");
-//        mEvent.setTitle("Dope Event");
-//        mEvent.setDescription("THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING ");
-//        mEvent.setCategory(EnumerationClasses.Categories.FUN.toString());
-//        mEvent.setLongitude(-118.279838);
-//        mEvent.setLatitude(34.022799);
-//        mEvent.setPrivacy(true);
-//        mEvent.setVisible(true);
-//        mEvent.setOrganizer(new User("TEST organizer"));
-
         populateDetails();
     }
 
     public void populateDetails(){
-
         titleView.setText(mEvent.getTitle());
         locationNameView.setText(
                 "Location: "+ nameFromLatLng(mEvent.getLatitude(),mEvent.getLongitude()));
@@ -101,7 +94,7 @@ public class EventDetailActivity extends AppCompatActivity implements
         mMap.addMarker(new MarkerOptions().position(new
                 LatLng(mEvent.getLatitude(), mEvent.getLongitude())).title("Hello world"));
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mEvent.getLatitude(), mEvent.getLongitude()),15));
-        //Populate the attendants horizontal scroll view | Tinder scrolling
+        //TODO Populate the attendants horizontal scroll view | Tinder scrolling
         chatButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -112,7 +105,6 @@ public class EventDetailActivity extends AppCompatActivity implements
 
     public void chatButtonClicked(){
         Intent i = new Intent(this, ChatActivity.class);
-//        i.putExtra(EventDetailActivity.EVENT_KEY, mEvent.get);
         startActivity(i);
     }
 
