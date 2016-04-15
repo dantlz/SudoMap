@@ -4,6 +4,8 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.hardware.Sensor;
+import android.hardware.SensorManager;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
@@ -20,6 +22,7 @@ import android.widget.Toast;
 
 import com.anchronize.sudomap.navigationdrawer.AddEventActivity;
 import com.anchronize.sudomap.objects.Event;
+import com.anchronize.sudomap.objects.ShakeDetector;
 import com.arlib.floatingsearchview.FloatingSearchView;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
@@ -51,7 +54,7 @@ public class HomeActivity extends NavigationDrawer
         GoogleMap.OnInfoWindowCloseListener,
         OnMapReadyCallback,
         ActivityCompat.OnRequestPermissionsResultCallback,
-        GoogleMap.OnMarkerClickListener{
+        GoogleMap.OnMarkerClickListener {
 
     /**
      * Request code for location permission request.
@@ -84,6 +87,12 @@ public class HomeActivity extends NavigationDrawer
     private DrawerLayout mDrawerLayout;
     private FloatingActionButton mAddEventButton;
 
+    // The following are used for the shake detection
+    private SensorManager mSensorManager;
+    private Sensor mAccelerometer;
+    private ShakeDetector mShakeDetector;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -114,7 +123,8 @@ public class HomeActivity extends NavigationDrawer
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(HomeActivity.this, AddEventActivity.class);
-                startActivity(i);
+                int requestCode = 1;
+                startActivityForResult(i, requestCode);
             }
         });
 
@@ -151,6 +161,54 @@ public class HomeActivity extends NavigationDrawer
             }
         });
 
+        // ShakeDetector initializationfrom http://jasonmcreynolds.com/?p=388
+        mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        mAccelerometer = mSensorManager
+                .getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        mShakeDetector = new ShakeDetector();
+        mShakeDetector.setOnShakeListener(new ShakeDetector.OnShakeListener() {
+
+            @Override
+            public void onShake(int count) {
+				/*
+				 * The following method, "handleShakeEvent(count):" is a stub //
+				 * method you would use to setup whatever you want done once the
+				 * device has been shook.
+				 */
+                handleShakeEvent(count);
+            }
+        });
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // Check which request we're responding to
+        if (requestCode == 1) {
+            // Make sure the request was successful
+            if (resultCode == RESULT_OK) {
+                Log.d("EVENT", "event successfully added");
+                addMapMarkers();
+            }
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        // Add the following line to register the Session Manager Listener onResume
+        mSensorManager.registerListener(mShakeDetector, mAccelerometer,	SensorManager.SENSOR_DELAY_UI);
+    }
+
+    @Override
+    public void onPause() {
+        // Add the following line to unregister the Sensor Manager onPause
+        mSensorManager.unregisterListener(mShakeDetector);
+        super.onPause();
+    }
+
+    public void handleShakeEvent(int count) {
+        Log.d("SHAKE", "Shaked device: " + count + " times.");
     }
 
     @Override
