@@ -34,6 +34,7 @@
             app:floatingSearch_menu="@menu/menu_searchbar"/>
 
         <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab_add_event"
             android:src="@drawable/ic_add"
             app:fabSize="normal"
             android:layout_width="wrap_content"

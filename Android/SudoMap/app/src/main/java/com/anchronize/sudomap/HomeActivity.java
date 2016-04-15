@@ -9,13 +9,16 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
+import com.anchronize.sudomap.navigationdrawer.AddEventActivity;
 import com.anchronize.sudomap.objects.Event;
 import com.arlib.floatingsearchview.FloatingSearchView;
 import com.firebase.client.DataSnapshot;
@@ -79,6 +82,7 @@ public class HomeActivity extends NavigationDrawer
     private final String TAG = "HomeActivity";
     private FloatingSearchView mSearchView;
     private DrawerLayout mDrawerLayout;
+    private FloatingActionButton mAddEventButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,6 +108,15 @@ public class HomeActivity extends NavigationDrawer
                         mDrawerLayout.closeDrawer(GravityCompat.START);
                     }
                 } );
+
+        mAddEventButton = (FloatingActionButton) findViewById(R.id.fab_add_event);
+        mAddEventButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(HomeActivity.this, AddEventActivity.class);
+                startActivity(i);
+            }
+        });
 
         SupportMapFragment mapFragment =
                 (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
