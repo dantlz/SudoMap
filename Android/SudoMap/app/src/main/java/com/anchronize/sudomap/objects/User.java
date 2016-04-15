@@ -6,12 +6,15 @@ import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.widget.ImageView;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by tianlinz on 4/2/16.
  */
-public class User {
+public class User implements Serializable {
+
+    public static final long serialVersionUID = 2L;
 
     public User(){
 

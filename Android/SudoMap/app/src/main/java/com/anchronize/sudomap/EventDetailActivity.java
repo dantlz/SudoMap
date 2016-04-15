@@ -30,6 +30,8 @@ public class EventDetailActivity extends AppCompatActivity implements
         GoogleMap.OnMyLocationButtonClickListener,
         OnMapReadyCallback,
         ActivityCompat.OnRequestPermissionsResultCallback{
+    //A unique keyname, so that mainActivity can use this key and pass selected event to this activity
+    public static final String EVENT_KEY = "com.anchronize.sudomap.EventDetailActivity.event";
 
     private TextView titleView;
     private TextView locationNameView;
@@ -53,6 +55,10 @@ public class EventDetailActivity extends AppCompatActivity implements
         attendantsScrollView = (HorizontalScrollView) findViewById(R.id.attendantsScrollView);
         chatButton = (Button) findViewById(R.id.chatButton);
 
+        //retrive the event that get passed in
+        Intent i = getIntent();
+        mEvent = (Event)i.getSerializableExtra(EVENT_KEY);
+
         SupportMapFragment mapFragment =
                 (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.eventsMap);
         mapFragment.getMapAsync(this);
@@ -71,15 +77,15 @@ public class EventDetailActivity extends AppCompatActivity implements
 
         //Pass in an event from HomeActivity by calling setEvent.
         //Delete the hardcoded event below
-        mEvent = new Event("TEST");
-        mEvent.setTitle("Dope Event");
-        mEvent.setDescription("THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING ");
-        mEvent.setCategory(EnumerationClasses.Categories.FUN.toString());
-        mEvent.setLongitude(-118.279838);
-        mEvent.setLatitude(34.022799);
-        mEvent.setPrivacy(true);
-        mEvent.setVisible(true);
-        mEvent.setOrganizer(new User("TEST organizer"));
+//        mEvent = new Event("TEST");
+//        mEvent.setTitle("Dope Event");
+//        mEvent.setDescription("THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING ");
+//        mEvent.setCategory(EnumerationClasses.Categories.FUN.toString());
+//        mEvent.setLongitude(-118.279838);
+//        mEvent.setLatitude(34.022799);
+//        mEvent.setPrivacy(true);
+//        mEvent.setVisible(true);
+//        mEvent.setOrganizer(new User("TEST organizer"));
 
         populateDetails();
     }
