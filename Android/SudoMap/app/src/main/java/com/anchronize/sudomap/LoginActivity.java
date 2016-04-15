@@ -34,7 +34,6 @@ import com.firebase.client.FirebaseError;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
@@ -66,6 +65,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private View mProgressView;
     private View mLoginFormView;
     private Button mUsernameRegisterButton;
+    private Button mGuestSigninButton;
 
     // Maintain a connection to Firebase
     private Firebase ref;
@@ -105,6 +105,16 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(getApplicationContext(), RegisterActivity.class);
+                startActivity(i);
+            }
+        });
+
+        Button mGuestSigninButton = (Button) findViewById(R.id.username_guest);
+        mGuestSigninButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((SudoMapApplication)getApplication()).setAuthenticateStatus(false);
+                Intent i = new Intent(LoginActivity.this, HomeActivity.class);
                 startActivity(i);
             }
         });
@@ -314,7 +324,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     }
 
     /**
-     * Represents an asynchronous login/registration task used to authenticate
+     * Represents an asynchronous, multi-threaded login/registration task used to authenticate
      * the user.
      */
     public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
@@ -390,6 +400,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
             if (success) {
                 finish();
+                // set global auth status to logged in
+                ((SudoMapApplication)getApplication()).setAuthenticateStatus(true);
                 startActivity(new Intent(LoginActivity.this, HomeActivity.class));
                 System.out.println(" onPostExecute success");
 

@@ -101,7 +101,8 @@ public class HomeActivity extends NavigationDrawer
                     Event event = postSnapshot.getValue(Event.class);
                     allEventsinFirebase.add(event);
                 }
-                addMapMarkers();
+                if ( ((SudoMapApplication)getApplication()).getAuthenticateStatus() == true)
+                    addMapMarkers();
             }
             @Override
             public void onCancelled(FirebaseError firebaseError) {
