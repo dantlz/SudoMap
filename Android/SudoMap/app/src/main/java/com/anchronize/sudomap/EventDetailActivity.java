@@ -39,6 +39,8 @@ public class EventDetailActivity extends AppCompatActivity implements
     private TextView descriptionView;
     private HorizontalScrollView attendantsScrollView;
     private Button chatButton;
+    private Button bookmarkButton;
+    private Button attendingButton;
 
     private Event mEvent;
     private GoogleMap mMap;

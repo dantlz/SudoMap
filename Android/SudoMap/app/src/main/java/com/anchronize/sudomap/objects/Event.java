@@ -65,7 +65,7 @@ public class Event implements Serializable{
         this.organizer = organizer;
     }
 
-    public MyList<User> getAttendants() {
+    public ArrayList<User> getAttendants() {
         return attendants;
     }
 
@@ -81,7 +81,7 @@ public class Event implements Serializable{
         }
     }
 
-    public MyList<Post> getPosts() {
+    public ArrayList<Post> getPosts() {
         return posts;
     }
 
@@ -142,8 +142,8 @@ public class Event implements Serializable{
     private String description;
     private String category;
     private User organizer;
-    private MyList<User> attendants = new MyList<User>();
-    private MyList<Post> posts = new MyList<Post>();
+    private ArrayList<User> attendants = new ArrayList<User>();
+    private ArrayList<Post> posts = new ArrayList<Post>();
     private boolean privacy;
     private double longitude;
     private double latitude;
