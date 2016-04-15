@@ -99,6 +99,14 @@ public class Event implements Serializable {
         this.privacy = privacy;
     }
 
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
     public double getLongitude() {
         return longitude;
     }
@@ -139,6 +147,7 @@ public class Event implements Serializable {
     private ArrayList<User> attendants = new ArrayList<User>();
     private ArrayList<Post> posts = new ArrayList<Post>();
     private boolean privacy;
+    private String address;
     private double longitude;
     private double latitude;
     private boolean visible;

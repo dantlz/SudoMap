@@ -38,6 +38,7 @@ dependencies {
     compile 'com.android.support:design:23.1.1'
     compile 'com.firebase:firebase-client-android:2.5.1+'
     compile 'com.firebaseui:firebase-ui:0.3.1'
+    compile 'com.google.android.gms:play-services-location:8.4.0'
     compile 'com.google.android.gms:play-services-maps:8.4.0'
     compile files('libs/mpandroidchartlibrary-2-2-4.jar')
     compile 'com.github.PhilJay:MPAndroidChart:v2.1.6'
