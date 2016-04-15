@@ -7,6 +7,7 @@ import android.graphics.drawable.Drawable;
 import android.widget.ImageView;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -16,9 +17,7 @@ public class User implements Serializable {
 
     public static final long serialVersionUID = 2L;
 
-    public User(){
-
-    }
+    public User(){}
 
     public User(String ID){
         userID = ID;
@@ -85,46 +84,46 @@ public class User implements Serializable {
 //        this.userPreferences = userPreferences;
 //    }
 //
-//    public List<Event> getAttendingEvents() {
-//        return attendingEvents;
-//    }
-//
-//    public void addAttendingEvent(Event attendingEvent){
-//        this.attendingEvents.add(attendingEvent);
-//    }
-//
-//    public void removeAttendingEvent(String eventID){
-//        for(Event event: attendingEvents){
-//            if(event.getEventID().equals(eventID)){
-//                attendingEvents.remove(event);
-//            }
-//        }
-//    }
+    public List<Event> getAttendingEvents() {
+        return attendingEvents;
+    }
 
-//    public List<Event> getBookmarkedEvents() {
-//        return bookmarkedEvents;
-//    }
-//
-//    public void addBookmarkedEvent(Event bookmarkedEvent) {
-//        this.bookmarkedEvents.add(bookmarkedEvent);
-//    }
-//
-//    public void removeBookmarkedEvent(String eventID){
-//        for(Event event: bookmarkedEvents){
-//            if(event.getEventID().equals(eventID)){
-//                bookmarkedEvents.remove(event);
-//            }
-//        }
-//    }
+    public void addAttendingEvent(Event attendingEvent){
+        this.attendingEvents.add(attendingEvent);
+    }
+
+    public void removeAttendingEvent(String eventID){
+        for(Event event: attendingEvents){
+            if(event.getEventID().equals(eventID)){
+                attendingEvents.remove(event);
+            }
+        }
+    }
+
+    public List<Event> getBookmarkedEvents() {
+        return bookmarkedEvents;
+    }
+
+    public void addBookmarkedEvent(Event bookmarkedEvent) {
+        this.bookmarkedEvents.add(bookmarkedEvent);
+    }
+
+    public void removeBookmarkedEvent(String eventID){
+        for(Event event: bookmarkedEvents){
+            if(event.getEventID().equals(eventID)){
+                bookmarkedEvents.remove(event);
+            }
+        }
+    }
 
     private boolean premium;
     private String userID;
     private String inAppName;
-    //We don't know if we can store profile image.
+    //TODO We don't know if we can store profile image.
 //    private ImageView profileImg;
     private String userBio;
 //    private UserPreference userPreferences;
-//    private List<Event> attendingEvents;
-//    private List<Event> bookmarkedEvents;
+    private List<Event> attendingEvents = new ArrayList<Event>();
+    private List<Event> bookmarkedEvents = new ArrayList<Event>();
 }
 

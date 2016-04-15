@@ -111,8 +111,8 @@ public class EventDetailActivity extends AppCompatActivity implements
     }
 
     public void chatButtonClicked(){
-        Toast.makeText(EventDetailActivity.this, "Chat Button Clicked", Toast.LENGTH_SHORT).show();
         Intent i = new Intent(this, ChatActivity.class);
+//        i.putExtra(EventDetailActivity.EVENT_KEY, mEvent.get);
         startActivity(i);
     }
 

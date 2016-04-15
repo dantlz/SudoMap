@@ -13,5 +13,4 @@ public class EnumerationClasses {
     public enum Categories{
         FUN, DANGEROUS, POLICE, NEW, FIRE
     }
-
 }
