@@ -6,35 +6,34 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.anchronize.sudomap.navigationDrawerActivities.TrendingActivity">
-    tools:context="com.anchronize.sudomap.NavigationDrawer.SettingActivity">
+    tools:context="com.anchronize.sudomap.NavigationDrawer.ChatActivity">
 
     <TextView
-        android:id="@+id/trending_title"
-        android:layout_width="104dp"
+        android:id="@+id/chat_title"
+        android:layout_width="58dp"
         android:layout_height="35dp"
         android:layout_centerHorizontal="true"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Trending"
+        android:text="Title"
         android:textStyle="bold"
         android:fontFamily="Myriad Pro"
         android:textColor="@color/white"
         android:shadowColor="@android:color/darker_gray"
         android:textSize="25dp"/>
 
-    <com.github.mikephil.charting.charts.LineChart
-        android:id="@+id/chart"
+    <TextView
+        android:id="@+id/main_post"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:layout_marginTop="70dp"/>
+        android:layout_height="100dp"
+        android:layout_marginTop="30dp"
+        android:text="MAIN_POST"/>
 
     <ListView
-        android:id="@+id/mylist"
+        android:id="@+id/listview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="380dp"
+        android:layout_marginTop="150dp"
         android:layout_weight="1"
         android:background="#FFFFFF">
     </ListView>
-
 </RelativeLayout>
