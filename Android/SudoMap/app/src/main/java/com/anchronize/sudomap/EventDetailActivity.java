@@ -9,10 +9,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.HorizontalScrollView;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.anchronize.sudomap.objects.EnumerationClasses;
 import com.anchronize.sudomap.objects.Event;
 import com.anchronize.sudomap.objects.User;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -34,10 +34,12 @@ public class EventDetailActivity extends AppCompatActivity implements
     public static final String EVENT_KEY = "com.anchronize.sudomap.EventDetailActivity.event";
 
     private TextView titleView;
+    private TextView organizerView;
     private TextView locationNameView;
     private TextView locationAddress;
     private TextView descriptionView;
     private HorizontalScrollView attendantsScrollView;
+    private LinearLayout attendantsView;
     private Button chatButton;
     private Button bookmarkButton;
     private Button attendingButton;
@@ -45,39 +47,70 @@ public class EventDetailActivity extends AppCompatActivity implements
     private Event mEvent;
     private GoogleMap mMap;
 
-    //TODO Delete this dummy method
-    public Event hardCodedEvent(){
-        Event e = new Event();
-        e.setTitle("Dope Event");
-        e.setDescription("THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING THIS IS MEANT TO BE A SUPER LONG STRING ");
-        e.setCategory(EnumerationClasses.Categories.FUN.toString());
-        e.setLongitude(-118.279838);
-        e.setLatitude(34.022799);
-        e.setPrivacy(true);
-        e.setVisible(true);
-        e.setOrganizer(new User("TEST organizer"));
-        return e;
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_detail);
+        initializeComponents();
+        addListeners();
+    }
 
+    public void initializeComponents(){
+        //Current Event
+        Intent i = getIntent();
+        mEvent = (Event)i.getSerializableExtra(EVENT_KEY);
+
+        //Map
         SupportMapFragment mapFragment =
                 (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.eventsMap);
         mapFragment.getMapAsync(this);
 
+        //GUI
         titleView = (TextView) findViewById(R.id.eventTitle);
+        organizerView = (TextView) findViewById(R.id.organizerInfo);
         locationNameView = (TextView) findViewById(R.id.eventLocationNameTextView);
         locationAddress = (TextView) findViewById(R.id.eventLocationAddressTextView);
         descriptionView = (TextView) findViewById(R.id.eventDescriptionView);
         attendantsScrollView = (HorizontalScrollView) findViewById(R.id.attendantsScrollView);
+        attendantsView = (LinearLayout) findViewById(R.id.attendants);
         chatButton = (Button) findViewById(R.id.chatButton);
+        bookmarkButton = (Button) findViewById(R.id.bookmarkButton);
+        attendingButton = (Button) findViewById(R.id.attendingButton);
+    }
 
-        //Get the event that get passed in
-        Intent i = getIntent();
-        mEvent = (Event)i.getSerializableExtra(EVENT_KEY);
+    public void addListeners(){
+        chatButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                chatButtonClicked();
+            }
+        });
+        bookmarkButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                bookmarkButtonClicked();
+            }
+        });
+        attendingButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                attendingButtonClicked();
+            }
+        });
+    }
+
+    public void chatButtonClicked(){
+        Intent i = new Intent(this, ChatActivity.class);
+        startActivity(i);
+    }
+
+    public void bookmarkButtonClicked(){
+        //TODO add mEvent to global current user's bookmarked
+    }
+
+    public void attendingButtonClicked(){
+        //TODO add mEvent to global current user's attending events. Should be displayed in homeactivity
+        //TODO mEvent.addAttendant(); Add current user
     }
 
     @Override
@@ -87,7 +120,10 @@ public class EventDetailActivity extends AppCompatActivity implements
     }
 
     public void populateDetails(){
+
+        //TODO category
         titleView.setText(mEvent.getTitle());
+        organizerView.setText("By: "+mEvent.getOrganizer());
         locationNameView.setText(
                 "Location: "+ nameFromLatLng(mEvent.getLatitude(),mEvent.getLongitude()));
         locationAddress.setText(
@@ -97,17 +133,10 @@ public class EventDetailActivity extends AppCompatActivity implements
                 LatLng(mEvent.getLatitude(), mEvent.getLongitude())).title("Hello world"));
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mEvent.getLatitude(), mEvent.getLongitude()),15));
         //TODO Populate the attendants horizontal scroll view | Tinder scrolling
-        chatButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                chatButtonClicked();
-            }
-        });
-    }
-
-    public void chatButtonClicked(){
-        Intent i = new Intent(this, ChatActivity.class);
-        startActivity(i);
+//        for(User user: mEvent.getAttendants()){
+//            ImageView img = user.getImage(this);
+//            attendantsView.addView(img);
+//        }
     }
 
     public String addressFromLatLng(double lat, double lng){
