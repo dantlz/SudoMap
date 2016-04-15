@@ -39,5 +39,4 @@ public class Post {
     private String message;
     private User author;
     private int voteCount;
-
 }

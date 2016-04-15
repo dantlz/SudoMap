@@ -65,37 +65,37 @@ public class Event implements Serializable{
         this.organizer = organizer;
     }
 
-//    public List<User> getAttendants() {
-//        return attendants;
-//    }
-//
-//    public void addAttendant(User attendant) {
-//        this.attendants.add(attendant);
-//    }
-//
-//    public void removeAttendant(String attendantID){
-//        for(User atdnt: attendants){
-//            if(atdnt.getUserID().equals(attendantID)){
-//                attendants.remove(atdnt);
-//            }
-//        }
-//    }
+    public List<User> getAttendants() {
+        return attendants;
+    }
 
-//    public List<Post> getPosts() {
-//        return posts;
-//    }
-//
-//    public void addPost(Post post) {
-//        posts.add(post);
-//    }
-//
-//    public void removePost(String postID){
-//        for(Post post: posts){
-//            if(post.getPostID().equals(postID)){
-//                posts.remove(post);
-//            }
-//        }
-//    }
+    public void addAttendant(User attendant) {
+        this.attendants.add(attendant);
+    }
+
+    public void removeAttendant(String attendantID){
+        for(User atdnt: attendants){
+            if(atdnt.getUserID().equals(attendantID)){
+                attendants.remove(atdnt);
+            }
+        }
+    }
+
+    public List<Post> getPosts() {
+        return posts;
+    }
+
+    public void addPost(Post post) {
+        posts.add(post);
+    }
+
+    public void removePost(String postID){
+        for(Post post: posts){
+            if(post.getPostID().equals(postID)){
+                posts.remove(post);
+            }
+        }
+    }
 
     public boolean getPrivacy() {
         return privacy;
@@ -129,25 +129,25 @@ public class Event implements Serializable{
         this.visible = visible;
     }
 
-//    public HashMap<Integer, Integer> getnumOfPostsAtTime() {
-//        return numOfPostsAtTime;
-//    }
-//
-//    public String getcreationTime() {
-//        return creationTime;
-//    }
+    public HashMap<Integer, Integer> getnumOfPostsAtTime() {
+        return numOfPostsAtTime;
+    }
+
+    public String getcreationTime() {
+        return creationTime;
+    }
 
     private String eventID;
     private String title;
     private String description;
     private String category;
     private User organizer;
-//    private List<User> attendants;
-//    private List<Post> posts;
+    private List<User> attendants = new ArrayList<User>();
+    private List<Post> posts = new ArrayList<Post>();
     private boolean privacy;
     private double longitude;
     private double latitude;
     private boolean visible;
-//    private HashMap<Integer, Integer> numOfPostsAtTime;
-//    private String creationTime;
+    private HashMap<Integer, Integer> numOfPostsAtTime = new HashMap<Integer, Integer>();
+    private String creationTime;
 }
