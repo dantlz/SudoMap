@@ -130,13 +130,11 @@ public class HomeActivity extends NavigationDrawer
     @Override
     public boolean onMarkerClick(final Marker marker) {
         lastSelectedMarker = marker;
-
         return false;
     }
 
     @Override
     public void onInfoWindowClick(Marker marker) {
-
         Event e = markerEventHashMap.get(lastSelectedMarker);
         Intent i = new Intent(getApplicationContext(), EventDetailActivity.class);
         i.putExtra(EventDetailActivity.EVENT_KEY, e);
@@ -150,7 +148,6 @@ public class HomeActivity extends NavigationDrawer
     }
 
     private void addMapMarkers(){
-
         markerEventHashMap.clear();
         for(Event e : allEventsinFirebase){
 
@@ -161,7 +158,6 @@ public class HomeActivity extends NavigationDrawer
                     .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
             markerEventHashMap.put(marker, e);
         }
-
     }
 
     /**
@@ -250,4 +246,5 @@ public class HomeActivity extends NavigationDrawer
         com.anchronize.sudomap.PermissionUtils.PermissionDeniedDialog
                 .newInstance(true).show(getSupportFragmentManager(), "dialog");
     }
+
 }
