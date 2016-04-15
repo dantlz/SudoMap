@@ -3,6 +3,7 @@ package com.anchronize.sudomap.navigationdrawer;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -10,7 +11,6 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
 
-import com.anchronize.sudomap.NavigationDrawer;
 import com.anchronize.sudomap.R;
 import com.anchronize.sudomap.objects.Event;
 import com.anchronize.sudomap.objects.User;
@@ -20,7 +20,7 @@ import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
 
-public class AddEventActivity extends NavigationDrawer {
+public class AddEventActivity extends AppCompatActivity {
 
 
     private EditText titleEditText;
