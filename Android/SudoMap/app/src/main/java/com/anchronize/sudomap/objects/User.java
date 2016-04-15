@@ -1,5 +1,6 @@
 package com.anchronize.sudomap.objects;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -8,6 +9,7 @@ import android.media.Image;
 import android.util.Base64;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.anchronize.sudomap.R;
 
@@ -49,10 +51,14 @@ public class User implements Serializable {
         this.inAppName = inAppName;
     }
 
-    //TODO
-//    public String imageToString(String filePath){
-//
-//    }
+    public ImageView getImage(Context context){
+        ImageView imageView = new ImageView(context);
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        lp.setMargins(0, 0, 10, 0);
+        imageView.setLayoutParams(lp);
+        imageView.setImageResource(profileImg);
+        return imageView;
+    }
 
     public String getUserBio() {
         return userBio;
@@ -106,7 +112,7 @@ public class User implements Serializable {
     private String userID;
     private String inAppName;
     //TODO We don't know if we can store profile image.
-    private String profileImg;
+    private Integer profileImg;
     private String userBio;
 //    private UserPreference userPreferences;
     private ArrayList<Event> attendingEvents = new ArrayList<Event>();

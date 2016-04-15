@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.HorizontalScrollView;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.anchronize.sudomap.objects.Event;
@@ -37,6 +39,7 @@ public class EventDetailActivity extends AppCompatActivity implements
     private TextView locationAddress;
     private TextView descriptionView;
     private HorizontalScrollView attendantsScrollView;
+    private LinearLayout attendantsView;
     private Button chatButton;
     private Button bookmarkButton;
     private Button attendingButton;
@@ -69,6 +72,7 @@ public class EventDetailActivity extends AppCompatActivity implements
         locationAddress = (TextView) findViewById(R.id.eventLocationAddressTextView);
         descriptionView = (TextView) findViewById(R.id.eventDescriptionView);
         attendantsScrollView = (HorizontalScrollView) findViewById(R.id.attendantsScrollView);
+        attendantsView = (LinearLayout) findViewById(R.id.attendants);
         chatButton = (Button) findViewById(R.id.chatButton);
         bookmarkButton = (Button) findViewById(R.id.bookmarkButton);
         attendingButton = (Button) findViewById(R.id.attendingButton);
@@ -129,13 +133,10 @@ public class EventDetailActivity extends AppCompatActivity implements
                 LatLng(mEvent.getLatitude(), mEvent.getLongitude())).title("Hello world"));
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mEvent.getLatitude(), mEvent.getLongitude()),15));
         //TODO Populate the attendants horizontal scroll view | Tinder scrolling
-        for(User user: mEvent.getAttendants()){
-//            ImageView img = user.;
-//            attendantsScrollView.addView();
-            TextView tv = new TextView(this);
-            tv.setText(user.getInAppName());
-            attendantsScrollView.addView(tv);
-        }
+//        for(User user: mEvent.getAttendants()){
+//            ImageView img = user.getImage(this);
+//            attendantsView.addView(img);
+//        }
     }
 
     public String addressFromLatLng(double lat, double lng){
