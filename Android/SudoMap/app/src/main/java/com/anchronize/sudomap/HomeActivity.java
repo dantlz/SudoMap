@@ -16,6 +16,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -47,7 +48,7 @@ import java.util.HashMap;
 //public class HomeActivity {
 //}
 
-public class HomeActivity extends NavigationDrawer
+public class HomeActivity extends AppCompatActivity
         implements
         GoogleMap.OnMyLocationButtonClickListener,
         GoogleMap.OnInfoWindowClickListener,
@@ -161,7 +162,7 @@ public class HomeActivity extends NavigationDrawer
             }
         });
 
-        // ShakeDetector initializationfrom http://jasonmcreynolds.com/?p=388
+        // ShakeDetector initialization from http://jasonmcreynolds.com/?p=388
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         mAccelerometer = mSensorManager
                 .getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
