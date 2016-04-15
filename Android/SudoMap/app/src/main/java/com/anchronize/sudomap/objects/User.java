@@ -1,14 +1,20 @@
 package com.anchronize.sudomap.objects;
 
-
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
+import android.media.Image;
+import android.util.Base64;
+import android.view.View;
 import android.widget.ImageView;
 
+import com.anchronize.sudomap.R;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by tianlinz on 4/2/16.
@@ -43,29 +49,9 @@ public class User implements Serializable {
         this.inAppName = inAppName;
     }
 
-//    public ImageView getProfileImg() {
-//        Bitmap bmp =  BitmapFactory.decodeResource(getResources(),
-//                R.drawable.chicken);//your image
-//        ByteArrayOutputStream bYtE = new ByteArrayOutputStream();
-//        bmp.compress(Bitmap.CompressFormat.PNG, 100, bYtE);
-//        bmp.recycle();
-//        byte[] byteArray = bYtE.toByteArray();
-//        String imageFile = Base64.encodeToString(byteArray, Base64.DEFAULT);
+    //TODO
+//    public String imageToString(String filePath){
 //
-//        return profileImg;
-//    }
-//
-//    public Bitmap convertToBitmap(Drawable drawable, int widthPixels, int heightPixels) {
-//        Bitmap mutableBitmap = Bitmap.createBitmap(widthPixels, heightPixels, Bitmap.Config.ARGB_8888);
-//        Canvas canvas = new Canvas(mutableBitmap);
-//        drawable.setBounds(0, 0, widthPixels, heightPixels);
-//        drawable.draw(canvas);
-//
-//        return mutableBitmap;
-//    }
-
-//    public void setProfileImg(ImageView profileImg) {
-//        this.profileImg = profileImg;
 //    }
 
     public String getUserBio() {
@@ -120,7 +106,7 @@ public class User implements Serializable {
     private String userID;
     private String inAppName;
     //TODO We don't know if we can store profile image.
-//    private ImageView profileImg;
+    private String profileImg;
     private String userBio;
 //    private UserPreference userPreferences;
     private ArrayList<Event> attendingEvents = new ArrayList<Event>();

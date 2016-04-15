@@ -1,19 +1,13 @@
 package com.anchronize.sudomap.objects;
 
-
-        import android.location.Location;
-
-        import java.io.*;
-        import java.sql.Timestamp;
-        import java.util.ArrayList;
-        import java.util.HashMap;
-        import java.util.List;
-        import java.util.Vector;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by tianlinz on 3/25/16.
  */
-public class Event implements Serializable{
+public class Event implements Serializable {
 
     public static final long serialVersionUID = 1L;
 
