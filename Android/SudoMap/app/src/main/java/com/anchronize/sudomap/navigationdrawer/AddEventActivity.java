@@ -89,6 +89,8 @@ public class AddEventActivity extends NavigationDrawer {
                 Log.d("id", id);
                 temp.setValue(event);
 //                event.setEventID(id);
+                setResult(RESULT_OK, null);
+                finish();
 
             }
         });
