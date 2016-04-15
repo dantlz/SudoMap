@@ -84,7 +84,7 @@ public class User implements Serializable {
 //        this.userPreferences = userPreferences;
 //    }
 //
-    public List<Event> getAttendingEvents() {
+    public ArrayList<Event> getAttendingEvents() {
         return attendingEvents;
     }
 
@@ -100,7 +100,7 @@ public class User implements Serializable {
         }
     }
 
-    public List<Event> getBookmarkedEvents() {
+    public ArrayList<Event> getBookmarkedEvents() {
         return bookmarkedEvents;
     }
 
@@ -123,7 +123,7 @@ public class User implements Serializable {
 //    private ImageView profileImg;
     private String userBio;
 //    private UserPreference userPreferences;
-    private List<Event> attendingEvents = new ArrayList<Event>();
-    private List<Event> bookmarkedEvents = new ArrayList<Event>();
+    private ArrayList<Event> attendingEvents = new ArrayList<Event>();
+    private ArrayList<Event> bookmarkedEvents = new ArrayList<Event>();
 }
 

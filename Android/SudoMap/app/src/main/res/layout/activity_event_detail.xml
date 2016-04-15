@@ -28,11 +28,34 @@
                 android:padding="10dp"
                 android:layout_alignParentStart="true"
                 android:background="@drawable/button_border"/>
+            <RelativeLayout
+                android:id="@+id/eventButtons"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/eventTitle"
+                android:layout_marginTop="15dp">
+                <Button
+                    android:id="@+id/bookmarkButton"
+                    android:text="Bookmark"
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginStart="46dp" />
+                <Button
+                    android:id="@+id/attendingButton"
+                    android:text="Attending"
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:layout_alignParentTop="true"
+                    android:layout_toEndOf="@+id/bookmarkButton"
+                    android:layout_marginStart="36dp" />
+            </RelativeLayout>
             <fragment
                 android:id="@+id/eventsMap"
                 class="com.google.android.gms.maps.SupportMapFragment"
                 xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_below="@+id/eventTitle"
+                android:layout_below="@+id/eventButtons"
                 android:layout_width="match_parent"
                 android:layout_height="220dp"
                 android:layout_marginTop="15dp" />
