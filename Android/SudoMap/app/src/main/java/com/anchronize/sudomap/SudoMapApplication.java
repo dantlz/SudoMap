@@ -131,7 +131,6 @@ public class SudoMapApplication extends android.app.Application{
             public void onChildAdded(DataSnapshot snapshot, String previousChild) {
                 Log.d("snapSHOTPARENT:", snapshot.toString());
                 currentUser = snapshot.getValue(User.class);
-
             }
 
             @Override
@@ -155,6 +154,7 @@ public class SudoMapApplication extends android.app.Application{
             }
 
         });
+
 
         return currentUser;
     }

@@ -41,7 +41,7 @@ public class AddEventActivity extends AppCompatActivity{
     private EditText descriptionEditText;
     private Button createEventButton;
     private Spinner categorySpinner;
-    private Spinner privacySpinner;
+    private CheckBox privacyCheckbox;
 
     private TextView locationTV, startDateTV, startTimeTV, endDateTV, endTimeTV;
 
@@ -64,8 +64,8 @@ public class AddEventActivity extends AppCompatActivity{
         descriptionEditText = (EditText)findViewById(R.id.descriptionEditText);
         createEventButton = (Button)findViewById(R.id.createButton);
         categorySpinner = (Spinner)findViewById(R.id.categorySpinner);
-        privacySpinner =(Spinner)findViewById(R.id.privacySpinner);
-        privacySpinner.setSelection(0);
+        privacyCheckbox =(CheckBox)findViewById(R.id.privateCheckbox);
+        categorySpinner.setSelection(0);
 
         locationTV = (TextView) findViewById(R.id.locationTextView);
         startDateTV = (TextView) findViewById(R.id.startDateTextView);
@@ -84,20 +84,12 @@ public class AddEventActivity extends AppCompatActivity{
             public void onClick(View v) {
                 String title = titleEditText.getText().toString();
                 String description = descriptionEditText.getText().toString();
-                boolean isPrivate = (boolean) privacySpinner.getSelectedItem();
+                boolean isPrivate =  privacyCheckbox.isChecked();
                 String category = categorySpinner.getSelectedItem().toString();
-
-
-                //TODO change the hard-code user to the global user
-                User tianlinz = new User("123456");
-                tianlinz.setPremium(true);
-                tianlinz.setInAppName("tianlinz");
-                tianlinz.setUserBio("fuck you bio!");
 
                 //create the event object
                 Event event = new Event();
-                User currentUser = ((SudoMapApplication)getApplication()).getCurrentUser();
-                event.setOrganizerID(currentUser.getUserID());
+                event.setOrganizerID(((SudoMapApplication)getApplication()).getCurrentUserID());
                 event.setTitle(title);
                 event.setDescription(description);
                 event.setPrivacy(isPrivate);
@@ -107,12 +99,11 @@ public class AddEventActivity extends AppCompatActivity{
                 event.setLongitude(longitude);
                 event.setAddress(address);
 
-
                 Firebase temp = refEvent.push();
                 String id = temp.getKey();
                 Log.d("id", id);
                 temp.setValue(event);
-                
+
                 Map<String, Object> eventID = new HashMap<String, Object>();
                 eventID.put("eventID", id);
                 temp.updateChildren(eventID);
