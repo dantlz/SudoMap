@@ -124,7 +124,7 @@ public class EventDetailActivity extends AppCompatActivity implements
         //TODO category
         titleView.setText(mEvent.getTitle());
 
-        organizerView.setText("By: "+ ((SudoMapApplication) getApplication()).getUserFromID(mEvent.getOrganizerID()));
+        organizerView.setText("By: "+ (((SudoMapApplication) getApplication()).getUserFromID(mEvent.getOrganizerID())).getInAppName());
         locationNameView.setText(
                 "Location: "+ nameFromLatLng(mEvent.getLatitude(),mEvent.getLongitude()));
         locationAddress.setText(
