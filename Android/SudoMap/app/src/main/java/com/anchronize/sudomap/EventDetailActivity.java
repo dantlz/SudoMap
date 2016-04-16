@@ -1,11 +1,15 @@
 package com.anchronize.sudomap;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Address;
 import android.location.Geocoder;
+import android.net.Uri;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
 import android.widget.HorizontalScrollView;
@@ -22,7 +26,9 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 import java.util.Locale;
 
@@ -128,7 +134,7 @@ public class EventDetailActivity extends AppCompatActivity implements
 
         //TODO category
         titleView.setText(mEvent.getTitle());
-        //TODO organizer doesn't seem to work
+        //TODO getUserFromID seems to be broken
         User organizer = (((SudoMapApplication)getApplication()).getUserFromID(mEvent.getOrganizerID()));
         String organizerName = "";
         if(organizer == null){
@@ -147,13 +153,18 @@ public class EventDetailActivity extends AppCompatActivity implements
                 LatLng(mEvent.getLatitude(), mEvent.getLongitude())).title("Hello world"));
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mEvent.getLatitude(), mEvent.getLongitude()),15));
 
-        for(User user: mEvent.getAttendants()){
+//        for(User user: mEvent.getAttendants()){
+//            AttendantsItem item = new AttendantsItem(getApplicationContext());
+//            item.setName(user.getInAppName());
+//            item.setPicBitMap(user.getProfileImageBitMap());
+//            attendantsView.addView(item);
+//        }
+        for(int i = 0; i < 5; i++){
             AttendantsItem item = new AttendantsItem(getApplicationContext());
-            item.setName(user.getInAppName());
-            item.setPicBitMap(user.getProfileImageBitMap());
-            ImageView img = new ImageView(getApplicationContext());
-            img.setImageBitmap(user.getProfileImageBitMap());
-            attendantsView.addView(img);
+            item.setName(Integer.toString(i)+ " -test- " + Integer.toString(i));
+            Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.miller);
+            item.setPicBitMap(bitmap);
+            attendantsView.addView(item);
         }
     }
 
