@@ -128,7 +128,7 @@ public class EventDetailActivity extends AppCompatActivity implements
 
         //TODO category
         titleView.setText(mEvent.getTitle());
-        organizerView.setText("By: "+mEvent.getOrganizer());
+        organizerView.setText("By: "+mEvent.getOrganizer().getInAppName());
         locationNameView.setText(
                 "Location: "+ nameFromLatLng(mEvent.getLatitude(),mEvent.getLongitude()));
         locationAddress.setText(
@@ -137,8 +137,11 @@ public class EventDetailActivity extends AppCompatActivity implements
         mMap.addMarker(new MarkerOptions().position(new
                 LatLng(mEvent.getLatitude(), mEvent.getLongitude())).title("Hello world"));
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mEvent.getLatitude(), mEvent.getLongitude()),15));
-        //TODO Populate the attendants horizontal scroll view | Tinder scrolling
+
         for(User user: mEvent.getAttendants()){
+            AttendantsItem item = new AttendantsItem(getApplicationContext());
+            item.setName(user.getInAppName());
+            item.setPicBitMap(user.getProfileImageBitMap());
             ImageView img = new ImageView(getApplicationContext());
             img.setImageBitmap(user.getProfileImageBitMap());
             attendantsView.addView(img);
