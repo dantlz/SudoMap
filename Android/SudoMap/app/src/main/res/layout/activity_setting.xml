@@ -71,14 +71,15 @@
                     android:layout_width="match_parent"
                     android:layout_height="45dp"
                     android:hint="Change name..."
-                    android:layout_marginTop="448dp"/>
+                    android:layout_marginTop="428dp"
+                    />
 
                 <Button
                     android:id="@+id/change_name_button"
                     style="?android:textAppearanceSmall"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
-                    android:layout_marginTop="490dp"
+                    android:layout_marginTop="470dp"
                     android:text="Change Name"
                     android:layout_centerHorizontal="true"
                     android:textColor="@color/white"
