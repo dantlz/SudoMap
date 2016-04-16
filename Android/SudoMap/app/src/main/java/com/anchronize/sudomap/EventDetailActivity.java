@@ -138,16 +138,14 @@ public class EventDetailActivity extends AppCompatActivity implements
         User organizer = (((SudoMapApplication)getApplication()).getUserFromID(mEvent.getOrganizerID()));
         String organizerName = "";
         if(organizer == null){
-            organizerName = "getUserFromID returned null";
+            organizerName = "null - getUserFromID() returned null bro";
         }
         else{
             organizerName = organizer.getInAppName();
         }
-        organizerView.setText("By: "+ organizerName);
-        locationNameView.setText(
-                "Location: "+ nameFromLatLng(mEvent.getLatitude(),mEvent.getLongitude()));
-        locationAddress.setText(
-                "Address: "+ addressFromLatLng(mEvent.getLatitude(), mEvent.getLongitude()));
+        organizerView.setText("Organizer: "+ organizerName);
+        locationNameView.setText(nameFromLatLng(mEvent.getLatitude(),mEvent.getLongitude()));
+        locationAddress.setText(addressFromLatLng(mEvent.getLatitude(), mEvent.getLongitude()));
         descriptionView.setText(mEvent.getDescription());
         mMap.addMarker(new MarkerOptions().position(new
                 LatLng(mEvent.getLatitude(), mEvent.getLongitude())).title("Hello world"));

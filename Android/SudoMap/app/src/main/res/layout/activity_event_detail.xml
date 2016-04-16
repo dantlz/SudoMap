@@ -19,7 +19,7 @@
 
             <TextView
                 android:id="@+id/eventTitle"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:text="Title placeholder"
@@ -67,26 +67,39 @@
                 android:layout_height="220dp"
                 android:layout_marginTop="15dp" />
             <TextView
-                android:id="@+id/eventLocationNameTextView"
+                android:id="@+id/locationLabel"
                 android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:layout_marginTop="15dp"
+                android:textSize="15dp"
+                android:text="Location:"
+                android:layout_below="@id/eventsMap"/>
+            <TextView
+                android:id="@+id/eventLocationNameTextView"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:text="Location name placeholder"
-                android:layout_marginTop="15dp"
                 android:padding="10dp"
                 android:background="@drawable/button_border"
-                android:layout_below="@+id/eventsMap"/>
-
+                android:layout_below="@+id/locationLabel"/>
+            <TextView
+                android:id="@+id/addressLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:layout_marginTop="15dp"
+                android:textSize="15dp"
+                android:text="Street Address:"
+                android:layout_below="@id/eventLocationNameTextView"/>
             <TextView
                 android:id="@+id/eventLocationAddressTextView"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:text="Location address placeholder"
-                android:layout_marginTop="15dp"
                 android:padding="10dp"
                 android:background="@drawable/button_border"
-                android:layout_below="@+id/eventLocationNameTextView"/>
+                android:layout_below="@+id/addressLabel"/>
             <TextView
                 android:id="@+id/descriptionLabel"
                 android:layout_width="wrap_content"
@@ -98,11 +111,12 @@
                 android:text="Description:"/>
             <TextView
                 android:id="@+id/eventDescriptionView"
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="Description placeholder"
                 android:textColor="#000000"
+                android:padding="10dp"
                 android:layout_below="@+id/descriptionLabel"
                 android:background="@drawable/button_border" />
             <TextView
