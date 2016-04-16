@@ -37,7 +37,8 @@
         </activity>
         <activity
             android:name=".ChatActivity"
-            android:label="Chat activity">
+            android:label="Chat activity"
+            android:windowSoftInputMode="stateHidden|adjustPan">
         </activity>
         <activity
             android:name=".EventDetailActivity"
