@@ -143,7 +143,7 @@ public class HomeActivity extends AppCompatActivity
         Firebase refUsers = ref.child("user");
 
         //query data once for to get all the events
-        refEvents.addListenerForSingleValueEvent(new ValueEventListener() {
+        refEvents.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
                 allEventsinFirebase.clear();
@@ -161,6 +161,9 @@ public class HomeActivity extends AppCompatActivity
 
             }
         });
+
+//        //add a listener to databse
+//        refEvents.add
 
         // ShakeDetector initialization from http://jasonmcreynolds.com/?p=388
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
@@ -198,7 +201,7 @@ public class HomeActivity extends AppCompatActivity
     public void onResume() {
         super.onResume();
         // Add the following line to register the Session Manager Listener onResume
-        mSensorManager.registerListener(mShakeDetector, mAccelerometer,	SensorManager.SENSOR_DELAY_UI);
+        mSensorManager.registerListener(mShakeDetector, mAccelerometer, SensorManager.SENSOR_DELAY_UI);
     }
 
     @Override
@@ -249,14 +252,20 @@ public class HomeActivity extends AppCompatActivity
     }
 
     private void addMapMarkers(){
+        //clean up all the marker
+        for(Marker marker: markerEventHashMap.keySet()){
+            marker.remove();
+        }
+        //clean up the marker -> Event map
         markerEventHashMap.clear();
         for(Event e : allEventsinFirebase){
-
             Marker marker = mMap.addMarker(new MarkerOptions()
+                    .anchor(0.0f, 1.0f)
                     .position(new LatLng(e.getLatitude(), e.getLongitude()))
                     .title(e.getTitle())
                     .snippet(e.getCategory())
-                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)))
+                    ;
             markerEventHashMap.put(marker, e);
         }
     }
