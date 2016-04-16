@@ -75,14 +75,6 @@ public class User implements Serializable {
         this.userBio = userBio;
     }
 
-//    public UserPreference getUserPreferences() {
-//        return userPreferences;
-//    }
-//
-//    public void setUserPreferences(UserPreference userPreferences) {
-//        this.userPreferences = userPreferences;
-//    }
-//
     public ArrayList<Event> getAttendingEvents() {
         return attendingEvents;
     }
@@ -121,7 +113,6 @@ public class User implements Serializable {
     //TODO We don't know if we can store profile image.
     private String profileImgString = "default";
     private String userBio;
-//    private UserPreference userPreferences;
     private ArrayList<Event> attendingEvents = new ArrayList<Event>();
     private ArrayList<Event> bookmarkedEvents = new ArrayList<Event>();
 }
