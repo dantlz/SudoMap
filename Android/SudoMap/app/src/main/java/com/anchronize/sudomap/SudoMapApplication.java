@@ -20,6 +20,8 @@ public class SudoMapApplication extends android.app.Application{
     private String currentUserID;
 
     private Firebase ref, refUsers;
+
+    private User tempUser; //this is used for queries, after other activies request on this application
     @Override
     public void onCreate() {
         super.onCreate();
@@ -39,6 +41,42 @@ public class SudoMapApplication extends android.app.Application{
     public boolean getAuthenticateStatus() {
         return isAuthenticated;
     }
+
+    public User getUserFromID(String UserID){
+        Query queryRef = refUsers.orderByChild("userID").equalTo(UserID);
+
+        queryRef.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot snapshot, String previousChild) {
+                Log.d("snapSHOTPARENT:", snapshot.toString());
+                tempUser = snapshot.getValue(User.class);
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+
+        });
+
+        return tempUser;
+    }
+
 
     public void updateCurrentUser(final User user){
         if(!user.getUserID().equalsIgnoreCase(currentUserID)){
