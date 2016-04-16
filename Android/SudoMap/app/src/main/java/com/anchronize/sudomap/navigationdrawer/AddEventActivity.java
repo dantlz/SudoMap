@@ -1,16 +1,25 @@
 package com.anchronize.sudomap.navigationdrawer;
 
 import android.app.Activity;
+import android.app.DatePickerDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.anchronize.sudomap.R;
 import com.anchronize.sudomap.SudoMapApplication;
@@ -22,11 +31,9 @@ import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Calendar;
 
-public class AddEventActivity extends AppCompatActivity {
-
+public class AddEventActivity extends AppCompatActivity{
 
     private EditText titleEditText;
     private EditText descriptionEditText;
@@ -64,9 +71,11 @@ public class AddEventActivity extends AppCompatActivity {
         endDateTV = (TextView) findViewById(R.id.endDateTextView);
         endTimeTV = (TextView) findViewById(R.id.endTimeTextView);
 
+
 //        Firebase.setAndroidContext(this);
         ref = new Firebase("https://anchronize.firebaseio.com");
         refEvent = ref.child("events");
+
 
         createEventButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,10 +85,17 @@ public class AddEventActivity extends AppCompatActivity {
                 boolean isPrivate = (boolean) privacySpinner.getSelectedItem();
                 String category = categorySpinner.getSelectedItem().toString();
 
+
+                //TODO change the hard-code user to the global user
+                User tianlinz = new User("123456");
+                tianlinz.setPremium(true);
+                tianlinz.setInAppName("tianlinz");
+                tianlinz.setUserBio("fuck you bio!");
+
                 //create the event object
                 Event event = new Event();
-                String currentID = ((SudoMapApplication) getApplication()).getCurrentUserID();
-                event.setOrganizerID(currentID);
+                User currentUser = ((SudoMapApplication)getApplication()).getCurrentUser();
+                event.setOrganizerID(currentUser.getUserID());
                 event.setTitle(title);
                 event.setDescription(description);
                 event.setPrivacy(isPrivate);
@@ -93,14 +109,24 @@ public class AddEventActivity extends AppCompatActivity {
                 String id = temp.getKey();
                 Log.d("id", id);
                 temp.setValue(event);
-
-                Map<String, Object> eventID = new HashMap<String, Object>();
-                eventID.put("eventID", id);
-                temp.updateChildren(eventID);
-
+//                event.setEventID(id);
                 setResult(RESULT_OK, null);
                 finish();
 
+            }
+        });
+
+        locationTV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
+                try {
+                    startActivityForResult(builder.build(activity), PLACE_PICKER_REQUEST);
+                } catch (GooglePlayServicesRepairableException e) {
+                    e.printStackTrace();
+                } catch (GooglePlayServicesNotAvailableException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
