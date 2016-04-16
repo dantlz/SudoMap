@@ -105,12 +105,17 @@ public class EventDetailActivity extends AppCompatActivity implements
     }
 
     public void bookmarkButtonClicked(){
-        //TODO add mEvent to global current user's bookmarked
+        User user = ((SudoMapApplication)getApplication()).getCurrentUser();
+        user.addBookmarkedEvent(mEvent);
+        ((SudoMapApplication)getApplication()).updateCurrentUser(user);
     }
 
     public void attendingButtonClicked(){
-        //TODO add mEvent to global current user's attending events. Should be displayed in homeactivity
-        //TODO mEvent.addAttendant(); Add current user
+        User user = ((SudoMapApplication)getApplication()).getCurrentUser();
+        user.addAttendingEvent(mEvent);
+        ((SudoMapApplication)getApplication()).updateCurrentUser(user);
+        mEvent.addAttendant(user);
+        //TODO update this event in firebase
     }
 
     @Override

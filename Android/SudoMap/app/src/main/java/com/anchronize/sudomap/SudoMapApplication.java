@@ -40,8 +40,6 @@ public class SudoMapApplication extends android.app.Application{
         return isAuthenticated;
     }
 
-
-
     public void updateCurrentUser(final User user){
         if(!user.getUserID().equalsIgnoreCase(currentUserID)){
 
