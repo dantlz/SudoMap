@@ -20,6 +20,9 @@ import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class AddEventActivity extends AppCompatActivity {
 
 
@@ -88,7 +91,9 @@ public class AddEventActivity extends AppCompatActivity {
                 String id = temp.getKey();
                 Log.d("id", id);
                 temp.setValue(event);
-//                event.setEventID(id);
+                Map<String, Object> eventID = new HashMap<String, Object>();
+                eventID.put("eventID", id);
+                temp.updateChildren(eventID);
                 setResult(RESULT_OK, null);
                 finish();
 
