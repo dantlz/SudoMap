@@ -43,5 +43,11 @@
     <string name="past_fragment_title">Past</string>
     <string name="list_item_event_title">Event Title</string>
 
+    <!-- Strings related to AddEventActivity -->
+    <string-array name="privacy_entries">
+        <item>Private Event</item>
+        <item>Public Event</item>
+    </string-array>
+
     <string name="action_voice_rec">Houndify</string>
 </resources>

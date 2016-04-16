@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.anchronize.sudomap.R;
 import com.anchronize.sudomap.SudoMapApplication;
@@ -29,9 +30,11 @@ public class AddEventActivity extends AppCompatActivity {
 
     private EditText titleEditText;
     private EditText descriptionEditText;
-    private Button createEventButton, locationButton;
+    private Button createEventButton;
     private Spinner categorySpinner;
-    private CheckBox privacyCheckbox;
+    private Spinner privacySpinner;
+
+    private TextView locationTV, startDateTV, startTimeTV, endDateTV, endTimeTV;
 
     // Maintain a connection to Firebase
     private Firebase refEvent;
@@ -51,25 +54,27 @@ public class AddEventActivity extends AppCompatActivity {
         titleEditText = (EditText)findViewById(R.id.titleEditText);
         descriptionEditText = (EditText)findViewById(R.id.descriptionEditText);
         createEventButton = (Button)findViewById(R.id.createButton);
-        locationButton = (Button)findViewById(R.id.locationButton);
         categorySpinner = (Spinner)findViewById(R.id.categorySpinner);
-        privacyCheckbox =(CheckBox)findViewById(R.id.privateCheckbox);
+        privacySpinner =(Spinner)findViewById(R.id.privacySpinner);
+        privacySpinner.setSelection(0);
 
+        locationTV = (TextView) findViewById(R.id.locationTextView);
+        startDateTV = (TextView) findViewById(R.id.startDateTextView);
+        startTimeTV = (TextView) findViewById(R.id.startTimeTextView);
+        endDateTV = (TextView) findViewById(R.id.endDateTextView);
+        endTimeTV = (TextView) findViewById(R.id.endTimeTextView);
 
 //        Firebase.setAndroidContext(this);
         ref = new Firebase("https://anchronize.firebaseio.com");
         refEvent = ref.child("events");
-
 
         createEventButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String title = titleEditText.getText().toString();
                 String description = descriptionEditText.getText().toString();
-                boolean isPrivate = privacyCheckbox.isChecked();
+                boolean isPrivate = (boolean) privacySpinner.getSelectedItem();
                 String category = categorySpinner.getSelectedItem().toString();
-
-
 
                 //create the event object
                 Event event = new Event();
@@ -99,21 +104,10 @@ public class AddEventActivity extends AppCompatActivity {
             }
         });
 
-        locationButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
-                try {
-                    startActivityForResult(builder.build(activity), PLACE_PICKER_REQUEST);
-                } catch (GooglePlayServicesRepairableException e) {
-                    e.printStackTrace();
-                } catch (GooglePlayServicesNotAvailableException e) {
-                    e.printStackTrace();
-                }
-
-            }
-        });
+        startDateTV.setOnClickListener(new DialogListener());
+        endDateTV.setOnClickListener(new DialogListener());
+        startTimeTV.setOnClickListener(new DialogListener());
+        endTimeTV.setOnClickListener(new DialogListener());
     }
 
     @Override
@@ -121,11 +115,28 @@ public class AddEventActivity extends AppCompatActivity {
         if (requestCode == PLACE_PICKER_REQUEST) {
             if (resultCode == RESULT_OK) {
                 Place place = PlacePicker.getPlace(getApplicationContext(), data);
-                locationButton.setText(place.getAddress());
                 longitude = place.getLatLng().longitude;
                 latitude = place.getLatLng().latitude;
                 address = String.valueOf(place.getAddress());
+                locationTV.setText(place.getName().toString());
             }
         }
+    }
+
+    private class DialogListener implements View.OnClickListener{
+
+        @Override
+        public void onClick(View v) {
+            int id = v.getId();
+
+            if((id == R.id.startDateTextView) || (id == R.id.endDateTextView)){
+
+            }
+
+            if((id == R.id.startTimeTextView) || (id == R.id.endTimeTextView)){
+
+            }
+        }
+
     }
 }
