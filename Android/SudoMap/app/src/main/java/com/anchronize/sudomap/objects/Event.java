@@ -51,12 +51,12 @@ public class Event implements Serializable {
         this.category = category;
     }
 
-    public User getOrganizer() {
-        return organizer;
+    public String getOrganizerID() {
+        return organizerID;
     }
 
-    public void setOrganizer(User organizer) {
-        this.organizer = organizer;
+    public void setOrganizerID(String organizerID) {
+        this.organizerID = organizerID;
     }
 
     public ArrayList<User> getAttendants() {
@@ -143,7 +143,7 @@ public class Event implements Serializable {
     private String title;
     private String description;
     private String category;
-    private User organizer;
+    private String organizerID;
     private ArrayList<User> attendants = new ArrayList<User>();
     private ArrayList<Post> posts = new ArrayList<Post>();
     private boolean privacy;

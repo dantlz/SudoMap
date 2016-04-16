@@ -233,7 +233,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     private boolean isPasswordValid(String password) {
         //TODO: Replace this with your own logic
-        return password.length() > 6;
+        return password.length() >= 8;
     }
 
     /**
@@ -364,8 +364,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 //                    ref.child("users").get;
                     Log.d("currentUser", currentUserID);
 
-
-                    ((SudoMapApplication)getApplication()).setCurrentUser(new User(currentUserID));
                     ((SudoMapApplication)getApplication()).setCurrentUserID(currentUserID);
 
                 }
@@ -417,7 +415,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             if (success) {
                 finish();
                 // set global auth status to logged in
-                ((SudoMapApplication)getApplication()).setAuthenticateStatus(true);
+                ((SudoMapApplication) getApplication()).setAuthenticateStatus(true);
                 startActivity(new Intent(LoginActivity.this, HomeActivity.class));
                 System.out.println(" onPostExecute success");
 

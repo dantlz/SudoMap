@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.media.Image;
+import android.net.Uri;
 import android.util.Base64;
 import android.view.View;
 import android.widget.ImageView;
@@ -15,6 +16,7 @@ import com.anchronize.sudomap.R;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -51,14 +53,19 @@ public class User implements Serializable {
         this.inAppName = inAppName;
     }
 
-//    public ImageView getImage(Context context){
-//        ImageView imageView = new ImageView(context);
-//        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-//        lp.setMargins(0, 0, 10, 0);
-//        imageView.setLayoutParams(lp);
-//        imageView.setImageResource(profileImg);
-//        return imageView;
-//    }
+    public String getProfileImgString() {
+        return profileImgString;
+    }
+
+    public void setProfileImgString(String profileImgString) {
+        this.profileImgString = profileImgString;
+    }
+
+    public Bitmap getProfileImageBitMap(){
+        byte [] encodeByte =Base64.decode(profileImgString,Base64.DEFAULT);
+        Bitmap bitmap=BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
+        return bitmap;
+    }
 
     public String getUserBio() {
         return userBio;
@@ -112,7 +119,7 @@ public class User implements Serializable {
     private String userID;
     private String inAppName;
     //TODO We don't know if we can store profile image.
-    private String profileImg;
+    private String profileImgString = "default";
     private String userBio;
 //    private UserPreference userPreferences;
     private ArrayList<Event> attendingEvents = new ArrayList<Event>();

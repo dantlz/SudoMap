@@ -209,7 +209,7 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
 
     private boolean isPasswordValid(String password) {
         //TODO: Replace this with your own logic
-        return password.length() > 6;
+        return password.length() >= 6;
     }
 
     /**
@@ -332,6 +332,9 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
                     registerStatus = true;
 
                     User newUser = new User(result.get("uid").toString());
+                    newUser.setPremium(false);
+                    newUser.setInAppName(mUsername);
+                    newUser.setUserBio("This user has no Bio yet");
                     Firebase refEvent = ref.child("users");
                     Firebase temp = refEvent.push();
                     String id = temp.getKey();
@@ -398,4 +401,3 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
         }
     }
 }
-

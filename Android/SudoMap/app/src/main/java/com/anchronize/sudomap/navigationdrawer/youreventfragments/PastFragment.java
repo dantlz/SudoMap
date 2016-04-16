@@ -64,6 +64,7 @@ public class PastFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Event event = _pastEvents.get(position);
                 Intent i = new Intent(getActivity().getApplicationContext(), EventDetailActivity.class);
+                System.out.println(event.getTitle());
                 i.putExtra(EVENT_KEY, event);
                 startActivity(i);
             }

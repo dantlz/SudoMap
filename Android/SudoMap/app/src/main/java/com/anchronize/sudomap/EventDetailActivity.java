@@ -1,11 +1,15 @@
 package com.anchronize.sudomap;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Address;
 import android.location.Geocoder;
+import android.net.Uri;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
 import android.widget.HorizontalScrollView;
@@ -22,7 +26,9 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 import java.util.Locale;
 
@@ -105,12 +111,17 @@ public class EventDetailActivity extends AppCompatActivity implements
     }
 
     public void bookmarkButtonClicked(){
-        //TODO add mEvent to global current user's bookmarked
+        User user = ((SudoMapApplication)getApplication()).getCurrentUser();
+        user.addBookmarkedEvent(mEvent);
+        ((SudoMapApplication)getApplication()).updateCurrentUser(user);
     }
 
     public void attendingButtonClicked(){
-        //TODO add mEvent to global current user's attending events. Should be displayed in homeactivity
-        //TODO mEvent.addAttendant(); Add current user
+        User user = ((SudoMapApplication)getApplication()).getCurrentUser();
+        user.addAttendingEvent(mEvent);
+        ((SudoMapApplication)getApplication()).updateCurrentUser(user);
+        mEvent.addAttendant(user);
+        //TODO update this event in firebase
     }
 
     @Override
@@ -123,20 +134,36 @@ public class EventDetailActivity extends AppCompatActivity implements
 
         //TODO category
         titleView.setText(mEvent.getTitle());
-        organizerView.setText("By: "+mEvent.getOrganizer());
-        locationNameView.setText(
-                "Location: "+ nameFromLatLng(mEvent.getLatitude(),mEvent.getLongitude()));
-        locationAddress.setText(
-                "Address: "+ addressFromLatLng(mEvent.getLatitude(), mEvent.getLongitude()));
+        //TODO getUserFromID seems to be broken
+        User organizer = (((SudoMapApplication)getApplication()).getUserFromID(mEvent.getOrganizerID()));
+        String organizerName = "";
+        if(organizer == null){
+            organizerName = "null - getUserFromID() returned null bro";
+        }
+        else{
+            organizerName = organizer.getInAppName();
+        }
+        organizerView.setText("Organizer: "+ organizerName);
+        locationNameView.setText(nameFromLatLng(mEvent.getLatitude(),mEvent.getLongitude()));
+        locationAddress.setText(addressFromLatLng(mEvent.getLatitude(), mEvent.getLongitude()));
         descriptionView.setText(mEvent.getDescription());
         mMap.addMarker(new MarkerOptions().position(new
                 LatLng(mEvent.getLatitude(), mEvent.getLongitude())).title("Hello world"));
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mEvent.getLatitude(), mEvent.getLongitude()),15));
-        //TODO Populate the attendants horizontal scroll view | Tinder scrolling
+
 //        for(User user: mEvent.getAttendants()){
-//            ImageView img = user.getImage(this);
-//            attendantsView.addView(img);
+//            AttendantsItem item = new AttendantsItem(getApplicationContext());
+//            item.setName(user.getInAppName());
+//            item.setPicBitMap(user.getProfileImageBitMap());
+//            attendantsView.addView(item);
 //        }
+        for(int i = 0; i < 5; i++){
+            AttendantsItem item = new AttendantsItem(getApplicationContext());
+            item.setName(Integer.toString(i)+ " -test- " + Integer.toString(i));
+            Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.miller);
+            item.setPicBitMap(bitmap);
+            attendantsView.addView(item);
+        }
     }
 
     public String addressFromLatLng(double lat, double lng){
