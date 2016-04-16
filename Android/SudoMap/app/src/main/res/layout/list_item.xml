@@ -41,7 +41,7 @@
         android:layout_alignParentRight="true"
         android:layout_marginTop="-5dp"
         android:background="@drawable/arrow_up"
-        android:id="@+id/list_item_btn"/>
+        android:id="@+id/list_item_btn_up"/>
 
     <Button
         android:layout_width="20dp"

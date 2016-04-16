@@ -88,16 +88,17 @@ public class ChatActivity extends AppCompatActivity {
                 ViewHolder viewHolder = new ViewHolder();
                 viewHolder.thumbnail = (ImageView) convertView.findViewById(R.id.list_item_thumbnail);
                 viewHolder.title = (TextView) convertView.findViewById(R.id.list_item_text);
-                viewHolder.button = (Button) convertView.findViewById(R.id.list_item_btn);
+                viewHolder.button_up = (Button) convertView.findViewById(R.id.list_item_btn_up);
+                viewHolder.button_down = (Button) convertView.findViewById(R.id.list_item_btn_down);
                 convertView.setTag(viewHolder);
             }
             mainViewholder = (ViewHolder) convertView.getTag();
-            mainViewholder.button.setOnClickListener(new View.OnClickListener() {
+            mainViewholder.button_up.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Toast.makeText(getContext(), "Button was clicked for list item " + position, Toast.LENGTH_SHORT).show();
                     TextView tv = (TextView)findViewById(R.id.list_item_counter);
-                    Button incrementer = (Button)findViewById(R.id.list_item_btn);
+                    Button incrementer = (Button)findViewById(R.id.list_item_btn_up);
 
                     String present_value_string = tv.getText().toString();
                     int present_value_int = Integer.parseInt(present_value_string);
@@ -105,13 +106,27 @@ public class ChatActivity extends AppCompatActivity {
 
                     tv.setText(String.valueOf(present_value_int));
 
-                    Button decrementer = (Button)findViewById(R.id.list_item_btn_down);
-                    String curr_val_string = tv.getText().toString();
-                    int curr_val_int = Integer.parseInt(curr_val_string);
-                    curr_val_int--;
-                    tv.setText(String.valueOf(curr_val_int));
+//                    Button decrementer = (Button)findViewById(R.id.list_item_btn_down);
+//                    String curr_val_string = tv.getText().toString();
+//                    int curr_val_int = Integer.parseInt(curr_va-l_string);
+//                    curr_val_int--;
+//                    tv.setText(String.valueOf(curr_val_int));
                 }
             });
+
+//            mainViewholder.button_down.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    Toast.makeText(getContext(), "Button was clicked for list item " + position, Toast.LENGTH_SHORT).show();
+//                    TextView tv = (TextView)findViewById(R.id.list_item_counter);
+//                    Button decrementer = (Button)findViewById(R.id.list_item_btn_down);
+//
+//                    String curr_val_string = tv.getText().toString();
+//                    int curr_val_int = Integer.parseInt(curr_val_string);
+//                    curr_val_int--;
+//                    tv.setText(String.valueOf(curr_val_int));
+//                }
+//            });
             mainViewholder.title.setText(getItem(position));
 
             return convertView;
@@ -122,6 +137,6 @@ public class ChatActivity extends AppCompatActivity {
 
         ImageView thumbnail;
         TextView title;
-        Button button;
+        Button button_up, button_down;
     }
 }
