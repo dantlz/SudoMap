@@ -332,6 +332,9 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
                     registerStatus = true;
 
                     User newUser = new User(result.get("uid").toString());
+                    newUser.setPremium(false);
+                    newUser.setInAppName(newUser.getUserID());
+                    newUser.setUserBio("This user has no Bio yet");
                     Firebase refEvent = ref.child("users");
                     Firebase temp = refEvent.push();
                     String id = temp.getKey();
