@@ -42,6 +42,8 @@
     <string name="upcoming_fragment_title">Upcoming</string>
     <string name="past_fragment_title">Past</string>
     <string name="list_item_event_title">Event Title</string>
+    <string name="list_item_date_time_title">Date and Time Title</string>
+    <string name="list_item_location_title">Location Title</string>
 
     <string name="action_voice_rec">Houndify</string>
 </resources>
