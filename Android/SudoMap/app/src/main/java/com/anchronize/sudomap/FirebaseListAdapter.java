@@ -183,8 +183,6 @@ public abstract class FirebaseListAdapter<T> extends BaseAdapter {
         downvoteButton.setOnClickListener(new DownvoteListener());
 
 
-        //cao jiesen
-
 
 
         T model = mModels.get(i);
