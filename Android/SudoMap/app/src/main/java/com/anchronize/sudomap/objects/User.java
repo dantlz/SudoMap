@@ -51,14 +51,14 @@ public class User implements Serializable {
         this.inAppName = inAppName;
     }
 
-    public ImageView getImage(Context context){
-        ImageView imageView = new ImageView(context);
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        lp.setMargins(0, 0, 10, 0);
-        imageView.setLayoutParams(lp);
-        imageView.setImageResource(profileImg);
-        return imageView;
-    }
+//    public ImageView getImage(Context context){
+//        ImageView imageView = new ImageView(context);
+//        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+//        lp.setMargins(0, 0, 10, 0);
+//        imageView.setLayoutParams(lp);
+//        imageView.setImageResource(profileImg);
+//        return imageView;
+//    }
 
     public String getUserBio() {
         return userBio;
@@ -112,7 +112,7 @@ public class User implements Serializable {
     private String userID;
     private String inAppName;
     //TODO We don't know if we can store profile image.
-    private Integer profileImg;
+    private String profileImg;
     private String userBio;
 //    private UserPreference userPreferences;
     private ArrayList<Event> attendingEvents = new ArrayList<Event>();
