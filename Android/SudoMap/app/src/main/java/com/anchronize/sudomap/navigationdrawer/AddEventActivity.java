@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.anchronize.sudomap.R;
+import com.anchronize.sudomap.SudoMapApplication;
 import com.anchronize.sudomap.objects.Event;
 import com.anchronize.sudomap.objects.User;
 import com.firebase.client.Firebase;
@@ -69,15 +70,11 @@ public class AddEventActivity extends AppCompatActivity {
                 String category = categorySpinner.getSelectedItem().toString();
 
 
-                //TODO change the hard-code user to the global user
-                User tianlinz = new User("123456");
-                tianlinz.setPremium(true);
-                tianlinz.setInAppName("tianlinz");
-                tianlinz.setUserBio("fuck you bio!");
 
                 //create the event object
                 Event event = new Event();
-                event.setOrganizer(tianlinz);
+                String currentID = ((SudoMapApplication) getApplication()).getCurrentUserID();
+                event.setOrganizerID(currentID);
                 event.setTitle(title);
                 event.setDescription(description);
                 event.setPrivacy(isPrivate);

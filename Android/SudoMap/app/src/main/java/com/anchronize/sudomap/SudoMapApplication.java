@@ -44,7 +44,7 @@ public class SudoMapApplication extends android.app.Application{
 
     public User getUserFromID(String UserID){
         Query queryRef = refUsers.orderByChild("userID").equalTo(UserID);
-        
+
         queryRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot snapshot, String previousChild) {
