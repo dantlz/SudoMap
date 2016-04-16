@@ -34,7 +34,7 @@
         android:text="0"
         android:layout_marginTop="45dp"
         android:id="@+id/list_item_counter"
-        android:layout_marginLeft="320dp" />
+        android:layout_marginLeft="280dp" />
 
     <Button
         android:layout_width="40dp"
