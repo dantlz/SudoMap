@@ -24,6 +24,7 @@ public class ChatActivity extends ListActivity {
     private ArrayList<String> data = new ArrayList<String>();
     private static final String FIREBASE_URL = "https://anchronize.firebaseio.com";
     private String mUsername;
+    private String mDescription;
     private Firebase mFirebaseRef;
     private ValueEventListener mConnectedListener;
     private ChatListAdapter mChatListAdapter;
@@ -37,7 +38,10 @@ public class ChatActivity extends ListActivity {
         //this should be changed to be under each event
         mFirebaseRef = new Firebase(FIREBASE_URL).child("chat");
 
-
+        //TEST
+        mDescription = "mDescription.";
+        //main post is replaced by description
+        TextView description = (TextView) findViewById(R.id.main_post);
 
         //set up input text field and send message button listener
         EditText inputText = (EditText) findViewById(R.id.messageInput);
