@@ -333,7 +333,7 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
 
                     User newUser = new User(result.get("uid").toString());
                     newUser.setPremium(false);
-                    newUser.setInAppName(newUser.getUserID());
+                    newUser.setInAppName(mUsername);
                     newUser.setUserBio("This user has no Bio yet");
                     Firebase refEvent = ref.child("users");
                     Firebase temp = refEvent.push();
@@ -401,4 +401,3 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
         }
     }
 }
-

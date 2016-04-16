@@ -53,6 +53,14 @@ public class User implements Serializable {
         this.inAppName = inAppName;
     }
 
+    public String getProfileImgString() {
+        return profileImgString;
+    }
+
+    public void setProfileImgString(String profileImgString) {
+        this.profileImgString = profileImgString;
+    }
+
     public Bitmap getProfileImageBitMap(){
         byte [] encodeByte =Base64.decode(profileImgString,Base64.DEFAULT);
         Bitmap bitmap=BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
@@ -111,7 +119,7 @@ public class User implements Serializable {
     private String userID;
     private String inAppName;
     //TODO We don't know if we can store profile image.
-    private String profileImgString;
+    private String profileImgString = "default";
     private String userBio;
 //    private UserPreference userPreferences;
     private ArrayList<Event> attendingEvents = new ArrayList<Event>();
