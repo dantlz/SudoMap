@@ -1,15 +1,25 @@
 package com.anchronize.sudomap.navigationdrawer;
 
 import android.app.Activity;
+import android.app.DatePickerDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.anchronize.sudomap.R;
 import com.anchronize.sudomap.objects.Event;
@@ -20,14 +30,17 @@ import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
 
-public class AddEventActivity extends AppCompatActivity {
+import java.util.Calendar;
 
+public class AddEventActivity extends AppCompatActivity{
 
     private EditText titleEditText;
     private EditText descriptionEditText;
-    private Button createEventButton, locationButton;
+    private Button createEventButton;
     private Spinner categorySpinner;
-    private CheckBox privacyCheckbox;
+    private Spinner privacySpinner;
+
+    private TextView locationTV, startDateTV, startTimeTV, endDateTV, endTimeTV;
 
     // Maintain a connection to Firebase
     private Firebase refEvent;
@@ -47,9 +60,15 @@ public class AddEventActivity extends AppCompatActivity {
         titleEditText = (EditText)findViewById(R.id.titleEditText);
         descriptionEditText = (EditText)findViewById(R.id.descriptionEditText);
         createEventButton = (Button)findViewById(R.id.createButton);
-        locationButton = (Button)findViewById(R.id.locationButton);
         categorySpinner = (Spinner)findViewById(R.id.categorySpinner);
-        privacyCheckbox =(CheckBox)findViewById(R.id.privateCheckbox);
+        privacySpinner =(Spinner)findViewById(R.id.privacySpinner);
+        privacySpinner.setSelection(0);
+
+        locationTV = (TextView) findViewById(R.id.locationTextView);
+        startDateTV = (TextView) findViewById(R.id.startDateTextView);
+        startTimeTV = (TextView) findViewById(R.id.startTimeTextView);
+        endDateTV = (TextView) findViewById(R.id.endDateTextView);
+        endTimeTV = (TextView) findViewById(R.id.endTimeTextView);
 
 
 //        Firebase.setAndroidContext(this);
@@ -62,7 +81,7 @@ public class AddEventActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String title = titleEditText.getText().toString();
                 String description = descriptionEditText.getText().toString();
-                boolean isPrivate = privacyCheckbox.isChecked();
+                boolean isPrivate = (boolean) privacySpinner.getSelectedItem();
                 String category = categorySpinner.getSelectedItem().toString();
 
 
@@ -95,10 +114,9 @@ public class AddEventActivity extends AppCompatActivity {
             }
         });
 
-        locationButton.setOnClickListener(new View.OnClickListener() {
+        locationTV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
                 try {
                     startActivityForResult(builder.build(activity), PLACE_PICKER_REQUEST);
@@ -107,9 +125,13 @@ public class AddEventActivity extends AppCompatActivity {
                 } catch (GooglePlayServicesNotAvailableException e) {
                     e.printStackTrace();
                 }
-
             }
         });
+
+        startDateTV.setOnClickListener(new DialogListener());
+        endDateTV.setOnClickListener(new DialogListener());
+        startTimeTV.setOnClickListener(new DialogListener());
+        endTimeTV.setOnClickListener(new DialogListener());
     }
 
     @Override
@@ -117,11 +139,28 @@ public class AddEventActivity extends AppCompatActivity {
         if (requestCode == PLACE_PICKER_REQUEST) {
             if (resultCode == RESULT_OK) {
                 Place place = PlacePicker.getPlace(getApplicationContext(), data);
-                locationButton.setText(place.getAddress());
                 longitude = place.getLatLng().longitude;
                 latitude = place.getLatLng().latitude;
                 address = String.valueOf(place.getAddress());
+                locationTV.setText(place.getName().toString());
             }
         }
+    }
+
+    private class DialogListener implements View.OnClickListener{
+
+        @Override
+        public void onClick(View v) {
+            int id = v.getId();
+
+            if((id == R.id.startDateTextView) || (id == R.id.endDateTextView)){
+
+            }
+
+            if((id == R.id.startTimeTextView) || (id == R.id.endTimeTextView)){
+
+            }
+        }
+
     }
 }
