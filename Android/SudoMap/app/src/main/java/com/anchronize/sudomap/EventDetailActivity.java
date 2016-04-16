@@ -105,12 +105,17 @@ public class EventDetailActivity extends AppCompatActivity implements
     }
 
     public void bookmarkButtonClicked(){
-        //TODO add mEvent to global current user's bookmarked
+        User user = ((SudoMapApplication)getApplication()).getCurrentUser();
+        user.addBookmarkedEvent(mEvent);
+        ((SudoMapApplication)getApplication()).updateCurrentUser(user);
     }
 
     public void attendingButtonClicked(){
-        //TODO add mEvent to global current user's attending events. Should be displayed in homeactivity
-        //TODO mEvent.addAttendant(); Add current user
+        User user = ((SudoMapApplication)getApplication()).getCurrentUser();
+        user.addAttendingEvent(mEvent);
+        ((SudoMapApplication)getApplication()).updateCurrentUser(user);
+        mEvent.addAttendant(user);
+        //TODO update this event in firebase
     }
 
     @Override
@@ -123,8 +128,7 @@ public class EventDetailActivity extends AppCompatActivity implements
 
         //TODO category
         titleView.setText(mEvent.getTitle());
-
-        organizerView.setText("By: "+ (((SudoMapApplication) getApplication()).getUserFromID(mEvent.getOrganizerID())));
+        organizerView.setText("By: "+mEvent.getOrganizer().getInAppName());
         locationNameView.setText(
                 "Location: "+ nameFromLatLng(mEvent.getLatitude(),mEvent.getLongitude()));
         locationAddress.setText(
@@ -133,11 +137,15 @@ public class EventDetailActivity extends AppCompatActivity implements
         mMap.addMarker(new MarkerOptions().position(new
                 LatLng(mEvent.getLatitude(), mEvent.getLongitude())).title("Hello world"));
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mEvent.getLatitude(), mEvent.getLongitude()),15));
-        //TODO Populate the attendants horizontal scroll view | Tinder scrolling
-//        for(User user: mEvent.getAttendants()){
-//            ImageView img = user.getImage(this);
-//            attendantsView.addView(img);
-//        }
+
+        for(User user: mEvent.getAttendants()){
+            AttendantsItem item = new AttendantsItem(getApplicationContext());
+            item.setName(user.getInAppName());
+            item.setPicBitMap(user.getProfileImageBitMap());
+            ImageView img = new ImageView(getApplicationContext());
+            img.setImageBitmap(user.getProfileImageBitMap());
+            attendantsView.addView(img);
+        }
     }
 
     public String addressFromLatLng(double lat, double lng){
