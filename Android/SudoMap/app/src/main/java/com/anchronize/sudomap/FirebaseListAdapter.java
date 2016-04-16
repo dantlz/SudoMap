@@ -171,21 +171,18 @@ public abstract class FirebaseListAdapter<T> extends BaseAdapter {
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
 
-        ViewHolder mainViewHolder = null;
 
-        //if (view == null) {
         view = mInflater.inflate(mLayout, viewGroup, false);
-        //ViewHolder viewHolder = new ViewHolder();
-//        Button upvoteButton = (Button) view.findViewById(R.id.list_item_btn);
-//        Button downvoteButton = (Button) view.findViewById(R.id.list_item_btn_down);
-//        upvoteButton.setTag(i);
-//        downvoteButton.setTag(i);
-//
-//        upvoteButton.setOnClickListener(new UpvoteListener());
-//        downvoteButton.setOnClickListener(new DownvoteListener());
 
-        // view.setTag(viewHolder);
-        //}
+        Button upvoteButton = (Button) view.findViewById(R.id.list_item_btn_up);
+        Button downvoteButton = (Button) view.findViewById(R.id.list_item_btn_down);
+        upvoteButton.setTag(i);
+        downvoteButton.setTag(i);
+
+        upvoteButton.setOnClickListener(new UpvoteListener());
+        downvoteButton.setOnClickListener(new DownvoteListener());
+
+
 
 
 
