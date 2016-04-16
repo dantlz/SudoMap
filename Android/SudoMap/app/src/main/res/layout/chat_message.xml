@@ -14,7 +14,7 @@
         android:layout_height="35dp"
         android:layout_centerHorizontal="true"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Title"
+        android:text="Chat Room"
         android:textStyle="bold"
         android:fontFamily="Myriad Pro"
         android:textColor="@color/white"
