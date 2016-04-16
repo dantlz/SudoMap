@@ -45,17 +45,5 @@
     <string name="list_item_date_time_title">Date and Time Title</string>
     <string name="list_item_location_title">Location Title</string>
 
-    <!-- Strings related to AddEventActivity -->
-    <string-array name="privacy_entries">
-        <item>Private Event</item>
-        <item>Public Event</item>
-    </string-array>
-
-    <!-- Strings related to AddEventActivity -->
-    <string-array name="privacy_entries">
-        <item>Private Event</item>
-        <item>Public Event</item>
-    </string-array>
-
     <string name="action_voice_rec">Houndify</string>
 </resources>

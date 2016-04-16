@@ -22,6 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.anchronize.sudomap.R;
+import com.anchronize.sudomap.SudoMapApplication;
 import com.anchronize.sudomap.objects.Event;
 import com.anchronize.sudomap.objects.User;
 import com.firebase.client.Firebase;
@@ -93,7 +94,8 @@ public class AddEventActivity extends AppCompatActivity{
 
                 //create the event object
                 Event event = new Event();
-                event.setOrganizer(tianlinz);
+                User currentUser = ((SudoMapApplication)getApplication()).getCurrentUser();
+                event.setOrganizerID(currentUser.getUserID());
                 event.setTitle(title);
                 event.setDescription(description);
                 event.setPrivacy(isPrivate);

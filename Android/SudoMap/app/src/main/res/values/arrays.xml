@@ -7,4 +7,9 @@
         <item>NEW</item>
         <item>FIRE</item>
     </string-array>
+    <!-- Strings related to AddEventActivity -->
+    <string-array name="privacy_entries">
+        <item>Private Event</item>
+        <item>Public Event</item>
+    </string-array>
 </resources>
