@@ -38,5 +38,10 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
+    <!-- Strings related to tabs -->
+    <string name="upcoming_fragment_title">Upcoming</string>
+    <string name="past_fragment_title">Past</string>
+    <string name="list_item_event_title">Event Title</string>
+
     <string name="action_voice_rec">Houndify</string>
 </resources>
