@@ -24,6 +24,7 @@ import android.widget.Toast;
 import com.anchronize.sudomap.navigationdrawer.AddEventActivity;
 import com.anchronize.sudomap.objects.Event;
 import com.anchronize.sudomap.objects.ShakeDetector;
+import com.anchronize.sudomap.objects.User;
 import com.arlib.floatingsearchview.FloatingSearchView;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
@@ -149,18 +150,20 @@ public class HomeActivity extends AppCompatActivity
                 allEventsinFirebase.clear();
 //                System.out.println(snapshot.getValue());
 //                System.out.println("There are " + snapshot.getChildrenCount() + " events");
-                for (DataSnapshot postSnapshot: snapshot.getChildren()) {
+                for (DataSnapshot postSnapshot : snapshot.getChildren()) {
                     Event event = postSnapshot.getValue(Event.class);
                     allEventsinFirebase.add(event);
                 }
-                if ( ((SudoMapApplication)getApplication()).getAuthenticateStatus() == true)
+                if (((SudoMapApplication) getApplication()).getAuthenticateStatus() == true)
                     addMapMarkers();
             }
+
             @Override
             public void onCancelled(FirebaseError firebaseError) {
 
             }
         });
+
 
 //        //add a listener to databse
 //        refEvents.add
