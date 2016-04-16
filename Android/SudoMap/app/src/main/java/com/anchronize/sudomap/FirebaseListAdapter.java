@@ -174,7 +174,7 @@ public abstract class FirebaseListAdapter<T> extends BaseAdapter {
 
         view = mInflater.inflate(mLayout, viewGroup, false);
 
-        Button upvoteButton = (Button) view.findViewById(R.id.list_item_btn);
+        Button upvoteButton = (Button) view.findViewById(R.id.list_item_btn_up);
         Button downvoteButton = (Button) view.findViewById(R.id.list_item_btn_down);
         upvoteButton.setTag(i);
         downvoteButton.setTag(i);
