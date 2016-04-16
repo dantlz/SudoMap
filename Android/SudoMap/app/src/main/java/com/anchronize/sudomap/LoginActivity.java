@@ -72,6 +72,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     // Maintain a connection to Firebase
     private Firebase ref;
 
+    //If sucess, pass this id to global application so other activities can refer to it
+    private String currentUserID;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -356,7 +359,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     System.out.println(authData.getProviderData().get("email"));
 
                     // unsure
-                    String currentUserID = authData.getUid();
+                     currentUserID = authData.getUid();
 //                    String currentUserReference =
 //                    Query userRef = ref.child("users").orderByChild("userID").equalTo(currentUserID);
 
@@ -364,7 +367,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 //                    ref.child("users").get;
                     Log.d("currentUser", currentUserID);
 
-                    ((SudoMapApplication)getApplication()).setCurrentUserID(currentUserID);
+
 
                 }
 
@@ -416,6 +419,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 finish();
                 // set global auth status to logged in
                 ((SudoMapApplication) getApplication()).setAuthenticateStatus(true);
+                ((SudoMapApplication)getApplication()).setCurrentUserID(currentUserID);
                 startActivity(new Intent(LoginActivity.this, HomeActivity.class));
                 System.out.println(" onPostExecute success");
 

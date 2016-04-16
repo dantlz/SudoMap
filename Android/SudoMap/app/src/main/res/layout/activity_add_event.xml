@@ -88,7 +88,7 @@
         android:layout_marginTop="30dp">
 
         <EditText
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textMultiLine"
             android:textSize="18sp"
@@ -124,18 +124,16 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:text="Privacy"
+            android:text="Private"
             android:textSize="18sp"
-            android:layout_marginEnd="8dp"
+            android:layout_marginEnd="230dp"
             />
 
-        <Spinner
-            android:id="@+id/privacySpinner"
+        <CheckBox
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:entries="@array/privacy_entries">
-
-        </Spinner>
+            android:layout_gravity="end"
+            android:id="@+id/privateCheckbox"/>
 
 
     </LinearLayout>
@@ -156,6 +154,7 @@
         <Spinner
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="0.8"
             android:entries= "@array/eventCategories"
             android:id="@+id/categorySpinner"
             ></Spinner>
@@ -164,9 +163,8 @@
     <Button
         android:layout_gravity="center"
         android:layout_marginTop="30dp"
-        android:paddingLeft="30dp"
-        android:paddingRight="30dp"
-        android:layout_width="wrap_content"
+
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Create"
         android:backgroundTint="@color/skyBlue"
