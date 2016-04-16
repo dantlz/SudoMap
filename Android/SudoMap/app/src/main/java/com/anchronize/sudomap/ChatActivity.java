@@ -1,20 +1,27 @@
 package com.anchronize.sudomap;
 
+import android.app.ListActivity;
 import android.content.Context;
+import android.database.DataSetObserver;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
+import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.firebase.client.Firebase;
+import com.firebase.client.ValueEventListener;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,16 +29,63 @@ import java.util.List;
  * Created by Rohan on 4/13/16.
  */
 
-public class ChatActivity extends AppCompatActivity {
+public class ChatActivity extends ListActivity {
 
     private ArrayList<String> data = new ArrayList<String>();
+    private static final String FIREBASE_URL = "https://anchronize.firebaseio.com";
+
+    private String mUsername;
+    private Firebase mFirebaseRef;
+    private ValueEventListener mConnectedListener;
+    private ChatListAdapter mChatListAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.chat_message);
 
-        ListView lv = (ListView) findViewById(R.id.listview);
+        //Set up firebase reference
+        //this should be changed to be under each event
+        mFirebaseRef = new Firebase(FIREBASE_URL).child("chat");
+
+
+
+        //set up input text field and send message button listener
+        EditText inputText = (EditText) findViewById(R.id.messageInput);
+        inputText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
+                if (actionId == EditorInfo.IME_NULL && keyEvent.getAction() == KeyEvent.ACTION_DOWN) {
+                    sendMessage();
+                }
+                return true;
+            }
+        });
+
+        findViewById(R.id.sendButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sendMessage();
+            }
+        });
+
+
+        //add listadapter to listview
+        final ListView listView = getListView();
+        // Tell our list adapter that we only want 50 messages at a time
+        mChatListAdapter = new ChatListAdapter(mFirebaseRef.limit(50), this, R.layout.list_item, mUsername);
+        listView.setAdapter(mChatListAdapter);
+        mChatListAdapter.registerDataSetObserver(new DataSetObserver() {
+            @Override
+            public void onChanged() {
+                super.onChanged();
+                listView.setSelection(mChatListAdapter.getCount() - 1);
+            }
+        });
+
+
+
+       /* ListView lv = (ListView) findViewById(R.id.listview);
         generateListContent();
         lv.setAdapter(new MyListAdaper(this, R.layout.list_item, data));
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -39,7 +93,7 @@ public class ChatActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Toast.makeText(ChatActivity.this, "List item was clicked at " + position, Toast.LENGTH_SHORT).show();
             }
-        });
+        });*/
     }
 
     private void generateListContent() {
@@ -68,6 +122,21 @@ public class ChatActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+
+    private void sendMessage() {
+        EditText inputText = (EditText) findViewById(R.id.messageInput);
+        String input = inputText.getText().toString();
+        if (!input.equals("")) {
+            // Create our 'model', a Chat object
+            Chat chat = new Chat(input, mUsername);
+            // Create a new, auto-generated child of that chat location, and save our chat data there
+            Firebase mPostRef = mFirebaseRef.push();
+            //mChatListAdapter.setReference(mPostRef.child("votes"));
+            mPostRef.setValue(chat);
+            inputText.setText("");
+        }
     }
 
     private class MyListAdaper extends ArrayAdapter<String> {
