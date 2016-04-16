@@ -1,163 +1,131 @@
-//package com.anchronize.sudomap.navigationdrawer;
-//
-//import android.os.Bundle;
-//import android.support.design.widget.FloatingActionButton;
-//import android.support.design.widget.Snackbar;
-//import android.support.design.widget.TabLayout;
-//import android.support.v4.app.Fragment;
-//import android.support.v4.app.FragmentManager;
-//import android.support.v4.app.FragmentPagerAdapter;
-//import android.support.v4.view.ViewPager;
-//import android.support.v7.app.AppCompatActivity;
-//import android.support.v7.widget.Toolbar;
-//import android.view.LayoutInflater;
-//import android.view.Menu;
-//import android.view.MenuItem;
-//import android.view.View;
-//import android.view.ViewGroup;
-//import android.widget.TextView;
-//
-//import com.anchronize.sudomap.NavigationDrawer;
-//import com.anchronize.sudomap.R;
-//
-//public class YourEventActivity extends NavigationDrawer {
-//
-//    /**
-//     * The {@link android.support.v4.view.PagerAdapter} that will provide
-//     * fragments for each of the sections. We use a
-//     * {@link FragmentPagerAdapter} derivative, which will keep every
-//     * loaded fragment in memory. If this becomes too memory intensive, it
-//     * may be best to switch to a
-//     * {@link android.support.v4.app.FragmentStatePagerAdapter}.
-//     */
-//    private SectionsPagerAdapter mSectionsPagerAdapter;
-//
-//    /**
-//     * The {@link ViewPager} that will host the section contents.
-//     */
-//    private ViewPager mViewPager;
-//
-//    @Override
-//    protected void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_your_event);
-//
-//        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-//        setSupportActionBar(toolbar);
-//        // Create the adapter that will return a fragment for each of the three
-//        // primary sections of the activity.
-//        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-//
-//        // Set up the ViewPager with the sections adapter.
-//        mViewPager = (ViewPager) findViewById(R.id.container);
-//        mViewPager.setAdapter(mSectionsPagerAdapter);
-//
-//        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
-//        tabLayout.setupWithViewPager(mViewPager);
-//
-//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//            }
-//        });
-//
-//    }
-//
-//
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        // Inflate the menu; this adds items to the action bar if it is present.
-//        getMenuInflater().inflate(R.menu.menu_your_event, menu);
-//        return true;
-//    }
-//
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        // Handle action bar item clicks here. The action bar will
-//        // automatically handle clicks on the Home/Up button, so long
-//        // as you specify a parent activity in AndroidManifest.xml.
-//        int id = item.getItemId();
-//
-//        //noinspection SimplifiableIfStatement
-//        if (id == R.id.action_settings) {
-//            return true;
-//        }
-//
-//        return super.onOptionsItemSelected(item);
-//    }
-//
-//    /**
-//     * A placeholder fragment containing a simple view.
-//     */
-//    public static class PlaceholderFragment extends Fragment {
-//        /**
-//         * The fragment argument representing the section number for this
-//         * fragment.
-//         */
-//        private static final String ARG_SECTION_NUMBER = "section_number";
-//
-//        public PlaceholderFragment() {
-//        }
-//
-//        /**
-//         * Returns a new instance of this fragment for the given section
-//         * number.
-//         */
-//        public static PlaceholderFragment newInstance(int sectionNumber) {
-//            PlaceholderFragment fragment = new PlaceholderFragment();
-//            Bundle args = new Bundle();
-//            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-//            fragment.setArguments(args);
-//            return fragment;
-//        }
-//
-//        @Override
-//        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-//                                 Bundle savedInstanceState) {
-//            View rootView = inflater.inflate(R.layout.fragment_your_event, container, false);
-//            TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-//            textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
-//            return rootView;
-//        }
-//    }
-//
-//    /**
-//     * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
-//     * one of the sections/tabs/pages.
-//     */
-//    public class SectionsPagerAdapter extends FragmentPagerAdapter {
-//
-//        public SectionsPagerAdapter(FragmentManager fm) {
-//            super(fm);
-//        }
-//
-//        @Override
-//        public Fragment getItem(int position) {
-//            // getItem is called to instantiate the fragment for the given page.
-//            // Return a PlaceholderFragment (defined as a static inner class below).
-//            return PlaceholderFragment.newInstance(position + 1);
-//        }
-//
-//        @Override
-//        public int getCount() {
-//            // Show 3 total pages.
-//            return 3;
-//        }
-//
-//        @Override
-//        public CharSequence getPageTitle(int position) {
-//            switch (position) {
-//                case 0:
-//                    return "SECTION 1";
-//                case 1:
-//                    return "SECTION 2";
-//                case 2:
-//                    return "SECTION 3";
-//            }
-//            return null;
-//        }
-//    }
-//}
+package com.anchronize.sudomap.navigationdrawer;
+
+import android.os.Bundle;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+
+import com.anchronize.sudomap.R;
+import com.anchronize.sudomap.navigationdrawer.youreventfragments.PastFragment;
+import com.anchronize.sudomap.navigationdrawer.youreventfragments.UpcomingFragment;
+import com.anchronize.sudomap.objects.Event;
+import com.firebase.client.Firebase;
+
+import java.util.ArrayList;
+import java.util.List;
+
+//Glarence Zhao
+//Tab UI code modified/referenced from Android Hive
+//http://www.androidhive.info/2015/09/android-material-design-working-with-tabs/
+
+public class YourEventActivity extends AppCompatActivity {
+
+    private Firebase ref;
+
+    private Toolbar toolBar;
+    private TabLayout tabLayout;
+    private ViewPager viewPager;
+
+    //FOR TESTING
+    private ArrayList<Event> upcomingEvents = new ArrayList<Event>();
+    private ArrayList<Event> pastEvents = new ArrayList<Event>();
+    public static final String UPCOMING_KEY = "UPCOMING EVENTS";
+    public static final String PAST_KEY = "PAST EVENTS";
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_your_event);
+
+        toolBar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolBar);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        //TEST
+        populateEvents();
+
+        viewPager = (ViewPager) findViewById(R.id.container);
+        setupViewPager(viewPager);
+
+        tabLayout = (TabLayout) findViewById(R.id.tabs);
+        tabLayout.setupWithViewPager(viewPager);
+
+        //set context for firebase
+        Firebase.setAndroidContext(this);
+        ref = new Firebase("https://anchronize.firebaseio.com");
+    }
+
+    private void setupViewPager(ViewPager viewPager){
+        ViewPagerAdapter viewPageAdapter = new ViewPagerAdapter(getSupportFragmentManager());
+
+        UpcomingFragment upcomingFragment = new UpcomingFragment();
+        PastFragment pastFragment = new PastFragment();
+        //setup Array passing
+        Bundle upcomingBundle = new Bundle();
+        upcomingBundle.putSerializable(UPCOMING_KEY, upcomingEvents);
+        upcomingFragment.setArguments(upcomingBundle);
+        Bundle pastBundle = new Bundle();
+        pastBundle.putSerializable(PAST_KEY, pastEvents);
+        pastFragment.setArguments(pastBundle);
+
+        viewPageAdapter.addFragment(upcomingFragment, getResources().getString(R.string.upcoming_fragment_title));
+        viewPageAdapter.addFragment(pastFragment, getResources().getString(R.string.past_fragment_title));
+        viewPager.setAdapter(viewPageAdapter);
+    }
+
+    class ViewPagerAdapter extends FragmentPagerAdapter {
+
+        private final List<Fragment> fragmentList = new ArrayList<Fragment>();
+        private final List<String> fragmentTitleList = new ArrayList<String>();
+
+        public ViewPagerAdapter(FragmentManager manager){
+            super(manager);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return fragmentList.get(position);
+        }
+
+        @Override
+        public int getCount() {
+            return fragmentList.size();
+        }
+
+        public void addFragment(Fragment fragment, String title){
+            fragmentList.add(fragment);
+            fragmentTitleList.add(title);
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return fragmentTitleList.get(position);
+        }
+    }
+
+    //FOR TESTING
+    private void populateEvents(){
+
+        //past events
+        Event springFest = new Event();
+        springFest.setTitle("SPRINGFEST 2016!");
+        Event conquest = new Event();
+        conquest.setTitle("Conquest");
+        pastEvents.add(springFest);
+        pastEvents.add(conquest);
+
+        //upcoming events
+        Event lidoConcert = new Event();
+        lidoConcert.setTitle("Lido feat. Snakehips");
+        Event yeezusConcert = new Event();
+        yeezusConcert.setTitle("YEEZUS!!!!!!!!!!");
+        upcomingEvents.add(lidoConcert);
+        upcomingEvents.add(yeezusConcert);
+    }
+
+}
