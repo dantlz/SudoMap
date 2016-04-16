@@ -27,35 +27,39 @@
         android:layout_height="100dp"
         android:layout_marginTop="30dp"
         android:text="MAIN_POST"/>
-
-    <ListView
-        android:id="@android:id/list"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="150dp"
-        android:layout_weight="1"
-        android:background="#FFFFFF" />
+        android:layout_height="470dp"
+        android:layout_marginTop="150dp">
 
-        <LinearLayout
-            android:id="@+id/listFooter"
-            android:layout_width="fill_parent"
+        <ListView
+            android:id="@android:id/list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#FFFFFF" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/listFooter"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/messageInput"
+            android:layout_width="330dp"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:orientation="horizontal">
+            android:inputType="textShortMessage"
+            android:lines="1"
+            android:singleLine="true" />
 
-            <EditText
-                android:id="@+id/messageInput"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:inputType="textShortMessage"
-                android:lines="1"
-                android:singleLine="true" />
-
-            <ImageButton
-                android:id="@+id/sendButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@android:drawable/ic_menu_send" />
-        </LinearLayout>
+        <ImageButton
+            android:id="@+id/sendButton"
+            android:layout_width="70dp"
+            android:layout_height="50dp"
+            android:layout_toRightOf="@+id/messageInput"
+            android:src="@android:drawable/ic_menu_send" />
+    </RelativeLayout>
 </RelativeLayout>
