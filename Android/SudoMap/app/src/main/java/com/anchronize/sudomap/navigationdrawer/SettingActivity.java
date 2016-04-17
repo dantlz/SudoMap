@@ -1,12 +1,14 @@
 package com.anchronize.sudomap.navigationdrawer;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -41,6 +43,7 @@ public class SettingActivity extends NavigationDrawer {
     private ImageView myImageView;
     private final int SELECT_PHOTO = 1;
     private FloatingActionButton myFab;
+    private Bitmap selectedImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,31 +115,65 @@ public class SettingActivity extends NavigationDrawer {
             try {
                 Uri imageUri = imageReturnedIntent.getData();
                 InputStream imageStream = getContentResolver().openInputStream(imageUri);
-                Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
+                selectedImage = BitmapFactory.decodeStream(imageStream);
+
+                /**
+                 * Delete the commented out portion if you do not need it
+                 * */
+//                String[] orientationColumn = {MediaStore.Images.Media.ORIENTATION};
+//                Cursor cur = getContentResolver().query(imageUri, orientationColumn, null, null, null);
+//                int orientation = -1;
+//                if (cur != null && cur.moveToFirst()) {
+//                    orientation = cur.getInt(cur.getColumnIndex(orientationColumn[0]));
+//                }
+//                Matrix matrix = new Matrix();
+//                matrix.postRotate(orientation);
+//                selectedImage = Bitmap.createBitmap(selectedImage, 0, 0, selectedImage.getWidth(), selectedImage.getHeight(), matrix, true);
+
+                changePicOrientation(imageUri, selectedImage);
+
                 // Converting to string to push to firebase
+                Bitmap copySelectedImage = selectedImage;
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                selectedImage.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                copySelectedImage.compress(Bitmap.CompressFormat.JPEG, 100, baos);
                 byte[] b = baos.toByteArray();
                 String string = Base64.encodeToString(b, Base64.DEFAULT);
                 // End of pushing to firebase
                 //TODO set current user profile image to selectedImage.toString or something
-                myImageView.getLayoutParams().height = myImageView.getMeasuredHeight();
-                myImageView.getLayoutParams().width = myImageView.getMeasuredWidth();
-
-                RotateBitmap(selectedImage, 90);
-
-                myImageView.setImageBitmap(selectedImage);
+//                myImageView.setImageBitmap(selectedImage);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
         }
     }
 
-    public static Bitmap RotateBitmap(Bitmap source, float angle)
-    {
+    // Fixes picture orientation issue so now all pictures show up correctly
+    public void changePicOrientation(Uri imageUri, Bitmap selectedImage){
+        String[] orientationColumn = {MediaStore.Images.Media.ORIENTATION};
+        Cursor cur = getContentResolver().query(imageUri, orientationColumn, null, null, null);
+        int orientation = -1;
+        if (cur != null && cur.moveToFirst()) {
+            orientation = cur.getInt(cur.getColumnIndex(orientationColumn[0]));
+        }
         Matrix matrix = new Matrix();
-        matrix.postRotate(angle);
-        return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);
+        matrix.postRotate(orientation);
+        selectedImage = Bitmap.createBitmap(selectedImage, 0, 0, selectedImage.getWidth(),
+                                            selectedImage.getHeight(), matrix, true);
+        myImageView.getLayoutParams().height = myImageView.getMeasuredHeight();
+        myImageView.getLayoutParams().width = myImageView.getMeasuredWidth();
+        myImageView.setImageBitmap(selectedImage);
+    }
+
+
+    public void onClickPic(View view)
+    {
+//        Toast.makeText(this, "You clicked me!", Toast.LENGTH_SHORT).show();
+        Matrix matrix = new Matrix();
+        matrix.postRotate(90);
+        selectedImage = Bitmap.createBitmap(selectedImage, 0, 0, selectedImage.getWidth(),
+                selectedImage.getHeight(), matrix, true);
+        myImageView.setImageBitmap(selectedImage);
+
     }
 /**
  * @Rohan Delete this code snippet if no errors arise
