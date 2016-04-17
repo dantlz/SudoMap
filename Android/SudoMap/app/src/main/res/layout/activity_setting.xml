@@ -139,6 +139,12 @@
             android:layout_marginTop="665dp"
             android:layout_marginLeft="40dp"
             android:hint="Add Note"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Save Content"
+            android:id="@+id/saveButton"/>
     </android.support.design.widget.CoordinatorLayout>
 </RelativeLayout>
 
