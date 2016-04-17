@@ -4,6 +4,7 @@ import android.app.ListActivity;
 import android.content.Intent;
 import android.database.DataSetObserver;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -100,7 +101,9 @@ public class ChatActivity extends ListActivity {
             // Create our 'model', a Chat object
             SimpleDateFormat sdf = new SimpleDateFormat("HH");
             String hour = sdf.format(new Date());
-            Chat chat = new Chat(input, mUsername, hour);
+            Log.d("timestamp",hour);
+            Chat chat = new Chat(input, mUsername);
+            chat.setHour(hour);
             // Create a new, auto-generated child of that chat location, and save our chat data there
             Firebase mPostRef = mFirebaseRef.push();
             //mChatListAdapter.setReference(mPostRef.child("votes"));

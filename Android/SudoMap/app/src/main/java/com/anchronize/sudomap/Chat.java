@@ -15,15 +15,17 @@ public class Chat {
     private Chat() {
     }
 
-    public Chat(String message, String author, String hour) {
+    public Chat(String message, String author) {
         this.message = message;
         this.author = author;
         this.votes = 0;
-        this.hour = hour;
     }
 
     public int getVotes() {
         return votes;
+    }
+    public void setHour(String hour){
+        this.hour = hour;
     }
 
     public String getMessage() {
@@ -33,4 +35,6 @@ public class Chat {
     public String getAuthor() {
         return author;
     }
+
+    public String getHour(){return hour;}
 }
