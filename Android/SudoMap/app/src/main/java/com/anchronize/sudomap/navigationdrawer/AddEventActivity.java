@@ -18,20 +18,16 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
-import com.anchronize.sudomap.Chat;
 import com.anchronize.sudomap.R;
 import com.anchronize.sudomap.SudoMapApplication;
 import com.anchronize.sudomap.objects.Event;
-import com.anchronize.sudomap.objects.User;
 import com.firebase.client.Firebase;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Locale;
@@ -144,8 +140,8 @@ public class AddEventActivity extends AppCompatActivity{
                 Firebase refChatThisEvent = ref.child("chat").child(id);
                 Firebase welcomeChatRef = refChatThisEvent.push();
 
-                Chat helloworldChat = new Chat(description, "sdfs");
-                welcomeChatRef.setValue(helloworldChat);
+                //Chat helloworldChat = new Chat(description, "sdfs");
+                //welcomeChatRef.setValue(helloworldChat);
 
                 setResult(RESULT_OK, null);
                 finish();
