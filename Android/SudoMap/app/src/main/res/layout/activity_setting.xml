@@ -46,11 +46,13 @@
 
         <ImageView
             android:id="@+id/profile_pic"
-            android:layout_width="472dp"
+            android:layout_width="460dp"
             android:layout_height="290dp"
             android:layout_marginLeft="-25dp"
             android:adjustViewBounds="true"
             android:scaleType="centerCrop"
+            android:clickable="true"
+            android:onClick="onClickPic"
             android:src="@mipmap/empty_pic"/>
 
         <ImageView
