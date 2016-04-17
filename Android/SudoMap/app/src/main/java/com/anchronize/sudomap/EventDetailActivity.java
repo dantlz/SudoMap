@@ -29,15 +29,19 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 public class EventDetailActivity extends AppCompatActivity implements
         GoogleMap.OnMyLocationButtonClickListener,
         OnMapReadyCallback,
         ActivityCompat.OnRequestPermissionsResultCallback{
     //A unique keyname, so that mainActivity can use this key and pass selected event to this activity
-    public static final String EVENT_KEY = "com.anchronize.sudomap.EventDetailActivity.event";
+    public static final String EVENT_KEY = "com.anchronize.sudomap.EventDetailActivity.eventKEY";
+    public static final String EVENTID_KEY = "com.anchronize.sudomap.EventDetailActivity.eventIDKEY";
 
     private TextView titleView;
     private TextView organizerView;
@@ -52,6 +56,7 @@ public class EventDetailActivity extends AppCompatActivity implements
 
     private Event mEvent;
     private GoogleMap mMap;
+    private Firebase ref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,17 +119,48 @@ public class EventDetailActivity extends AppCompatActivity implements
     }
 
     public void bookmarkButtonClicked(){
+        //get current user and update bookmarked events
         User user = ((SudoMapApplication)getApplication()).getCurrentUser();
+        if(user.getBookmarkedEventIDs().contains(mEvent.getEventID())){
+            return;         //if user already bookmark this event, do nothing
+        }
         user.addBookmarkedEventID(mEvent.getEventID());
-        ((SudoMapApplication)getApplication()).updateCurrentUser(user);
+
+        //update the firebase
+        Firebase refUser = ref.child("users").child(user.getUserID());
+        Map<String, Object> eventBookmarked = new HashMap<String, Object>();
+        eventBookmarked.put("bookmarkedEventIDs", user.getBookmarkedEventIDs());
+        refUser.updateChildren(eventBookmarked);
+
     }
 
     public void attendingButtonClicked(){
+        //get current user and update attending events
         User user = ((SudoMapApplication)getApplication()).getCurrentUser();
+        if(user.getAttendingEventIDs().contains(mEvent.getEventID())){
+            return;         //if user already attend this event, do nothing
+        }
         user.addAttendingEventID(mEvent.getEventID());
-        ((SudoMapApplication)getApplication()).updateCurrentUser(user);
-        mEvent.addAttendant(user.getUserID());
-        //TODO update this event in firebase
+
+
+        //update the firebase - user part
+        Firebase refUser = ref.child("users").child(user.getUserID());
+        Map<String, Object> eventAttending = new HashMap<String, Object>();
+        eventAttending.put("attendingEventIDs", user.getAttendingEventIDs());
+        refUser.updateChildren(eventAttending);
+
+        //update the firebases - event part
+        Firebase refEvent = ref.child("events").child(mEvent.getEventID());
+        ArrayList<String> attendentIDs = mEvent.getattendantsID();
+        if(!attendentIDs.contains(user.getUserID())){
+            //update the attendentIDs array
+            attendentIDs.add(user.getUserID());
+            Map<String, Object> attendee = new HashMap<String, Object>();
+            attendee.put("attendantsID", attendentIDs);
+            refEvent.updateChildren(attendee);
+        }
+
+
     }
 
     @Override
@@ -136,7 +172,7 @@ public class EventDetailActivity extends AppCompatActivity implements
     public void populateDetails(){
 
         //get Organizer from Firebase, set organizer's name to textView
-        Firebase ref = new Firebase("https://anchronize.firebaseio.com");
+        ref = new Firebase("https://anchronize.firebaseio.com");
         Firebase refOrganizer = ref.child("users").child(mEvent.getOrganizerID());
         refOrganizer.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -172,6 +208,31 @@ public class EventDetailActivity extends AppCompatActivity implements
 //            item.setPicBitMap(user.getProfileImageBitMap());
 //            attendantsView.addView(item);
 //        }
+
+//        for(String userID: mEvent.getAttendants()){
+//            Firebase attendeeRef = ref.child("users").child(userID);
+//            attendeeRef.addListenerForSingleValueEvent(new ValueEventListener() {
+//                @Override
+//                public void onDataChange(DataSnapshot dataSnapshot) {
+//                    User attendee = dataSnapshot.getValue(User.class);
+//
+//                    AttendantsItem item = new AttendantsItem(getApplicationContext());
+//                    item.setName(attendee.getInAppName());
+//
+//                    Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.miller);
+//                    item.setPicBitMap(bitmap);
+//                    attendantsView.addView(item);
+//
+//                }
+//
+//                @Override
+//                public void onCancelled(FirebaseError firebaseError) {
+//
+//                }
+//            });
+//
+//        }
+
         for(int i = 0; i < 5; i++){
             AttendantsItem item = new AttendantsItem(getApplicationContext());
             item.setName(Integer.toString(i)+ " -test- " + Integer.toString(i));
