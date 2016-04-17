@@ -7,6 +7,7 @@ public class Chat {
 
     private String message;
     private String author;
+    private String hour;
     private int votes;
 
     // Required default constructor for Firebase object mapping
@@ -14,10 +15,11 @@ public class Chat {
     private Chat() {
     }
 
-    public Chat(String message, String author) {
+    public Chat(String message, String author, String hour) {
         this.message = message;
         this.author = author;
         this.votes = 0;
+        this.hour = hour;
     }
 
     public int getVotes() {
