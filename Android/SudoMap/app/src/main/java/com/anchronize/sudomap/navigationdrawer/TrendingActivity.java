@@ -1,6 +1,7 @@
 package com.anchronize.sudomap.navigationdrawer;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,16 +14,17 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.anchronize.sudomap.EventDetailActivity;
 import com.anchronize.sudomap.NavigationDrawer;
 import com.anchronize.sudomap.R;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
-import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.LineData;
-import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.util.ArrayList;
@@ -52,8 +54,6 @@ public class TrendingActivity extends NavigationDrawer {
         map = new HashMap<>();
 
 
-
-
         //query the server once
         mRootRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -68,7 +68,7 @@ public class TrendingActivity extends NavigationDrawer {
                 map = sortByValue(map);
                 List<String> eventList = new ArrayList<String>();
                 for (Map.Entry<String, Integer> entry : map.entrySet()) {
-                    String id =  entry.getKey();
+                    String id = entry.getKey();
                     //eventList.add(id);
                     String eventTitle = (String) eventSnapshot.child(id).child("title").getValue();
                     eventList.add(eventTitle);
@@ -84,9 +84,9 @@ public class TrendingActivity extends NavigationDrawer {
                         String eventID = (String) trendingListView.getItemAtPosition(position);
                         Toast.makeText(TrendingActivity.this, "List item was clicked at " + eventID, Toast.LENGTH_SHORT).show();
 
-                           /* Intent i = new Intent(getApplicationContext(), EventDetailActivity.class);
-                            i.putExtra(EventDetailActivity.EVENTID_KEY, eventID);
-                            startActivity(i);*/
+                        Intent i = new Intent(getApplicationContext(), EventDetailActivity.class);
+                        i.putExtra(EventDetailActivity.EVENTID_KEY, eventID);
+                        startActivity(i);
                     }
                 });
             }
@@ -109,7 +109,7 @@ public class TrendingActivity extends NavigationDrawer {
             }
         });*/
 
-        LineChart lineChart = (LineChart) findViewById(R.id.chart);
+        PieChart pieChart = (PieChart) findViewById(R.id.chart);
         // creating list of entry
         ArrayList<Entry> entries = new ArrayList<>();
         entries.add(new Entry(4f, 0));
@@ -119,8 +119,7 @@ public class TrendingActivity extends NavigationDrawer {
         entries.add(new Entry(18f, 4));
         entries.add(new Entry(9f, 5));
 
-        LineDataSet dataset = new LineDataSet(entries, "# of Calls");
-        dataset.setDrawFilled(true);
+        PieDataSet dataset = new PieDataSet(entries, "# of Calls");
         dataset.setColors(ColorTemplate.COLORFUL_COLORS);
 
         // creating labels
@@ -132,13 +131,16 @@ public class TrendingActivity extends NavigationDrawer {
         labels.add("May");
         labels.add("June");
 
-        LineData data = new LineData(labels, dataset);
-        lineChart.setData(data); // set the data and list of lables into chart
-        lineChart.setDescription("Description");  // set the description
+        dataset.setValueTextSize(13);
+
+        PieData data = new PieData(labels, dataset);
+        pieChart.setData(data); // set the data and list of lables into chart
+        pieChart.setDescription("Description");  // set the description
+        pieChart.animateY(2000);
     }
 
     private void addItemsToList() {
-        for(int i = 0; i < 55; i++) {
+        for (int i = 0; i < 55; i++) {
             events.add("Number " + i);
         }
     }
@@ -158,7 +160,7 @@ public class TrendingActivity extends NavigationDrawer {
         public View getView(final int position, View convertView, ViewGroup parent) {
             ViewHolder mainViewholder = null;
 
-            if(convertView == null) {
+            if (convertView == null) {
                 LayoutInflater inflater = LayoutInflater.from(getContext());
                 convertView = inflater.inflate(layout, parent, false);
                 ViewHolder viewHolder = new ViewHolder();
@@ -178,6 +180,7 @@ public class TrendingActivity extends NavigationDrawer {
             return convertView;
         }
     }
+
     public class ViewHolder {
 
         TextView title;
@@ -188,10 +191,9 @@ public class TrendingActivity extends NavigationDrawer {
     //following implementation of sorting by map value is taken from
     //http://stackoverflow.com/questions/109383/sort-a-mapkey-value-by-values-java
     public static <K, V extends Comparable<? super V>> Map<K, V>
-    sortByValue( Map<K, V> map )
-    {
+    sortByValue(Map<K, V> map) {
         List<Map.Entry<K, V>> list =
-                new LinkedList<>( map.entrySet() );
+                new LinkedList<>(map.entrySet());
         Collections.sort(list, new Comparator<Map.Entry<K, V>>() {
             @Override
             public int compare(Map.Entry<K, V> o1, Map.Entry<K, V> o2) {
@@ -200,11 +202,9 @@ public class TrendingActivity extends NavigationDrawer {
         });
 
         Map<K, V> result = new LinkedHashMap<>();
-        for (Map.Entry<K, V> entry : list)
-        {
-            result.put( entry.getKey(), entry.getValue() );
+        for (Map.Entry<K, V> entry : list) {
+            result.put(entry.getKey(), entry.getValue());
         }
         return result;
     }
 }
-
