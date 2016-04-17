@@ -20,6 +20,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.anchronize.sudomap.Chat;
 import com.anchronize.sudomap.R;
 import com.anchronize.sudomap.SudoMapApplication;
 import com.anchronize.sudomap.objects.Event;
@@ -32,7 +33,9 @@ import com.google.android.gms.location.places.ui.PlacePicker;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 public class AddEventActivity extends AppCompatActivity{
 
@@ -105,17 +108,9 @@ public class AddEventActivity extends AppCompatActivity{
                 boolean isPrivate = privacyCheckBox.isChecked();
                 String category = categorySpinner.getSelectedItem().toString();
 
-
-                //TODO change the hard-code user to the global user
-                User tianlinz = new User("123456");
-                tianlinz.setPremium(true);
-                tianlinz.setInAppName("tianlinz");
-                tianlinz.setUserBio("fuck you bio!");
-
                 //create the event object
                 Event event = new Event();
-                User currentUser = ((SudoMapApplication)getApplication()).getCurrentUser();
-                event.setOrganizerID(currentUser.getUserID());
+                event.setOrganizerID(((SudoMapApplication) getApplication()).getCurrentUserID());
                 event.setTitle(title);
                 event.setDescription(description);
                 event.setPrivacy(isPrivate);
@@ -124,12 +119,34 @@ public class AddEventActivity extends AppCompatActivity{
                 event.setLatitude(latitude);
                 event.setLongitude(longitude);
                 event.setAddress(address);
+                //set event date and time
+                event.setStartMinute(startMinute);
+                event.setStartHour(startHour);
+                event.setStartDay(startDay);
+                event.setStartMonth(startMonth);
+                event.setStartYear(startYear);
+                event.setEndMinute(endMinute);
+                event.setEndDay(endDay);
+                event.setEndHour(endHour);
+                event.setEndMonth(endMonth);
+                event.setEndYear(endYear);
 
                 Firebase temp = refEvent.push();
                 String id = temp.getKey();
                 Log.d("id", id);
                 temp.setValue(event);
-//                event.setEventID(id);
+                //update the eventID into Firebase after pushing new events
+                Map<String, Object> eventID = new HashMap<String, Object>();
+                eventID.put("eventID", id);
+                temp.updateChildren(eventID);
+
+                //create a node in "chats" root, corresponding to this event
+                Firebase refChatThisEvent = ref.child("chat").child(id);
+                Firebase welcomeChatRef = refChatThisEvent.push();
+
+                Chat helloworldChat = new Chat(description, "sdfs");
+                welcomeChatRef.setValue(helloworldChat);
+
                 setResult(RESULT_OK, null);
                 finish();
 
