@@ -59,7 +59,7 @@ public class Event implements Serializable {
         this.organizerID = organizerID;
     }
 
-    public ArrayList<String> getAttendants() {
+    public ArrayList<String> getattendantsID() {
         return attendantsID;
     }
 
