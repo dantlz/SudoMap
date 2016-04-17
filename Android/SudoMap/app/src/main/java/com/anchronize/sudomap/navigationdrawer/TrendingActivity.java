@@ -1,8 +1,8 @@
 package com.anchronize.sudomap.navigationdrawer;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +13,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.anchronize.sudomap.EventDetailActivity;
 import com.anchronize.sudomap.NavigationDrawer;
 import com.anchronize.sudomap.R;
 import com.firebase.client.DataSnapshot;
@@ -38,7 +37,6 @@ import java.util.Map;
 public class TrendingActivity extends NavigationDrawer {
     private ArrayList<String> events = new ArrayList<String>();
     private static final String FIREBASE_URL = "https://anchronize.firebaseio.com";
-    private Firebase mChatRef;
     private Map<String, Integer> map; //<eventID, number of posts so far>
 
     @Override
@@ -46,41 +44,53 @@ public class TrendingActivity extends NavigationDrawer {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_trending);
         //set up Firebase reference for chat
-        mChatRef = new Firebase(FIREBASE_URL).child("chat");
-
+        Firebase mRootRef = new Firebase(FIREBASE_URL);
+        Firebase mChatRef = new Firebase(FIREBASE_URL).child("chat");
+        Firebase mEventRef = new Firebase(FIREBASE_URL).child("events");
         //initialize the map
         //<eventID, number of posts so far>
         map = new HashMap<>();
 
+
+
+
         //query the server once
-        mChatRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        mRootRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for(DataSnapshot eventSnapshot : dataSnapshot.getChildren()){
-                    String eventID = eventSnapshot.getKey();
-                    Integer num = Integer.valueOf((int) eventSnapshot.getChildrenCount());
+                DataSnapshot chatSnapshot = dataSnapshot.child("chat");
+                DataSnapshot eventSnapshot = dataSnapshot.child("events");
+                for (DataSnapshot chatInnerSnapshot : chatSnapshot.getChildren()) {
+                    String eventID = chatInnerSnapshot.getKey();
+                    Integer num = Integer.valueOf((int) chatInnerSnapshot.getChildrenCount());
                     map.put(eventID, num);
-                    map = sortByValue(map);
-                    List<String> eventList = new ArrayList<String>();
-                    for(Map.Entry<String, Integer> entry : map.entrySet()){
-                        eventList.add(entry.getKey());
-                    }
-                    MyListAdaper la = new MyListAdaper(getApplicationContext(), R.layout.event_list_item, eventList);
-                    final ListView trendingListView = (ListView)findViewById(R.id.mylist);
-                    addItemsToList();
-                    trendingListView.setAdapter(la);
-                    trendingListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                            String eventID = (String) trendingListView.getItemAtPosition(position);
-                            Intent i = new Intent(getApplicationContext(), EventDetailActivity.class);
-                            i.putExtra(EventDetailActivity.EVENTID_KEY, eventID);
-                            startActivity(i);
-                        }
-                    });
                 }
+                map = sortByValue(map);
+                List<String> eventList = new ArrayList<String>();
+                for (Map.Entry<String, Integer> entry : map.entrySet()) {
+                    String id =  entry.getKey();
+                    //eventList.add(id);
+                    String eventTitle = (String) eventSnapshot.child(id).child("title").getValue();
+                    eventList.add(eventTitle);
+                }
+                Log.d("eventList", eventList.toString());
+                MyListAdaper la = new MyListAdaper(getApplicationContext(), R.layout.event_list_item, eventList);
+                final ListView trendingListView = (ListView) findViewById(R.id.mylist);
+                //addItemsToList();
+                trendingListView.setAdapter(la);
+                trendingListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        String eventID = (String) trendingListView.getItemAtPosition(position);
+                        Toast.makeText(TrendingActivity.this, "List item was clicked at " + eventID, Toast.LENGTH_SHORT).show();
 
+                           /* Intent i = new Intent(getApplicationContext(), EventDetailActivity.class);
+                            i.putExtra(EventDetailActivity.EVENTID_KEY, eventID);
+                            startActivity(i);*/
+                    }
+                });
             }
+
 
             @Override
             public void onCancelled(FirebaseError firebaseError) {
@@ -89,7 +99,7 @@ public class TrendingActivity extends NavigationDrawer {
         });
 
 
-        ListView trendingListView = (ListView)findViewById(R.id.mylist);
+/*        ListView trendingListView = (ListView)findViewById(R.id.mylist);
         addItemsToList();
         trendingListView.setAdapter(new MyListAdaper(this, R.layout.event_list_item, events));
         trendingListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -97,7 +107,7 @@ public class TrendingActivity extends NavigationDrawer {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Toast.makeText(TrendingActivity.this, "List item was clicked at " + position, Toast.LENGTH_SHORT).show();
             }
-        });
+        });*/
 
         LineChart lineChart = (LineChart) findViewById(R.id.chart);
         // creating list of entry
