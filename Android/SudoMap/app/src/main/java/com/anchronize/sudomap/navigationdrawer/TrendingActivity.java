@@ -72,9 +72,10 @@ public class TrendingActivity extends NavigationDrawer {
                     trendingListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                            String event = (String) trendingListView.getItemAtPosition(position);
+                            String eventID = (String) trendingListView.getItemAtPosition(position);
                             Intent i = new Intent(getApplicationContext(), EventDetailActivity.class);
-//                            i.putExtra()
+                            i.putExtra(EventDetailActivity.EVENTID_KEY, eventID);
+                            startActivity(i);
                         }
                     });
                 }

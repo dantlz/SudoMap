@@ -8,6 +8,7 @@ import android.location.Geocoder;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.HorizontalScrollView;
@@ -55,6 +56,7 @@ public class EventDetailActivity extends AppCompatActivity implements
     private Button attendingButton;
 
     private Event mEvent;
+    private String mEventID;
     private GoogleMap mMap;
     private Firebase ref;
 
@@ -62,15 +64,12 @@ public class EventDetailActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_detail);
+        ref = new Firebase("https://anchronize.firebaseio.com");
         initializeComponents();
         addListeners();
     }
 
     public void initializeComponents(){
-        //Current Event
-        Intent i = getIntent();
-        mEvent = (Event)i.getSerializableExtra(EVENT_KEY);
-
         //Map
         SupportMapFragment mapFragment =
                 (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.eventsMap);
@@ -87,6 +86,33 @@ public class EventDetailActivity extends AppCompatActivity implements
         chatButton = (Button) findViewById(R.id.chatButton);
         bookmarkButton = (Button) findViewById(R.id.bookmarkButton);
         attendingButton = (Button) findViewById(R.id.attendingButton);
+
+        //Current Event
+        Intent i = getIntent();
+        if(i.hasExtra(EVENTID_KEY)){
+            mEventID = i.getStringExtra(EVENTID_KEY);
+            Log.d("a","sss");
+
+            //TODO Get the event from event ID and set mEvent to the event
+            Firebase refEventID = ref.child("events").child(mEventID);
+            refEventID.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    mEvent = dataSnapshot.getValue(Event.class);
+                    populateDetails();
+                }
+
+                @Override
+                public void onCancelled(FirebaseError firebaseError) {
+
+                }
+            });
+
+        }
+        else{
+            mEvent = (Event)i.getSerializableExtra(EVENT_KEY);
+            populateDetails();
+        }
     }
 
     public void addListeners(){
@@ -166,13 +192,14 @@ public class EventDetailActivity extends AppCompatActivity implements
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        populateDetails();
+        mMap.addMarker(new MarkerOptions().position(new
+                LatLng(mEvent.getLatitude(), mEvent.getLongitude())).title("Hello world"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mEvent.getLatitude(), mEvent.getLongitude()), 15));
     }
 
     public void populateDetails(){
 
         //get Organizer from Firebase, set organizer's name to textView
-        ref = new Firebase("https://anchronize.firebaseio.com");
         Firebase refOrganizer = ref.child("users").child(mEvent.getOrganizerID());
         refOrganizer.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -196,10 +223,6 @@ public class EventDetailActivity extends AppCompatActivity implements
         locationNameView.setText(mEvent.getAddressName());
         locationAddress.setText(mEvent.getAddress());
         descriptionView.setText(mEvent.getDescription());
-        mMap.addMarker(new MarkerOptions().position(new
-                LatLng(mEvent.getLatitude(), mEvent.getLongitude())).title("Hello world"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mEvent.getLatitude(), mEvent.getLongitude()), 15));
-
 
         Toast.makeText(getApplicationContext(), ((SudoMapApplication) getApplication()).getCurrentUser().getInAppName(), Toast.LENGTH_LONG).show();
 //        for(User user: mEvent.getAttendants()){

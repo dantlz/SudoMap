@@ -29,6 +29,11 @@ import android.widget.Toast;
 
 import com.anchronize.sudomap.NavigationDrawer;
 import com.anchronize.sudomap.R;
+import com.anchronize.sudomap.SudoMapApplication;
+import com.anchronize.sudomap.objects.User;
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.common.api.GoogleApiClient;
 
 import org.w3c.dom.Text;
 
@@ -44,6 +49,11 @@ public class SettingActivity extends NavigationDrawer {
     private final int SELECT_PHOTO = 1;
     private FloatingActionButton myFab;
     private Bitmap selectedImage;
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    private GoogleApiClient client;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +93,9 @@ public class SettingActivity extends NavigationDrawer {
                 startActivityForResult(photoPickerIntent, SELECT_PHOTO);
             }
         });
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
     @Override
@@ -137,9 +150,13 @@ public class SettingActivity extends NavigationDrawer {
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
                 copySelectedImage.compress(Bitmap.CompressFormat.JPEG, 100, baos);
                 byte[] b = baos.toByteArray();
-                String string = Base64.encodeToString(b, Base64.DEFAULT);
-                // End of pushing to firebase
-                //TODO set current user profile image to selectedImage.toString or something
+                String imgString = Base64.encodeToString(b, Base64.DEFAULT);
+                User current = ((SudoMapApplication) getApplication()).getCurrentUser();
+                current.setProfileImgString(imgString);
+                //TODO Update current user
+
+
+
 //                myImageView.setImageBitmap(selectedImage);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
@@ -148,7 +165,7 @@ public class SettingActivity extends NavigationDrawer {
     }
 
     // Fixes picture orientation issue so now all pictures show up correctly
-    public void changePicOrientation(Uri imageUri, Bitmap selectedImage){
+    public void changePicOrientation(Uri imageUri, Bitmap selectedImage) {
         String[] orientationColumn = {MediaStore.Images.Media.ORIENTATION};
         Cursor cur = getContentResolver().query(imageUri, orientationColumn, null, null, null);
         int orientation = -1;
@@ -158,15 +175,14 @@ public class SettingActivity extends NavigationDrawer {
         Matrix matrix = new Matrix();
         matrix.postRotate(orientation);
         selectedImage = Bitmap.createBitmap(selectedImage, 0, 0, selectedImage.getWidth(),
-                                            selectedImage.getHeight(), matrix, true);
+                selectedImage.getHeight(), matrix, true);
         myImageView.getLayoutParams().height = myImageView.getMeasuredHeight();
         myImageView.getLayoutParams().width = myImageView.getMeasuredWidth();
         myImageView.setImageBitmap(selectedImage);
     }
 
 
-    public void onClickPic(View view)
-    {
+    public void onClickPic(View view) {
 //        Toast.makeText(this, "You clicked me!", Toast.LENGTH_SHORT).show();
         Matrix matrix = new Matrix();
         matrix.postRotate(90);
@@ -174,6 +190,46 @@ public class SettingActivity extends NavigationDrawer {
                 selectedImage.getHeight(), matrix, true);
         myImageView.setImageBitmap(selectedImage);
 
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client.connect();
+        Action viewAction = Action.newAction(
+                Action.TYPE_VIEW, // TODO: choose an action type.
+                "Setting Page", // TODO: Define a title for the content shown.
+                // TODO: If you have web page content that matches this app activity's content,
+                // make sure this auto-generated web page URL is correct.
+                // Otherwise, set the URL to null.
+                Uri.parse("http://host/path"),
+                // TODO: Make sure this auto-generated app URL is correct.
+                Uri.parse("android-app://com.anchronize.sudomap.navigationdrawer/http/host/path")
+        );
+        AppIndex.AppIndexApi.start(client, viewAction);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        Action viewAction = Action.newAction(
+                Action.TYPE_VIEW, // TODO: choose an action type.
+                "Setting Page", // TODO: Define a title for the content shown.
+                // TODO: If you have web page content that matches this app activity's content,
+                // make sure this auto-generated web page URL is correct.
+                // Otherwise, set the URL to null.
+                Uri.parse("http://host/path"),
+                // TODO: Make sure this auto-generated app URL is correct.
+                Uri.parse("android-app://com.anchronize.sudomap.navigationdrawer/http/host/path")
+        );
+        AppIndex.AppIndexApi.end(client, viewAction);
+        client.disconnect();
     }
 /**
  * @Rohan Delete this code snippet if no errors arise
