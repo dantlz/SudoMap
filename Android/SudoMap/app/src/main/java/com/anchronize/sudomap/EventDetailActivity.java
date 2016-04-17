@@ -29,16 +29,18 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import org.w3c.dom.Text;
+
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
 public class EventDetailActivity extends AppCompatActivity implements
-        GoogleMap.OnMyLocationButtonClickListener,
-        OnMapReadyCallback,
+
         ActivityCompat.OnRequestPermissionsResultCallback{
     //A unique keyname, so that mainActivity can use this key and pass selected event to this activity
     public static final String EVENT_KEY = "com.anchronize.sudomap.EventDetailActivity.eventKEY";
@@ -49,41 +51,45 @@ public class EventDetailActivity extends AppCompatActivity implements
     private TextView locationNameView;
     private TextView locationAddress;
     private TextView descriptionView;
+    private TextView categoryView;
+    private TextView startDateTextView;
     private HorizontalScrollView attendantsScrollView;
     private LinearLayout attendantsView;
-    private Button chatButton;
+//    private Button chatButton;
     private Button bookmarkButton;
     private Button attendingButton;
 
     private Event mEvent;
     private String mEventID;
-    private GoogleMap mMap;
+
     private Firebase ref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_event_detail);
+        setContentView(R.layout.activity_event_detail_updated);
         ref = new Firebase("https://anchronize.firebaseio.com");
         initializeComponents();
         addListeners();
     }
 
     public void initializeComponents(){
-        //Map
-        SupportMapFragment mapFragment =
-                (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.eventsMap);
-        mapFragment.getMapAsync(this);
+//        //Map
+//        SupportMapFragment mapFragment =
+//                (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.eventsMap);
+//        mapFragment.getMapAsync(this);
 
         //GUI
         titleView = (TextView) findViewById(R.id.eventTitle);
+        categoryView = (TextView)findViewById(R.id.categoryTextView);
         organizerView = (TextView) findViewById(R.id.organizerInfo);
         locationNameView = (TextView) findViewById(R.id.eventLocationNameTextView);
         locationAddress = (TextView) findViewById(R.id.eventLocationAddressTextView);
         descriptionView = (TextView) findViewById(R.id.eventDescriptionView);
         attendantsScrollView = (HorizontalScrollView) findViewById(R.id.attendantsScrollView);
+        startDateTextView = (TextView)findViewById(R.id.startDateTimeTextView);
         attendantsView = (LinearLayout) findViewById(R.id.attendants);
-        chatButton = (Button) findViewById(R.id.chatButton);
+       // chatButton = (Button) findViewById(R.id.chatButton);
         bookmarkButton = (Button) findViewById(R.id.bookmarkButton);
         attendingButton = (Button) findViewById(R.id.attendingButton);
 
@@ -116,12 +122,12 @@ public class EventDetailActivity extends AppCompatActivity implements
     }
 
     public void addListeners(){
-        chatButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                chatButtonClicked();
-            }
-        });
+//        chatButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                chatButtonClicked();
+//            }
+//        });
         bookmarkButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -189,13 +195,13 @@ public class EventDetailActivity extends AppCompatActivity implements
 
     }
 
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
-        mMap.addMarker(new MarkerOptions().position(new
-                LatLng(mEvent.getLatitude(), mEvent.getLongitude())).title("Hello world"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mEvent.getLatitude(), mEvent.getLongitude()), 15));
-    }
+//    @Override
+//    public void onMapReady(GoogleMap googleMap) {
+//        mMap = googleMap;
+//        mMap.addMarker(new MarkerOptions().position(new
+//                LatLng(mEvent.getLatitude(), mEvent.getLongitude())).title("Hello world"));
+//        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mEvent.getLatitude(), mEvent.getLongitude()), 15));
+//    }
 
     public void populateDetails(){
 
@@ -220,11 +226,46 @@ public class EventDetailActivity extends AppCompatActivity implements
         //TODO category
 
         titleView.setText(mEvent.getTitle());
+        categoryView.setText(mEvent.getCategory() + "     |  ");
         locationNameView.setText(mEvent.getAddressName());
         locationAddress.setText(mEvent.getAddress());
         descriptionView.setText(mEvent.getDescription());
 
-        Toast.makeText(getApplicationContext(), ((SudoMapApplication) getApplication()).getCurrentUser().getInAppName(), Toast.LENGTH_LONG).show();
+
+        Calendar time = Calendar.getInstance();
+        time.set(Calendar.HOUR_OF_DAY, mEvent.getStartHour());
+        time.set(Calendar.MINUTE, mEvent.getStartMinute());
+        String startAM_PM = "";
+
+        if(time.get(Calendar.AM_PM) == Calendar.AM)
+            startAM_PM = "AM";
+        else if(time.get(Calendar.AM_PM) == Calendar.PM)
+            startAM_PM = "PM";
+
+        String hour = (time.get(Calendar.HOUR) == 0) ?"12":time.get(Calendar.HOUR)+"";
+        int startHour = Integer.parseInt(hour);
+
+        int selectedMinute = time.get(Calendar.MINUTE);
+        int startMinute = selectedMinute;
+        String sMinute = "00";
+        if(selectedMinute < 10){
+            sMinute = "0" + selectedMinute;
+        } else {
+            sMinute = selectedMinute + "";
+        }
+
+        String timeFirstPart = hour + ":" + sMinute + " " + startAM_PM;
+
+
+        int startYear = mEvent.getStartYear();
+        int startMonth = mEvent.getStartMonth();
+        int startDay = mEvent.getStartDay();
+
+        time.set(Calendar.MONTH, startMonth);
+        String month = time.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.US);
+        String date = month + " " + startDay + ", " + startYear;
+        startDateTextView.setText(date + " at " + timeFirstPart);
+
 //        for(User user: mEvent.getAttendants()){
 //            AttendantsItem item = new AttendantsItem(getApplicationContext());
 //            item.setName(user.getInAppName());
@@ -295,8 +336,5 @@ public class EventDetailActivity extends AppCompatActivity implements
         return "RETRIEVE ADDRESS NAME FAILED";
     }
 
-    @Override
-    public boolean onMyLocationButtonClick() {
-        return false;
-    }
+
 }
