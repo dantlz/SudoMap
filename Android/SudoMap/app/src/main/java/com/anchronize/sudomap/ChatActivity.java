@@ -14,7 +14,9 @@ import android.widget.TextView;
 import com.firebase.client.Firebase;
 import com.firebase.client.ValueEventListener;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Created by Rohan on 4/13/16.
@@ -96,7 +98,9 @@ public class ChatActivity extends ListActivity {
         String input = inputText.getText().toString();
         if (!input.equals("")) {
             // Create our 'model', a Chat object
-            Chat chat = new Chat(input, mUsername);
+            SimpleDateFormat sdf = new SimpleDateFormat("HH");
+            String hour = sdf.format(new Date());
+            Chat chat = new Chat(input, mUsername, hour);
             // Create a new, auto-generated child of that chat location, and save our chat data there
             Firebase mPostRef = mFirebaseRef.push();
             //mChatListAdapter.setReference(mPostRef.child("votes"));
