@@ -57,6 +57,7 @@ public class AddEventActivity extends AppCompatActivity{
     private double latitude = 0;
     private double longitude = 0;
     private String address = "";
+    private String addressName ="";
 
     int PLACE_PICKER_REQUEST = 2;   //request code for google place picker
 
@@ -114,6 +115,7 @@ public class AddEventActivity extends AppCompatActivity{
                 event.setVisible(true); //default the visibility to true
                 event.setLatitude(latitude);
                 event.setLongitude(longitude);
+                event.setAddressName(addressName);
                 event.setAddress(address);
                 //set event date and time
                 event.setStartMinute(startMinute);
@@ -280,6 +282,7 @@ public class AddEventActivity extends AppCompatActivity{
                 longitude = place.getLatLng().longitude;
                 latitude = place.getLatLng().latitude;
                 address = String.valueOf(place.getAddress());
+                addressName = place.getName().toString();
                 locationTV.setText(place.getName().toString());
             }
         }

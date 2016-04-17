@@ -75,12 +75,21 @@ public class Event implements Serializable {
         }
     }
 
+
     public boolean getPrivacy() {
         return privacy;
     }
 
     public void setPrivacy(boolean privacy) {
         this.privacy = privacy;
+    }
+
+    public String getAddressName() {
+        return addressName;
+    }
+
+    public void setAddressName(String addressName) {
+        this.addressName = addressName;
     }
 
     public String getAddress() {
@@ -215,6 +224,7 @@ public class Event implements Serializable {
     private ArrayList<String> attendantsID = new ArrayList<String>();
     private boolean privacy;
     private String address;
+    private String addressName;
     private double longitude;
     private double latitude;
     private boolean visible;
