@@ -1,46 +1,92 @@
 package com.anchronize.sudomap.navigationdrawer;
 
 import android.content.Context;
-import android.support.v7.app.AppCompatActivity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.anchronize.sudomap.EventDetailActivity;
 import com.anchronize.sudomap.NavigationDrawer;
 import com.anchronize.sudomap.R;
-import com.github.mikephil.charting.charts.BarChart;
+import com.firebase.client.DataSnapshot;
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
 import com.github.mikephil.charting.charts.LineChart;
-import com.github.mikephil.charting.data.BarData;
-import com.github.mikephil.charting.data.BarDataSet;
-import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
-import java.security.KeyStore;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 public class TrendingActivity extends NavigationDrawer {
     private ArrayList<String> events = new ArrayList<String>();
+    private static final String FIREBASE_URL = "https://anchronize.firebaseio.com";
+    private Firebase mChatRef;
+    private Map<String, Integer> map; //<eventID, number of posts so far>
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_trending);
+        //set up Firebase reference for chat
+        mChatRef = new Firebase(FIREBASE_URL).child("chat");
+
+        //initialize the map
+        //<eventID, number of posts so far>
+        map = new HashMap<>();
+
+        //query the server once
+        mChatRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot eventSnapshot : dataSnapshot.getChildren()){
+                    String eventID = eventSnapshot.getKey();
+                    Integer num = Integer.valueOf((int) eventSnapshot.getChildrenCount());
+                    map.put(eventID, num);
+                    map = sortByValue(map);
+                    List<String> eventList = new ArrayList<String>();
+                    for(Map.Entry<String, Integer> entry : map.entrySet()){
+                        eventList.add(entry.getKey());
+                    }
+                    MyListAdaper la = new MyListAdaper(getApplicationContext(), R.layout.event_list_item, eventList);
+                    final ListView trendingListView = (ListView)findViewById(R.id.mylist);
+                    addItemsToList();
+                    trendingListView.setAdapter(la);
+                    trendingListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            String event = (String) trendingListView.getItemAtPosition(position);
+                            Intent i = new Intent(getApplicationContext(), EventDetailActivity.class);
+//                            i.putExtra()
+                        }
+                    });
+                }
+
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
+
 
         ListView trendingListView = (ListView)findViewById(R.id.mylist);
         addItemsToList();
@@ -125,6 +171,29 @@ public class TrendingActivity extends NavigationDrawer {
 
         TextView title;
         ImageButton button;
+    }
+
+
+    //following implementation of sorting by map value is taken from
+    //http://stackoverflow.com/questions/109383/sort-a-mapkey-value-by-values-java
+    public static <K, V extends Comparable<? super V>> Map<K, V>
+    sortByValue( Map<K, V> map )
+    {
+        List<Map.Entry<K, V>> list =
+                new LinkedList<>( map.entrySet() );
+        Collections.sort(list, new Comparator<Map.Entry<K, V>>() {
+            @Override
+            public int compare(Map.Entry<K, V> o1, Map.Entry<K, V> o2) {
+                return (o1.getValue()).compareTo(o2.getValue());
+            }
+        });
+
+        Map<K, V> result = new LinkedHashMap<>();
+        for (Map.Entry<K, V> entry : list)
+        {
+            result.put( entry.getKey(), entry.getValue() );
+        }
+        return result;
     }
 }
 
