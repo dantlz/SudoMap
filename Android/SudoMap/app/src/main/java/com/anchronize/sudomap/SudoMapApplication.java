@@ -29,6 +29,8 @@ public class SudoMapApplication extends android.app.Application{
          ref =  new Firebase("https://anchronize.firebaseio.com");
          refUsers = ref.child("users");
 
+
+
         isAuthenticated = false;
         currentUserID = null;
 
