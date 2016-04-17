@@ -19,9 +19,11 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.anchronize.sudomap.navigationdrawer.AddEventActivity;
+import com.anchronize.sudomap.navigationdrawer.TrendingActivity;
 import com.anchronize.sudomap.objects.Event;
 import com.anchronize.sudomap.objects.ShakeDetector;
 import com.anchronize.sudomap.objects.User;
@@ -94,6 +96,8 @@ public class HomeActivity extends AppCompatActivity
     private Sensor mAccelerometer;
     private ShakeDetector mShakeDetector;
 
+    private Button mTrendingButton;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -165,6 +169,15 @@ public class HomeActivity extends AppCompatActivity
         });
 
 
+        //TODO DELETE THIS SHIT  Jason's temp button
+        mTrendingButton = (Button) findViewById(R.id.trending_temp);
+        mTrendingButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(), TrendingActivity.class);
+                startActivity(i);
+            }
+        });
 
 
         // ShakeDetector initialization from http://jasonmcreynolds.com/?p=388
