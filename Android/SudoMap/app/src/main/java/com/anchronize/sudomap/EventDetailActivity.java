@@ -155,8 +155,8 @@ public class EventDetailActivity extends AppCompatActivity implements
         //TODO category
 
         titleView.setText(mEvent.getTitle());
-        locationNameView.setText(nameFromLatLng(mEvent.getLatitude(),mEvent.getLongitude()));
-        locationAddress.setText(addressFromLatLng(mEvent.getLatitude(), mEvent.getLongitude()));
+        locationNameView.setText(mEvent.getAddressName());
+        locationAddress.setText(mEvent.getAddress());
         descriptionView.setText(mEvent.getDescription());
         mMap.addMarker(new MarkerOptions().position(new
                 LatLng(mEvent.getLatitude(), mEvent.getLongitude())).title("Hello world"));
