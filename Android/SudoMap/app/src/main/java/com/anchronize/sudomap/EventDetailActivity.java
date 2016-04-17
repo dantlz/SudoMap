@@ -8,10 +8,14 @@ import android.location.Geocoder;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -50,7 +54,7 @@ public class EventDetailActivity extends AppCompatActivity implements
     private TextView descriptionView;
     private HorizontalScrollView attendantsScrollView;
     private LinearLayout attendantsView;
-    private Button chatButton;
+//    private Button chatButton;
     private Button bookmarkButton;
     private Button attendingButton;
 
@@ -58,12 +62,23 @@ public class EventDetailActivity extends AppCompatActivity implements
     private GoogleMap mMap;
     private Firebase ref;
 
+    private Animation slideUp, slideDown;
+    private RelativeLayout swipeLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_detail);
         initializeComponents();
         addListeners();
+
+        findViewById(R.id.swipe_area).setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                swipeAreaSwiped();
+                return true;
+            }
+        });
     }
 
     public void initializeComponents(){
@@ -84,18 +99,22 @@ public class EventDetailActivity extends AppCompatActivity implements
         descriptionView = (TextView) findViewById(R.id.eventDescriptionView);
         attendantsScrollView = (HorizontalScrollView) findViewById(R.id.attendantsScrollView);
         attendantsView = (LinearLayout) findViewById(R.id.attendants);
-        chatButton = (Button) findViewById(R.id.chatButton);
+//        chatButton = (Button) findViewById(R.id.chatButton);
         bookmarkButton = (Button) findViewById(R.id.bookmarkButton);
         attendingButton = (Button) findViewById(R.id.attendingButton);
+
+//        slideUp = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_up);
+//        slideDown = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_down);
+//        swipeLayout = (RelativeLayout)findViewById(R.id.main_swipe_layout);
     }
 
     public void addListeners(){
-        chatButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                chatButtonClicked();
-            }
-        });
+//        chatButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                chatButtonClicked();
+//            }
+//        });
         bookmarkButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -275,5 +294,14 @@ public class EventDetailActivity extends AppCompatActivity implements
     @Override
     public boolean onMyLocationButtonClick() {
         return false;
+    }
+
+    public void swipeAreaSwiped(){
+//        swipeLayout.startAnimation(slideUp);
+        Intent i = new Intent(EventDetailActivity.this, ChatActivity.class);
+        i.putExtra(ChatActivity.EVENTID_KEY,mEvent.getEventID());
+        i.putExtra(ChatActivity.EVENTDESC_KEY, mEvent.getDescription());
+        i.putExtra(ChatActivity.USERNAME_KEY, ((SudoMapApplication) getApplication()).getCurrentUser().getInAppName());
+        startActivity(i);
     }
 }
