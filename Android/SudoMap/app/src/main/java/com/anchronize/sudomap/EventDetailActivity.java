@@ -102,7 +102,8 @@ public class EventDetailActivity extends AppCompatActivity implements
 
     public void chatButtonClicked(){
         Intent i = new Intent(this, ChatActivity.class);
-        i.putExtra(ChatActivity.CHAT_KEY,mEvent.getEventID());
+        i.putExtra(ChatActivity.EVENTID_KEY,mEvent.getEventID());
+        i.putExtra(ChatActivity.EVENTDESC_KEY, mEvent.getDescription());
         startActivity(i);
     }
 
