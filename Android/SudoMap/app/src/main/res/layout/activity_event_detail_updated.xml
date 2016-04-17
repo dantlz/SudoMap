@@ -80,16 +80,18 @@
                     android:weightSum="2">
 
                     <Button
-                        android:background="@drawable/button_background"
+                        android:background="#999999"
                         android:id="@+id/bookmarkButton"
                         android:text="Bookmark"
+                        android:layout_marginLeft="10dp"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"/>
 
                     <Button
-                        android:background="@drawable/button_background"
+                        android:background="#FDC313"
                         android:id="@+id/attendingButton"
+
                         android:text="Attend"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -102,7 +104,8 @@
                     android:layout_marginTop="20dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Start Date                             Start Time"
+                    android:text="Start Date    Start Time"
+                    android:id="@+id/startDateTimeTextView"
                     android:textSize="18sp"/>
 
                 <TextView

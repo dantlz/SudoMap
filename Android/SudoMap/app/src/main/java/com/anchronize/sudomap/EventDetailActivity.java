@@ -33,6 +33,7 @@ import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -51,6 +52,7 @@ public class EventDetailActivity extends AppCompatActivity implements
     private TextView locationAddress;
     private TextView descriptionView;
     private TextView categoryView;
+    private TextView startDateTextView;
     private HorizontalScrollView attendantsScrollView;
     private LinearLayout attendantsView;
 //    private Button chatButton;
@@ -85,6 +87,7 @@ public class EventDetailActivity extends AppCompatActivity implements
         locationAddress = (TextView) findViewById(R.id.eventLocationAddressTextView);
         descriptionView = (TextView) findViewById(R.id.eventDescriptionView);
         attendantsScrollView = (HorizontalScrollView) findViewById(R.id.attendantsScrollView);
+        startDateTextView = (TextView)findViewById(R.id.startDateTimeTextView);
         attendantsView = (LinearLayout) findViewById(R.id.attendants);
        // chatButton = (Button) findViewById(R.id.chatButton);
         bookmarkButton = (Button) findViewById(R.id.bookmarkButton);
@@ -223,12 +226,46 @@ public class EventDetailActivity extends AppCompatActivity implements
         //TODO category
 
         titleView.setText(mEvent.getTitle());
-        categoryView.setText(mEvent.getCategory());
+        categoryView.setText(mEvent.getCategory() + "     |  ");
         locationNameView.setText(mEvent.getAddressName());
         locationAddress.setText(mEvent.getAddress());
         descriptionView.setText(mEvent.getDescription());
 
-        Toast.makeText(getApplicationContext(), ((SudoMapApplication) getApplication()).getCurrentUser().getInAppName(), Toast.LENGTH_LONG).show();
+
+        Calendar time = Calendar.getInstance();
+        time.set(Calendar.HOUR_OF_DAY, mEvent.getStartHour());
+        time.set(Calendar.MINUTE, mEvent.getStartMinute());
+        String startAM_PM = "";
+
+        if(time.get(Calendar.AM_PM) == Calendar.AM)
+            startAM_PM = "AM";
+        else if(time.get(Calendar.AM_PM) == Calendar.PM)
+            startAM_PM = "PM";
+
+        String hour = (time.get(Calendar.HOUR) == 0) ?"12":time.get(Calendar.HOUR)+"";
+        int startHour = Integer.parseInt(hour);
+
+        int selectedMinute = time.get(Calendar.MINUTE);
+        int startMinute = selectedMinute;
+        String sMinute = "00";
+        if(selectedMinute < 10){
+            sMinute = "0" + selectedMinute;
+        } else {
+            sMinute = selectedMinute + "";
+        }
+
+        String timeFirstPart = hour + ":" + sMinute + " " + startAM_PM;
+
+
+        int startYear = mEvent.getStartYear();
+        int startMonth = mEvent.getStartMonth();
+        int startDay = mEvent.getStartDay();
+
+        time.set(Calendar.MONTH, startMonth);
+        String month = time.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.US);
+        String date = month + " " + startDay + ", " + startYear;
+        startDateTextView.setText(date + " at " + timeFirstPart);
+
 //        for(User user: mEvent.getAttendants()){
 //            AttendantsItem item = new AttendantsItem(getApplicationContext());
 //            item.setName(user.getInAppName());
@@ -299,8 +336,5 @@ public class EventDetailActivity extends AppCompatActivity implements
         return "RETRIEVE ADDRESS NAME FAILED";
     }
 
-//    @Override
-//    public boolean onMyLocationButtonClick() {
-//        return false;
-//    }
+
 }
