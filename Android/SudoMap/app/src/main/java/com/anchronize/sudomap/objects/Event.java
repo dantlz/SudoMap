@@ -59,34 +59,18 @@ public class Event implements Serializable {
         this.organizerID = organizerID;
     }
 
-    public ArrayList<User> getAttendants() {
-        return attendants;
+    public ArrayList<String> getAttendants() {
+        return attendantsID;
     }
 
-    public void addAttendant(User attendant) {
-        this.attendants.add(attendant);
+    public void addAttendant(String ai) {
+        this.attendantsID.add(ai);
     }
 
     public void removeAttendant(String attendantID){
-        for(User atdnt: attendants){
-            if(atdnt.getUserID().equals(attendantID)){
-                attendants.remove(atdnt);
-            }
-        }
-    }
-
-    public ArrayList<Post> getPosts() {
-        return posts;
-    }
-
-    public void addPost(Post post) {
-        posts.add(post);
-    }
-
-    public void removePost(String postID){
-        for(Post post: posts){
-            if(post.getPostID().equals(postID)){
-                posts.remove(post);
+        for(String id: attendantsID){
+            if(id.equals(attendantID)){
+                attendantsID.remove(id);
             }
         }
     }
@@ -228,8 +212,7 @@ public class Event implements Serializable {
     private String description;
     private String category;
     private String organizerID;
-    private ArrayList<User> attendants = new ArrayList<User>();
-    private ArrayList<Post> posts = new ArrayList<Post>();
+    private ArrayList<String> attendantsID = new ArrayList<String>();
     private boolean privacy;
     private String address;
     private double longitude;
