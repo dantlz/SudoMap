@@ -74,6 +74,8 @@ public class TrendingActivity extends NavigationDrawer {
                 for (Map.Entry<String, Integer> entry : map.entrySet()) {
                     String id = entry.getKey();
                     String eventTitle = (String) eventSnapshot.child(id).child("title").getValue();
+                    //have to concatenate two strings since adapter accepts only one
+                    //list of strings
                     String eventString = eventTitle.concat("*" + id); //event title first, then eventID
                     Log.d("EventTitle",eventTitle);
                     eventList.add(eventString);
@@ -96,7 +98,6 @@ public class TrendingActivity extends NavigationDrawer {
                 Log.d("eventList", eventList.toString());
                 MyListAdaper la = new MyListAdaper(getApplicationContext(), R.layout.event_list_item, eventList);
                 final ListView trendingListView = (ListView) findViewById(R.id.mylist);
-                //addItemsToList();
                 trendingListView.setAdapter(la);
                 trendingListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
@@ -121,6 +122,7 @@ public class TrendingActivity extends NavigationDrawer {
                 Log.d("category", categoryMap.toString());
 
                 int i = 0;
+                //calculate percentage and set the piechart
                 for (Map.Entry<String, Integer> entry : categoryMap.entrySet()) {
                     String str = entry.getKey();
                     int num = entry.getValue();
