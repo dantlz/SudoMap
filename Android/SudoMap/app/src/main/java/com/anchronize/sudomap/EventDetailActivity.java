@@ -109,6 +109,7 @@ public class EventDetailActivity extends AppCompatActivity implements
         Intent i = new Intent(this, ChatActivity.class);
         i.putExtra(ChatActivity.EVENTID_KEY,mEvent.getEventID());
         i.putExtra(ChatActivity.EVENTDESC_KEY, mEvent.getDescription());
+        i.putExtra(ChatActivity.USERNAME_KEY, ((SudoMapApplication) getApplication()).getCurrentUser().getInAppName());
         startActivity(i);
     }
 
