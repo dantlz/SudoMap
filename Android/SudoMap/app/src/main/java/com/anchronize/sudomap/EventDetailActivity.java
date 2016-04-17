@@ -16,6 +16,10 @@ import android.widget.TextView;
 
 import com.anchronize.sudomap.objects.Event;
 import com.anchronize.sudomap.objects.User;
+import com.firebase.client.DataSnapshot;
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -128,18 +132,28 @@ public class EventDetailActivity extends AppCompatActivity implements
 
     public void populateDetails(){
 
+        //get Organizer from Firebase, set organizer's name to textView
+        Firebase ref = new Firebase("https://anchronize.firebaseio.com");
+        Firebase refOrganizer = ref.child("users").child(mEvent.getOrganizerID());
+        refOrganizer.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                User organizer = dataSnapshot.getValue(User.class);
+                //update the organizer text view here
+                organizerView.setText(organizer.getInAppName());
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
+
+
+
         //TODO category
+
         titleView.setText(mEvent.getTitle());
-        //TODO getUserFromID seems to be broken
-        User organizer = (((SudoMapApplication)getApplication()).getUserFromID(mEvent.getOrganizerID()));
-        String organizerName = "";
-        if(organizer == null){
-            organizerName = "null - getUserFromID() returned null bro";
-        }
-        else{
-            organizerName = organizer.getInAppName();
-        }
-        organizerView.setText("Organizer: "+ organizerName);
         locationNameView.setText(nameFromLatLng(mEvent.getLatitude(),mEvent.getLongitude()));
         locationAddress.setText(addressFromLatLng(mEvent.getLatitude(), mEvent.getLongitude()));
         descriptionView.setText(mEvent.getDescription());
