@@ -69,11 +69,14 @@ public class TrendingActivity extends NavigationDrawer {
                 }
                 map = sortByValue(map);
                 List<String> eventList = new ArrayList<String>();
+                List<String> eventIDList = new ArrayList<String>();
+                Log.d("EventsMap",map.toString());
                 for (Map.Entry<String, Integer> entry : map.entrySet()) {
                     String id = entry.getKey();
-                    //eventList.add(id);
                     String eventTitle = (String) eventSnapshot.child(id).child("title").getValue();
-                    eventList.add(eventTitle);
+                    String eventString = eventTitle.concat("*" + id); //event title first, then eventID
+                    Log.d("EventTitle",eventTitle);
+                    eventList.add(eventString);
                 }
 
                 //calculating category percentage
@@ -99,8 +102,10 @@ public class TrendingActivity extends NavigationDrawer {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         String eventID = (String) trendingListView.getItemAtPosition(position);
+                        String[] split = eventID.split("\\*");
+                        eventID = split[1];
+                        Log.d("eventID", eventID);
                         Toast.makeText(TrendingActivity.this, "List item was clicked at " + eventID, Toast.LENGTH_SHORT).show();
-
                         Intent i = new Intent(getApplicationContext(), EventDetailActivity.class);
                         i.putExtra(EventDetailActivity.EVENTID_KEY, eventID);
                         startActivity(i);
@@ -119,7 +124,7 @@ public class TrendingActivity extends NavigationDrawer {
                 for (Map.Entry<String, Integer> entry : categoryMap.entrySet()) {
                     String str = entry.getKey();
                     int num = entry.getValue();
-                    float percent = num/totalCount;
+                    float percent = num * 100.0f/(totalCount);
                     entries.add(new Entry(percent, i));
                     labels.add(str);
                     i++;
@@ -130,7 +135,7 @@ public class TrendingActivity extends NavigationDrawer {
 
 
 
-                PieDataSet dataset = new PieDataSet(entries, "# of Calls");
+                PieDataSet dataset = new PieDataSet(entries, "# of Events");
                 dataset.setColors(ColorTemplate.COLORFUL_COLORS);
 
 
@@ -139,7 +144,7 @@ public class TrendingActivity extends NavigationDrawer {
 
                 PieData data = new PieData(labels, dataset);
                 pieChart.setData(data); // set the data and list of lables into chart
-                pieChart.setDescription("Events by category");  // set the description
+                pieChart.setDescription("Events by category %");  // set the description
                 pieChart.animateY(2000);
 
 
@@ -151,14 +156,9 @@ public class TrendingActivity extends NavigationDrawer {
 
             }
         });
-        
+
     }
 
-    private void addItemsToList() {
-        for (int i = 0; i < 55; i++) {
-            events.add("Number " + i);
-        }
-    }
 
     private class MyListAdaper extends ArrayAdapter<String> {
         private int layout;
@@ -190,8 +190,10 @@ public class TrendingActivity extends NavigationDrawer {
                     Toast.makeText(getContext(), "Button was clicked for list item " + position, Toast.LENGTH_SHORT).show();
                 }
             });
-            mainViewholder.title.setText(getItem(position));
-
+            String str = getItem((position));
+            String[] split = str.split("\\*");
+            String eventName = split[0];
+            mainViewholder.title.setText(eventName);
             return convertView;
         }
     }
