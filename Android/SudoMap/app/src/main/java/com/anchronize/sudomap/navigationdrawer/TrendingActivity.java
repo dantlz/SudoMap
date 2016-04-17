@@ -40,6 +40,7 @@ public class TrendingActivity extends NavigationDrawer {
     private ArrayList<String> events = new ArrayList<String>();
     private static final String FIREBASE_URL = "https://anchronize.firebaseio.com";
     private Map<String, Integer> map; //<eventID, number of posts so far>
+    private Map<String, Integer> categoryMap; //<event category, number of event>
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +53,7 @@ public class TrendingActivity extends NavigationDrawer {
         //initialize the map
         //<eventID, number of posts so far>
         map = new HashMap<>();
+        categoryMap = new HashMap<>();
 
 
         //query the server once
@@ -73,6 +75,21 @@ public class TrendingActivity extends NavigationDrawer {
                     String eventTitle = (String) eventSnapshot.child(id).child("title").getValue();
                     eventList.add(eventTitle);
                 }
+
+                //calculating category percentage
+                for(DataSnapshot temp : eventSnapshot.getChildren()){
+                    String category = (String) temp.child("category").getValue();
+                    Integer count = categoryMap.get(category);
+                    if(count ==  null){
+                        categoryMap.put(category, 1);
+                    }
+                    else{
+                        categoryMap.put(category, count + 1);
+                    }
+                }
+
+                int totalCount = (int) eventSnapshot.getChildrenCount();
+
                 Log.d("eventList", eventList.toString());
                 MyListAdaper la = new MyListAdaper(getApplicationContext(), R.layout.event_list_item, eventList);
                 final ListView trendingListView = (ListView) findViewById(R.id.mylist);
@@ -89,6 +106,43 @@ public class TrendingActivity extends NavigationDrawer {
                         startActivity(i);
                     }
                 });
+
+                PieChart pieChart = (PieChart) findViewById(R.id.chart);
+
+                // creating list of entry
+                ArrayList<Entry> entries = new ArrayList<>();
+                ArrayList<String> labels = new ArrayList<String>();
+
+                Log.d("category", categoryMap.toString());
+
+                int i = 0;
+                for (Map.Entry<String, Integer> entry : categoryMap.entrySet()) {
+                    String str = entry.getKey();
+                    int num = entry.getValue();
+                    float percent = num/totalCount;
+                    entries.add(new Entry(percent, i));
+                    labels.add(str);
+                    i++;
+
+                }
+
+
+
+
+
+                PieDataSet dataset = new PieDataSet(entries, "# of Calls");
+                dataset.setColors(ColorTemplate.COLORFUL_COLORS);
+
+
+                dataset.setValueTextSize(13);
+                pieChart.setDescriptionTextSize(13);
+
+                PieData data = new PieData(labels, dataset);
+                pieChart.setData(data); // set the data and list of lables into chart
+                pieChart.setDescription("Events by category");  // set the description
+                pieChart.animateY(2000);
+
+
             }
 
 
@@ -97,46 +151,7 @@ public class TrendingActivity extends NavigationDrawer {
 
             }
         });
-
-
-/*        ListView trendingListView = (ListView)findViewById(R.id.mylist);
-        addItemsToList();
-        trendingListView.setAdapter(new MyListAdaper(this, R.layout.event_list_item, events));
-        trendingListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(TrendingActivity.this, "List item was clicked at " + position, Toast.LENGTH_SHORT).show();
-            }
-        });*/
-
-        PieChart pieChart = (PieChart) findViewById(R.id.chart);
-        // creating list of entry
-        ArrayList<Entry> entries = new ArrayList<>();
-        entries.add(new Entry(4f, 0));
-        entries.add(new Entry(8f, 1));
-        entries.add(new Entry(6f, 2));
-        entries.add(new Entry(2f, 3));
-        entries.add(new Entry(18f, 4));
-        entries.add(new Entry(9f, 5));
-
-        PieDataSet dataset = new PieDataSet(entries, "# of Calls");
-        dataset.setColors(ColorTemplate.COLORFUL_COLORS);
-
-        // creating labels
-        ArrayList<String> labels = new ArrayList<String>();
-        labels.add("January");
-        labels.add("February");
-        labels.add("March");
-        labels.add("April");
-        labels.add("May");
-        labels.add("June");
-
-        dataset.setValueTextSize(13);
-
-        PieData data = new PieData(labels, dataset);
-        pieChart.setData(data); // set the data and list of lables into chart
-        pieChart.setDescription("Description");  // set the description
-        pieChart.animateY(2000);
+        
     }
 
     private void addItemsToList() {
