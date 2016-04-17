@@ -19,6 +19,7 @@
             android:layout_marginTop="31dp"
             android:layout_marginLeft="25dp"
             android:background="@color/white"
+            android:textColor="@color/black"
             android:id="@+id/list_item_title"/>
     </LinearLayout>
 
