@@ -41,7 +41,6 @@ public class EventDetailActivity extends AppCompatActivity implements
     private TextView descriptionView;
     private HorizontalScrollView attendantsScrollView;
     private LinearLayout attendantsView;
-    private Button chatButton;
     private Button bookmarkButton;
     private Button attendingButton;
 
@@ -51,7 +50,7 @@ public class EventDetailActivity extends AppCompatActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_event_detail);
+        setContentView(R.layout.activity_event_detail_updated);
         initializeComponents();
         addListeners();
     }
@@ -59,12 +58,14 @@ public class EventDetailActivity extends AppCompatActivity implements
     public void initializeComponents(){
         //Current Event
         Intent i = getIntent();
-        mEvent = (Event)i.getSerializableExtra(EVENT_KEY);
+        //mEvent = (Event)i.getSerializableExtra(EVENT_KEY);
+        //TESTING
+        mEvent = getTestEvent();
 
         //Map
-        SupportMapFragment mapFragment =
+        /*SupportMapFragment mapFragment =
                 (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.eventsMap);
-        mapFragment.getMapAsync(this);
+        mapFragment.getMapAsync(this);*/
 
         //GUI
         titleView = (TextView) findViewById(R.id.eventTitle);
@@ -74,18 +75,11 @@ public class EventDetailActivity extends AppCompatActivity implements
         descriptionView = (TextView) findViewById(R.id.eventDescriptionView);
         attendantsScrollView = (HorizontalScrollView) findViewById(R.id.attendantsScrollView);
         attendantsView = (LinearLayout) findViewById(R.id.attendants);
-        chatButton = (Button) findViewById(R.id.chatButton);
         bookmarkButton = (Button) findViewById(R.id.bookmarkButton);
         attendingButton = (Button) findViewById(R.id.attendingButton);
     }
 
     public void addListeners(){
-        chatButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                chatButtonClicked();
-            }
-        });
         bookmarkButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -106,6 +100,7 @@ public class EventDetailActivity extends AppCompatActivity implements
     }
 
     public void bookmarkButtonClicked(){
+
         User user = ((SudoMapApplication)getApplication()).getCurrentUser();
         user.addBookmarkedEventID(mEvent.getEventID());
         ((SudoMapApplication)getApplication()).updateCurrentUser(user);
@@ -122,7 +117,7 @@ public class EventDetailActivity extends AppCompatActivity implements
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        populateDetails();
+        //populateDetails();
     }
 
     public void populateDetails(){
@@ -194,5 +189,28 @@ public class EventDetailActivity extends AppCompatActivity implements
     @Override
     public boolean onMyLocationButtonClick() {
         return false;
+    }
+
+    private Event getTestEvent(){
+        Event event = new Event();
+        event.setTitle("Test Title");
+        event.setDescription("Testing this event + \n description 123 \n suhhhh dude!!! \n fuck you");
+        event.setCategory("FUN");
+        event.setAddress("2428 Santa Monica Blvd");
+        event.setLongitude(0.0);
+        event.setLatitude(0.0);
+        event.setVisible(true);
+        event.setStartDay(25);
+        event.setStartMonth(3);
+        event.setStartYear(2016);
+        event.setStartHour(14);
+        event.setStartMinute(0);
+        event.setEndDay(26);
+        event.setEndMonth(3);
+        event.setEndYear(2016);
+        event.setEndHour(2);
+        event.setEndMinute(9);
+
+        return event;
     }
 }
