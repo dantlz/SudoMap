@@ -4,41 +4,29 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
 import android.graphics.Matrix;
-import android.graphics.Paint;
 import android.net.Uri;
+import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.text.method.KeyListener;
 import android.util.Base64;
-import android.view.KeyEvent;
-import android.view.Menu;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.anchronize.sudomap.NavigationDrawer;
 import com.anchronize.sudomap.R;
 import com.anchronize.sudomap.SudoMapApplication;
 import com.anchronize.sudomap.objects.User;
-
-import org.w3c.dom.Text;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 
-public class SettingActivity extends NavigationDrawer {
+
+public class SettingActivity extends AppCompatActivity {
     private TextView nameTextView;
     private EditText nameEditText;
     private Button changeNameButton;

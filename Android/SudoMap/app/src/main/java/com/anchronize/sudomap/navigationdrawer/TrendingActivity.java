@@ -2,6 +2,7 @@ package com.anchronize.sudomap.navigationdrawer;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,7 +14,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.anchronize.sudomap.NavigationDrawer;
 import com.anchronize.sudomap.R;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
@@ -34,7 +34,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-public class TrendingActivity extends NavigationDrawer {
+public class TrendingActivity extends AppCompatActivity {
     private ArrayList<String> events = new ArrayList<String>();
     private static final String FIREBASE_URL = "https://anchronize.firebaseio.com";
     private Map<String, Integer> map; //<eventID, number of posts so far>

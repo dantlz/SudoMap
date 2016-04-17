@@ -1,15 +1,11 @@
 package com.anchronize.sudomap;
 
-import android.util.Log;
-
-import com.anchronize.sudomap.objects.Event;
 import com.anchronize.sudomap.objects.User;
-import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
-import com.firebase.client.Query;
 import com.firebase.client.ValueEventListener;
+import com.hound.android.fd.Houndify;
 
 /**
  * Created by tianlinz on 4/14/16.
@@ -29,6 +25,10 @@ public class SudoMapApplication extends android.app.Application{
         ref =  new Firebase("https://anchronize.firebaseio.com");
         isAuthenticated = false;    //default it to false when it's created first
         currentUserID = null;
+
+        Houndify.get(this).setClientId( Constants.CLIENT_ID );
+        Houndify.get(this).setClientKey( Constants.CLIENT_KEY );
+        Houndify.get(this).setRequestInfoFactory(StatefulRequestInfoFactory.get(this));
     }
 
     public void setAuthenticateStatus(boolean authStatus) {

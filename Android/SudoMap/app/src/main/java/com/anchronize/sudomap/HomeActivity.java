@@ -1,128 +1,132 @@
 package com.anchronize.sudomap;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
+import android.content.res.Resources;
+import android.content.res.TypedArray;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.speech.tts.TextToSpeech;
 import android.support.annotation.NonNull;
+import android.support.design.internal.ScrimInsetsFrameLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.util.SparseIntArray;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
+import android.widget.AdapterView;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.anchronize.sudomap.navigationdrawer.AddEventActivity;
 import com.anchronize.sudomap.navigationdrawer.TrendingActivity;
 import com.anchronize.sudomap.objects.Event;
 import com.anchronize.sudomap.objects.ShakeDetector;
-import com.anchronize.sudomap.objects.User;
-import com.arlib.floatingsearchview.FloatingSearchView;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.hound.android.fd.HoundSearchResult;
+import com.hound.android.fd.Houndify;
+import com.hound.android.libphs.PhraseSpotterReader;
+import com.hound.android.sdk.VoiceSearchInfo;
+import com.hound.android.sdk.audio.SimpleAudioByteStreamSource;
+import com.hound.core.model.sdk.CommandResult;
+import com.hound.core.model.sdk.HoundResponse;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+
+import br.liveo.adapter.NavigationLiveoAdapter;
+import br.liveo.interfaces.OnItemClickListener;
+import br.liveo.interfaces.OnPrepareOptionsMenuLiveo;
+import br.liveo.model.HelpItem;
+import br.liveo.model.HelpLiveo;
+import br.liveo.navigationliveo.NavigationLiveoList;
 
 /**
- * Created by jasonlin on 3/15/16.
+ * Created by jasonlin on 4/17/16.
  */
-//public class HomeActivity {
-//}
+public class HomeActivity extends NavigationLiveo implements OnItemClickListener {
 
-public class HomeActivity extends AppCompatActivity
-        implements
-        GoogleMap.OnMyLocationButtonClickListener,
-        GoogleMap.OnInfoWindowClickListener,
-        GoogleMap.OnInfoWindowCloseListener,
-        OnMapReadyCallback,
-        ActivityCompat.OnRequestPermissionsResultCallback,
-        GoogleMap.OnMarkerClickListener {
-
-    /**
-     * Request code for location permission request.
-     *
-     * @see #onRequestPermissionsResult(int, String[], int[])
-     */
-    private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
-
-    /**
-     * Flag indicating whether a requested permission has been denied after returning in
-     * {@link #onRequestPermissionsResult(int, String[], int[])}.
-     */
-    private boolean mPermissionDenied = false;
-
-    private GoogleMap mMap;
-
-//    //Test Marker LatLng
-//    private static final LatLng USC = new LatLng(34.0224 , -118.2851);
-
-    private Marker lastSelectedMarker;
-
-    private Firebase ref;
-
-    private ArrayList<Event> allEventsinFirebase;   //store all events in database
-
-    private HashMap<Marker, Event> markerEventHashMap; //maintain a map from maker to event
-
-    private final String TAG = "HomeActivity";
-    private FloatingSearchView mSearchView;
-    private DrawerLayout mDrawerLayout;
-    private FloatingActionButton mAddEventButton;
-
-    // The following are used for the shake detection
-    private SensorManager mSensorManager;
-    private Sensor mAccelerometer;
-    private ShakeDetector mShakeDetector;
-
-    private Button mTrendingButton;
-
+    // Navdrawer (creds to https://github.com/rudsonlive/NavigationDrawer-MaterialDesign)
+    private HelpLiveo mHelpLiveo;
+    private OnPrepareOptionsMenuLiveo onPrepare = new OnPrepareOptionsMenuLiveo() {
+        @Override
+        public void onPrepareOptionsMenu(Menu menu, int position, boolean visible) {
+        }
+    };
+    private View.OnClickListener onClickPhoto = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            closeDrawer();
+        }
+    };
+    private View.OnClickListener onClickFooter = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            closeDrawer();
+        }
+    };
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.home_demo);
+    public void onInt(Bundle savedInstanceState) {
+        // User Information
+        this.userName.setText("Jason Lin");
+        this.userEmail.setText("uscjlin@gmail.com");
+        this.userPhoto.setImageResource(R.drawable.miller_web);
+        this.userBackground.setImageResource(R.drawable.ic_user_background_first);
 
-        // UI code
-        mSearchView = (FloatingSearchView)findViewById(R.id.floating_search_view);
-        mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
-        mSearchView.setOnLeftMenuClickListener(
-                new FloatingSearchView.OnLeftMenuClickListener() {
-                    @Override
-                    public void onMenuOpened() {
-                        Log.d(TAG, "onMenuOpened()");
+        // Creating items navigation
+        mHelpLiveo = new HelpLiveo();
+        mHelpLiveo.add(getString(R.string.your_events), R.drawable.ic_event_black_24dp);
+        mHelpLiveo.addSeparator(); //Item separator
+        mHelpLiveo.add(getString(R.string.trending), R.drawable.ic_trending_up_black_24dp);
+        mHelpLiveo.add(getString(R.string.bookmark), R.drawable.address);
+        mHelpLiveo.addSeparator(); // Item separator
+        mHelpLiveo.add(getString(R.string.settings), R.drawable.ic_settings_black_24dp);
+        mHelpLiveo.add(getString(R.string.add_event), R.drawable.add_note, 120);
 
-                        mDrawerLayout.openDrawer(GravityCompat.START);
-                    }
 
-                    @Override
-                    public void onMenuClosed() {
-                        Log.d(TAG, "onMenuClosed()");
-
-                        mDrawerLayout.closeDrawer(GravityCompat.START);
-                    }
-                } );
+        with(this) // default theme is OUR THEME
+                .startingPosition(2) //Starting position in the list
+                .addAllHelpItem(mHelpLiveo.getHelp())
+                .setOnClickUser(onClickPhoto)
+                .setOnPrepareOptionsMenu(onPrepare)
+                .setOnClickFooter(onClickFooter)
+                .build();
 
         mAddEventButton = (FloatingActionButton) findViewById(R.id.fab_add_event);
         mAddEventButton.setOnClickListener(new View.OnClickListener() {
@@ -134,6 +138,59 @@ public class HomeActivity extends AppCompatActivity
             }
         });
 
+        textToSpeechMgr = new TextToSpeechMgr( this );
+
+    }
+
+    @Override //The "R.id.container" should be used in "beginTransaction (). Replace"
+    public void onItemClick(int position) {
+        FragmentManager mFragmentManager = getSupportFragmentManager();
+        Log.d("nav", "1enters onclick listener");
+        switch (position){
+            case 1:
+                Log.d("nav", "1st element clicked");
+                break;
+            case 2:
+                Intent i = new Intent(HomeActivity.this, TrendingActivity.class);
+                startActivity(i);
+                break;
+            case 3:
+                Log.d("nav", "3rd element clicked");
+                break;
+            case 4:
+                Log.d("nav", "4th element clicked");
+                break;
+
+            default:
+//                mFragment = MainFragment.newInstance(mHelpLiveo.get(position).getName());
+                break;
+        }
+////        Fragment mFragment = new MainFragment.newInstance(mHelpLiveo.get(position).getName());
+//
+//        if (mFragment != null){
+//            mFragmentManager.beginTransaction().replace(R.id.container, mFragment).commit();
+//        }
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+//        mAddEventButton = (FloatingActionButton) findViewById(R.id.fab_add_event);
+        mountListNavigation(savedInstanceState);
+
+        if (savedInstanceState != null) {
+            isSaveInstance = true;
+            setCurrentPosition(savedInstanceState.getInt(CURRENT_POSITION));
+            setCurrentCheckPosition(savedInstanceState.getInt(CURRENT_CHECK_POSITION));
+        }
+
+        if (savedInstanceState == null) {
+            mOnItemClickLiveo.onItemClick(mCurrentPosition);
+        }
+
+        setCheckedItemNavigation(mCurrentCheckPosition, true);
+
+
         SupportMapFragment mapFragment =
                 (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -141,44 +198,30 @@ public class HomeActivity extends AppCompatActivity
         allEventsinFirebase = new ArrayList<Event>();
         markerEventHashMap = new HashMap<Marker,Event>();
         //set context for firebase
-        Firebase.setAndroidContext(this);
         ref = new Firebase("https://anchronize.firebaseio.com");
         //create a Firebase reference to the child tree "event"
         Firebase refEvents = ref.child("events");
         Firebase refUsers = ref.child("user");
 
         //query data once for to get all the events
-        refEvents.addValueEventListener(new ValueEventListener() {
+        refEvents.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
                 allEventsinFirebase.clear();
 //                System.out.println(snapshot.getValue());
 //                System.out.println("There are " + snapshot.getChildrenCount() + " events");
-                for (DataSnapshot postSnapshot : snapshot.getChildren()) {
+                for (DataSnapshot postSnapshot: snapshot.getChildren()) {
                     Event event = postSnapshot.getValue(Event.class);
                     allEventsinFirebase.add(event);
                 }
-                if (((SudoMapApplication) getApplication()).getAuthenticateStatus() == true)
+                if ( ((SudoMapApplication)getApplication()).getAuthenticateStatus() == true)
                     addMapMarkers();
             }
-
             @Override
             public void onCancelled(FirebaseError firebaseError) {
 
             }
         });
-
-
-        //TODO DELETE THIS SHIT  Jason's temp button
-        mTrendingButton = (Button) findViewById(R.id.trending_temp);
-        mTrendingButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(getApplicationContext(), TrendingActivity.class);
-                startActivity(i);
-            }
-        });
-
 
         // ShakeDetector initialization from http://jasonmcreynolds.com/?p=388
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
@@ -198,42 +241,62 @@ public class HomeActivity extends AppCompatActivity
             }
         });
 
-//        //test to get current user
-//        Log.d("currentUserID", ((SudoMapApplication)getApplication()).getCurrentUserID());
-//        User user = ((SudoMapApplication)getApplication()).getCurrentUser();
-//        Log.d("user",user.toString() );
-//        Log.d("userid", user.getUserID());
+        textToSpeechMgr = new TextToSpeechMgr( this );
 
+//         Normally you'd only have to do this once in your Application#onCreate
+//        Houndify.get(this).setClientId( "7avivQzdymp1dCiyyOBrWw==" );
+//        Houndify.get(this).setClientKey( "TGx0cYDC5N9k7zKH3g2VVibU4uQI2Qpk67STQI43dAMVfSlJ_zh_RicHiMKQFkVOyD37mvW2Ucnof-IKUI2a5w==" );
+//        Houndify.get(this).setRequestInfoFactory(StatefulRequestInfoFactory.get(this));
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        // Check which request we're responding to
-        if (requestCode == 1) {
-            // Make sure the request was successful
-            if (resultCode == RESULT_OK) {
-                Log.d("EVENT", "event successfully added");
-                addMapMarkers();
-            }
+    /**
+     * Implementation of the PhraseSpotterReader.Listener interface used to handle PhraseSpotter
+     * call back.
+     */
+
+    protected final PhraseSpotterReader.Listener phraseSpotterListener = new PhraseSpotterReader.Listener() {
+        @Override
+        public void onPhraseSpotted() {
+
+            // It's important to note that when the phrase spotter detects "Ok Hound" it closes
+            // the input stream it was provided.
+            mainThreadHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    stopPhraseSpotting();
+                    // Now start the HomeActivity to begin the search. (Houndify Sample)
+                    Houndify.get( HomeActivity.this ).voiceSearch( HomeActivity.this );
+                }
+            });
+        }
+
+        @Override
+        public void onError(final Exception ex) {
+
+            // for this sample we don't care about errors from the "Ok Hound" phrase spotter.
+
+        }
+    };
+
+    /**
+     * Called to start the Phrase Spotter
+     */
+    protected void startPhraseSpotting() {
+        if ( phraseSpotterReader == null ) {
+            phraseSpotterReader = new PhraseSpotterReader(new SimpleAudioByteStreamSource());
+            phraseSpotterReader.setListener( phraseSpotterListener );
+            phraseSpotterReader.start();
         }
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        // Add the following line to register the Session Manager Listener onResume
-        mSensorManager.registerListener(mShakeDetector, mAccelerometer, SensorManager.SENSOR_DELAY_UI);
-    }
-
-    @Override
-    public void onPause() {
-        // Add the following line to unregister the Sensor Manager onPause
-        mSensorManager.unregisterListener(mShakeDetector);
-        super.onPause();
-    }
-
-    public void handleShakeEvent(int count) {
-        Log.d("SHAKE", "Shaked device: " + count + " times.");
+    /**
+     * Called to stop the Phrase Spotter
+     */
+    protected void stopPhraseSpotting() {
+        if ( phraseSpotterReader != null ) {
+            phraseSpotterReader.stop();
+            phraseSpotterReader = null;
+        }
     }
 
     @Override
@@ -244,7 +307,7 @@ public class HomeActivity extends AppCompatActivity
         enableMyLocation();
 
 
-       // addMapMarkers();
+        // addMapMarkers();
 
         mMap.setOnMarkerClickListener(this);
         mMap.setOnInfoWindowClickListener(this);
@@ -258,43 +321,10 @@ public class HomeActivity extends AppCompatActivity
         return false;
     }
 
-    @Override
-    public void onInfoWindowClick(Marker marker) {
-        Event e = markerEventHashMap.get(lastSelectedMarker);
-        Intent i = new Intent(getApplicationContext(), EventDetailActivity.class);
-        i.putExtra(EventDetailActivity.EVENT_KEY, e);
-        //// TODO: 4/14/16  startActivity for result 
-        startActivity(i);
-    }
-
-    @Override
-    public void onInfoWindowClose(Marker marker) {
-        Toast.makeText(this, "Info window closed", Toast.LENGTH_SHORT).show();
-    }
-
-    private void addMapMarkers(){
-        //clean up all the marker
-        for(Marker marker: markerEventHashMap.keySet()){
-            marker.remove();
-        }
-        //clean up the marker -> Event map
-        markerEventHashMap.clear();
-        for(Event e : allEventsinFirebase){
-            Marker marker = mMap.addMarker(new MarkerOptions()
-                    .anchor(0.0f, 1.0f)
-                    .position(new LatLng(e.getLatitude(), e.getLongitude()))
-                    .title(e.getTitle())
-                    .snippet(e.getCategory())
-                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)))
-                    ;
-            markerEventHashMap.put(marker, e);
-        }
-    }
-
     /**
      * Enables the My Location layer if the fine location permission has been granted.
      */
-    private void enableMyLocation() {
+    protected void enableMyLocation() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
             // Permission to access the location is missing.
@@ -327,12 +357,7 @@ public class HomeActivity extends AppCompatActivity
 
             mMap.setBuildingsEnabled(true);
 
-//            Commented out so it doesn't crash
-//            // adding marker and testing anchor
-//            mMap.addMarker(new MarkerOptions()
-////                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.red_pin))
-//                    .anchor(0.0f, 1.0f) // Anchors the marker on the bottom left
-//                    .position(new LatLng(location.getLatitude(), location.getLongitude())));
+
         }
     }
 
@@ -343,6 +368,35 @@ public class HomeActivity extends AppCompatActivity
         // (the camera animates to the user's current position).
         return false;
     }
+
+    @Override
+    public void onInfoWindowClick(Marker marker) {
+        Event e = markerEventHashMap.get(lastSelectedMarker);
+        Intent i = new Intent(getApplicationContext(), EventDetailActivity.class);
+        i.putExtra(EventDetailActivity.EVENT_KEY, e);
+        //// TODO: 4/14/16  startActivity for result
+        startActivity(i);
+    }
+
+    @Override
+    public void onInfoWindowClose(Marker marker) {
+        Toast.makeText(this, "Info window closed", Toast.LENGTH_SHORT).show();
+    }
+
+    protected void addMapMarkers(){
+        markerEventHashMap.clear();
+        for(Event e : allEventsinFirebase){
+
+            Marker marker = mMap.addMarker(new MarkerOptions()
+                    .position(new LatLng(e.getLatitude(), e.getLongitude()))
+                    .title(e.getTitle())
+                    .snippet(e.getCategory())
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+            markerEventHashMap.put(marker, e);
+        }
+    }
+
+    // End of Google Maps API call
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
@@ -360,6 +414,7 @@ public class HomeActivity extends AppCompatActivity
             mPermissionDenied = true;
         }
     }
+
     @Override
     protected void onResumeFragments() {
         super.onResumeFragments();
@@ -373,9 +428,1598 @@ public class HomeActivity extends AppCompatActivity
     /**
      * Displays a dialog with error message explaining that the location permission is missing.
      */
-    private void showMissingPermissionError() {
+    protected void showMissingPermissionError() {
         com.anchronize.sudomap.PermissionUtils.PermissionDeniedDialog
                 .newInstance(true).show(getSupportFragmentManager(), "dialog");
+    }
+
+    protected void configureFindView(){
+        mList = (ListView) findViewById(br.liveo.navigationliveo.R.id.list);
+        mList.setOnItemClickListener(new DrawerItemClickListener());
+
+        mToolbar = (Toolbar) findViewById(br.liveo.navigationliveo.R.id.toolbar);
+
+        mDrawerLayout = (DrawerLayout) findViewById(br.liveo.navigationliveo.R.id.drawerLayout);
+
+        mDrawerToggle = new ActionBarDrawerToggleCompat(this, mDrawerLayout, mToolbar);
+        mDrawerLayout.addDrawerListener(mDrawerToggle);
+
+        mTitleFooter = (TextView) this.findViewById(br.liveo.navigationliveo.R.id.titleFooter);
+        mIconFooter = (ImageView) this.findViewById(br.liveo.navigationliveo.R.id.iconFooter);
+
+        mTitleSecondFooter = (TextView) this.findViewById(br.liveo.navigationliveo.R.id.titleSecondFooter);
+        mIconSecondFooter = (ImageView) this.findViewById(br.liveo.navigationliveo.R.id.iconSecondFooter);
+
+        mFooterDrawer = (RelativeLayout) this.findViewById(br.liveo.navigationliveo.R.id.footerDrawer);
+        mFooterSecondDrawer = (RelativeLayout) this.findViewById(br.liveo.navigationliveo.R.id.footerSecondDrawer);
+        mRelativeDrawer = (ScrimInsetsFrameLayout) this.findViewById(br.liveo.navigationliveo.R.id.relativeDrawer);
+
+        this.setSupportActionBar(mToolbar);
+
+        ActionBar actionBar = getSupportActionBar();
+
+        if (actionBar != null){
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setHomeButtonEnabled(true);
+        }
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            try {
+                if (!mRemoveHeader || !mCustomHeader) {
+                    Resources.Theme theme = this.getTheme();
+                    TypedArray typedArray = theme.obtainStyledAttributes(new int[]{android.R.attr.colorPrimary});
+                    mDrawerLayout.setStatusBarBackground(typedArray.getResourceId(0, 0));
+                }
+            } catch (Exception e) {
+                e.getMessage();
+            }
+//
+//            this.setElevationToolBar(mElevationToolBar);
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        // TODO Auto-generated method stub
+        super.onSaveInstanceState(outState);
+        outState.putInt(CURRENT_POSITION, mCurrentPosition);
+        outState.putInt(CURRENT_CHECK_POSITION, mCurrentCheckPosition);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        if(mDrawerToggle != null) {
+            if (mDrawerToggle.onOptionsItemSelected(item)) {
+                return true;
+            }
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+
+        if (mOnPrepareOptionsMenu != null){
+            boolean drawerOpen = mDrawerLayout.isDrawerOpen(mRelativeDrawer);
+            mOnPrepareOptionsMenu.onPrepareOptionsMenu(menu, mCurrentPosition, drawerOpen);
+        }
+
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+
+        if (mDrawerToggle != null) {
+            mDrawerToggle.syncState();
+        }
+    }
+
+    protected class ActionBarDrawerToggleCompat extends ActionBarDrawerToggle {
+
+        public ActionBarDrawerToggleCompat(Activity activity, DrawerLayout drawerLayout, Toolbar toolbar){
+            super(
+                    activity,
+                    drawerLayout, toolbar,
+                    br.liveo.navigationliveo.R.string.drawer_open,
+                    br.liveo.navigationliveo.R.string.drawer_close);
+        }
+
+        @Override
+        public void onDrawerClosed(View view) {
+            supportInvalidateOptionsMenu();
+        }
+
+        @Override
+        public void onDrawerOpened(View drawerView) {
+            supportInvalidateOptionsMenu();
+        }
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        // TODO Auto-generated method stub
+        super.onConfigurationChanged(newConfig);
+
+        if (mDrawerToggle != null) {
+            mDrawerToggle.onConfigurationChanged(newConfig);
+        }
+    }
+
+    protected class DrawerItemClickListener implements ListView.OnItemClickListener {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+            int mPosition = (!mRemoveHeader || !mCustomHeader ? position - 1 : position);
+
+            if (mPosition == -1){
+                mDrawerLayout.closeDrawer(mRelativeDrawer);
+                return;
+            }
+
+            HelpItem helpItem = mHelpItem.get(mPosition);
+            if (!helpItem.isHeader()) {
+                if (position != 0 || (mRemoveHeader && mCustomHeader)) {
+                    setCurrentPosition(mPosition);
+
+                    if (helpItem.isCheck()) {
+                        setCurrentCheckPosition(mPosition);
+                        setCheckedItemNavigation(mPosition, true);
+                    }
+                    mOnItemClickLiveo.onItemClick(mPosition);
+                }
+
+                mDrawerLayout.closeDrawer(mRelativeDrawer);
+            }
+        }
+    }
+
+//    protected void mountListNavigation(Bundle savedInstanceState){
+//        if (mOnItemClickLiveo == null){
+//            this.createUserDefaultHeader();
+//            this.onInt(savedInstanceState);
+//        }
+//    }
+
+    /**
+     * @deprecated
+     */
+    public void setAdapterNavigation(){
+
+        if (mOnItemClickLiveo == null){
+            throw new RuntimeException(getString(br.liveo.navigationliveo.R.string.start_navigation_listener));
+        }
+
+        this.addHeaderView();
+
+        List<Integer> mListExtra = new ArrayList<>();
+        mListExtra.add(0, mNewSelector);
+        mListExtra.add(1, mColorDefault);
+        mListExtra.add(2, mColorIcon);
+        mListExtra.add(3, mColorName);
+        mListExtra.add(4, mColorSeparator);
+        mListExtra.add(5, mColorCounter);
+        mListExtra.add(6, mSelectorDefault);
+        mListExtra.add(7, mColorSubHeader);
+
+        List<Boolean> mListRemove = new ArrayList<>();
+        mListRemove.add(0, mRemoveAlpha);
+        mListRemove.add(1, mRemoveColorFilter);
+
+        if (mHelpItem != null){
+            mNavigationAdapter = new NavigationLiveoAdapter(this, NavigationLiveoList.getNavigationAdapter(this, mHelpItem, mNavigation.colorSelected, mNavigation.removeSelector), mListRemove, mListExtra);
+        }else {
+            mNavigationAdapter = new NavigationLiveoAdapter(this, NavigationLiveoList.getNavigationAdapter(this, mNavigation), mListRemove, mListExtra);
+        }
+
+        mList.setAdapter(mNavigationAdapter);
+    }
+
+    public void build(){
+
+        if (mOnItemClickLiveo == null){
+            throw new RuntimeException(getString(br.liveo.navigationliveo.R.string.start_navigation_listener));
+        }
+
+        this.addHeaderView();
+        List<Integer> mListExtra = new ArrayList<>();
+        mListExtra.add(0, mNewSelector);
+        mListExtra.add(1, mColorDefault);
+        mListExtra.add(2, mColorIcon);
+        mListExtra.add(3, mColorName);
+        mListExtra.add(4, mColorSeparator);
+        mListExtra.add(5, mColorCounter);
+        mListExtra.add(6, mSelectorDefault);
+        mListExtra.add(7, mColorSubHeader);
+
+        List<Boolean> mListRemove = new ArrayList<>();
+        mListRemove.add(0, mRemoveAlpha);
+        mListRemove.add(1, mRemoveColorFilter);
+
+        if (mHelpItem != null){
+            mNavigationAdapter = new NavigationLiveoAdapter(this, NavigationLiveoList.getNavigationAdapter(this, mHelpItem, mNavigation.colorSelected, mNavigation.removeSelector), mListRemove, mListExtra);
+        }else {
+            mNavigationAdapter = new NavigationLiveoAdapter(this, NavigationLiveoList.getNavigationAdapter(this, mNavigation), mListRemove, mListExtra);
+        }
+
+        setAdapter();
+    }
+
+    protected void setAdapter(){
+        if (mNavigationAdapter != null){
+            mList.setAdapter(mNavigationAdapter);
+        }
+    }
+
+//    /**
+//     * Create user default header
+//     */
+//    protected void createUserDefaultHeader() {
+//        mHeader = getLayoutInflater().inflate(br.liveo.navigationliveo.R.layout.navigation_list_header, mList, false);
+//
+//        userName = (TextView) mHeader.findViewById(br.liveo.navigationliveo.R.id.userName);
+//        userEmail = (TextView) mHeader.findViewById(br.liveo.navigationliveo.R.id.userEmail);
+//        userPhoto = (ImageView) mHeader.findViewById(br.liveo.navigationliveo.R.id.userPhoto);
+//        userBackground = (ImageView) mHeader.findViewById(br.liveo.navigationliveo.R.id.userBackground);
+//    }
+
+    protected void addHeaderView() {
+        if(!this.mRemoveHeader) {
+            this.mList.addHeaderView(this.mHeader);
+            mRelativeDrawer.setFitsSystemWindows(true);
+        }
+    }
+
+    /**
+     * Remove Header
+     */
+    public NavigationLiveo removeHeader(){
+        mRemoveHeader = true;
+        mCustomHeader = true;
+        mRelativeDrawer.setFitsSystemWindows(false);
+        return this;
+    }
+
+    /**
+     * Remove elevation toolBar
+     */
+    public NavigationLiveo removeElevationToolBar(){
+        this.mElevationToolBar = 0;
+        return this;
+    }
+
+    /**
+     * Background ListView
+     * @param color Default color - R.color.nliveo_white
+     */
+    public NavigationLiveo backgroundList(int color){
+        this.mSelectorDefault = color;
+        this.mList.setBackgroundResource(color);
+        this.mFooterDrawer.setBackgroundResource(color);
+        this.mFooterSecondDrawer.setBackgroundResource(color);
+        return this;
+    }
+
+    /**
+     * Background Footer
+     * @param color Default color - R.color.nliveo_white
+     */
+    public NavigationLiveo footerBackground(int color){
+        this.mFooterDrawer.setBackgroundResource(color);
+        this.mFooterSecondDrawer.setBackgroundResource(color);
+        return this;
+    }
+
+    /**
+     * Starting listener navigation
+     * @param listener listener.
+     */
+    public NavigationLiveo with(OnItemClickListener listener){
+        setContentView(R.layout.activity_home);
+        this.mOnItemClickLiveo = listener;
+        configureFindView();
+        return this;
+    };
+
+    /**
+     * Starting listener navigation
+     * @param listener listener.
+     * @param theme theme.
+     */
+    public NavigationLiveo with(OnItemClickListener listener, int theme){
+//        setContentView(theme == Navigation.THEME_DARK ? br.liveo.navigationliveo.R.layout.navigation_main_dark : br.liveo.navigationliveo.R.layout.navigation_main_light);
+        setContentView(R.layout.activity_home);
+        this.mOnItemClickLiveo = listener;
+        configureFindView();
+        return this;
+    };
+
+    /**
+     * @param listHelpItem list HelpItem.
+     */
+    @Override
+    public NavigationLiveo addAllHelpItem(List<HelpItem> listHelpItem){
+        this.mHelpItem = listHelpItem;
+        return this;
+    }
+
+    /**
+     * @param listNameItem list name item.
+     */
+    public NavigationLiveo nameItem(List<String> listNameItem){
+        this.mNavigation.nameItem = listNameItem;
+        return this;
+    }
+
+    /**
+     * @param listIcon list icon item.
+     */
+    public NavigationLiveo iconItem(List<Integer> listIcon){
+        this.mNavigation.iconItem = listIcon;
+        return this;
+    }
+
+    /**
+     * @param listHeader list header name item.
+     */
+    public NavigationLiveo headerItem(List<Integer> listHeader){
+        this.mNavigation.headerItem = listHeader;
+        return this;
+    }
+
+    /**
+     * @param sparceCount sparce count item.
+     */
+    public NavigationLiveo countItem(SparseIntArray sparceCount){
+        this.mNavigation.countItem = sparceCount;
+        return this;
+    }
+
+    /**
+     * Set adapter attributes
+     * @param listNameItem list name item.
+     * @param listIcon list icon item.
+     * @param listItensHeader list header name item.
+     * @param sparceItensCount sparce count item.
+     */
+    public void setNavigationAdapter(List<String> listNameItem, List<Integer> listIcon, List<Integer> listItensHeader, SparseIntArray sparceItensCount){
+        this.nameItem(listNameItem);
+        this.iconItem(listIcon);
+        this.headerItem(listItensHeader);
+        this.countItem(sparceItensCount);
+    }
+
+    /**
+     * Set adapter attributes
+     * @param listNameItem list name item.
+     * @param listIcon list icon item.
+     */
+    public void setNavigationAdapter(List<String> listNameItem, List<Integer> listIcon){
+        this.nameItem(listNameItem);
+        this.iconItem(listIcon);
+    }
+
+    /**
+     * hide navigation item
+     * @param listHide list hide item.
+     */
+    public NavigationLiveo hideItem(List<Integer> listHide){
+        mNavigation.hideItem = listHide;
+        return this;
+    }
+
+    /**
+     * show navigation item
+     * @param listShow list show item.
+     */
+    public void showNavigationItem(List<Integer> listShow){
+
+        if (listShow == null){
+            throw new RuntimeException(getString(br.liveo.navigationliveo.R.string.list_hide_item));
+        }
+
+        for (int i = 0; i < listShow.size(); i++){
+            setVisibleItemNavigation(listShow.get(i), true);
+        }
+    }
+
+    /**
+     * Starting listener navigation
+     * @param onItemClick listener.
+     * @deprecated
+     */
+    public void setNavigationListener(OnItemClickListener onItemClick){
+        this.mOnItemClickLiveo = onItemClick;
+    };
+
+    /**
+     * First item of the position selected from the list, use method startingPosition
+     * @param position ...
+     * @deprecated
+     */
+    public void setDefaultStartPositionNavigation(int position){
+        if (!isSaveInstance) {
+            this.mCurrentPosition = position;
+            this.mCurrentCheckPosition = position;
+        }
+    }
+
+    /**
+     * First item of the position selected from the list
+     * @param position ...
+     */
+    @Override
+    public NavigationLiveo startingPosition(int position){
+        if (!isSaveInstance) {
+            this.mCurrentPosition = position;
+            this.mCurrentCheckPosition = position;
+        }
+
+        return this;
+    }
+
+    /**
+     * Position in the last clicked item list
+     * @param position ...
+     */
+    protected void setCurrentPosition(int position){
+        this.mCurrentPosition = position;
+    }
+
+    /**
+     * get position in the last clicked item list
+     */
+    public int getCurrentPosition(){
+        return this.mCurrentPosition;
+    }
+
+    /**
+     * Position in the last clicked item list check
+     * @param position ...
+     */
+    protected void setCurrentCheckPosition(int position){
+        this.mCurrentCheckPosition = position;
+    }
+
+    /**
+     * get position in the last clicked item list check
+     */
+    public int getCurrentCheckPosition(){
+        return this.mCurrentCheckPosition;
+    }
+
+    /*{  }*/
+
+    /**
+     * Select item clicked
+     * @param position item position.
+     * @param checked true to check.
+     */
+    public void setCheckedItemNavigation(int position, boolean checked){
+
+        if (this.mNavigationAdapter == null){
+            throw new RuntimeException(getString(br.liveo.navigationliveo.R.string.start_navigation_listener));
+        }
+
+        this.mNavigationAdapter.resetarCheck();
+        this.mNavigationAdapter.setChecked(position, checked);
+    }
+
+    /**
+     * Information footer list item
+     * @param title item footer name.
+     * @param icon item footer icon.
+     * @deprecated
+     */
+    public void setFooterInformationDrawer(String title, int icon){
+
+        if (title == null){
+            throw new RuntimeException(getString(br.liveo.navigationliveo.R.string.title_null_or_empty));
+        }
+
+        if (title.trim().equals("")){
+            throw new RuntimeException(getString(br.liveo.navigationliveo.R.string.title_null_or_empty));
+        }
+
+        mTitleFooter.setText(title);
+
+        if (icon == 0){
+            mIconFooter.setVisibility(View.GONE);
+        }else{
+            mIconFooter.setImageResource(icon);
+        }
+    };
+
+    /**
+     * Information footer list item
+     * @param title item footer name.
+     * @param icon item footer icon.
+     */
+    public NavigationLiveo footerItem(String title, int icon){
+
+        if (title == null){
+            throw new RuntimeException(getString(br.liveo.navigationliveo.R.string.title_null_or_empty));
+        }
+
+        if (title.trim().equals("")){
+            throw new RuntimeException(getString(br.liveo.navigationliveo.R.string.title_null_or_empty));
+        }
+
+        mTitleFooter.setText(title);
+
+        if (icon == 0){
+            mIconFooter.setVisibility(View.GONE);
+        }else{
+            mIconFooter.setImageResource(icon);
+        }
+
+        return this;
+    };
+
+    /**
+     * Information footer second list item
+     * @param title item footer name.
+     * @param icon item footer icon.
+     */
+    public NavigationLiveo footerSecondItem(String title, int icon){
+
+        if (title == null){
+            throw new RuntimeException(getString(br.liveo.navigationliveo.R.string.title_null_or_empty));
+        }
+
+        if (title.trim().equals("")){
+            throw new RuntimeException(getString(br.liveo.navigationliveo.R.string.title_null_or_empty));
+        }
+
+        mTitleSecondFooter.setText(title);
+
+        if (icon == 0){
+            mIconSecondFooter.setVisibility(View.GONE);
+        }else{
+            mIconSecondFooter.setImageResource(icon);
+        }
+
+        mFooterSecondDrawer.setVisibility(View.VISIBLE);
+        return this;
+    };
+
+    /**
+     * Information footer list item
+     * @param title item footer name.
+     * @param icon item footer icon.
+     * @param colorName item footer name color.
+     * @param colorIcon item footer icon color.
+     * @deprecated
+     */
+    public void setFooterInformationDrawer(String title, int icon, int colorName, int colorIcon){
+
+        if (title == null){
+            throw new RuntimeException(getString(br.liveo.navigationliveo.R.string.title_null_or_empty));
+        }
+
+        if (title.trim().equals("")){
+            throw new RuntimeException(getString(br.liveo.navigationliveo.R.string.title_null_or_empty));
+        }
+
+        mTitleFooter.setText(title);
+
+        if (colorName > 0){
+            mTitleFooter.setTextColor(ContextCompat.getColor(this, colorName));
+        }
+
+        if (icon == 0){
+            mIconFooter.setVisibility(View.GONE);
+        }else{
+            mIconFooter.setImageResource(icon);
+
+            if ( colorIcon > 0) {
+                mIconFooter.setColorFilter(ContextCompat.getColor(this, colorIcon));
+            }
+        }
+    };
+
+    /**
+     * Information footer list item
+     * @param title item footer name.
+     * @param icon item footer icon.
+     * @param colorName item footer name color.
+     * @param colorIcon item footer icon color.
+     */
+    public NavigationLiveo footerInformationDrawer(String title, int icon, int colorName, int colorIcon){
+
+        if (title == null){
+            throw new RuntimeException(getString(br.liveo.navigationliveo.R.string.title_null_or_empty));
+        }
+
+        if (title.trim().equals("")){
+            throw new RuntimeException(getString(br.liveo.navigationliveo.R.string.title_null_or_empty));
+        }
+
+        mTitleFooter.setText(title);
+
+        if (colorName > 0){
+            mTitleFooter.setTextColor(ContextCompat.getColor(this, colorName));
+        }
+
+        if (icon == 0){
+            mIconFooter.setVisibility(View.GONE);
+        }else{
+            mIconFooter.setImageResource(icon);
+
+            if ( colorIcon > 0) {
+                mIconFooter.setColorFilter(ContextCompat.getColor(this, colorIcon));
+            }
+        }
+        return this;
+    };
+
+    /**
+     * Information footer list item
+     * @param title item footer name.
+     * @param icon item footer icon.
+     * @deprecated
+     */
+    public NavigationLiveo setFooterInformationDrawer(int title, int icon){
+
+        if (title == 0){
+            throw new RuntimeException(getString(br.liveo.navigationliveo.R.string.title_null_or_empty));
+        }
+
+        mTitleFooter.setText(getString(title));
+
+        if (icon == 0){
+            mIconFooter.setVisibility(View.GONE);
+        }else {
+            mIconFooter.setImageResource(icon);
+        }
+
+        if (mColorDefault > 0){
+            footerNameColor(mColorDefault);
+            footerIconColor(mColorDefault);
+        }
+
+        return this;
+    };
+
+    /**
+     * Information footer list item
+     * @param title item footer name.
+     * @param icon item footer icon.
+     */
+    public NavigationLiveo footerItem(int title, int icon){
+
+        if (title == 0){
+            throw new RuntimeException(getString(br.liveo.navigationliveo.R.string.title_null_or_empty));
+        }
+
+        mTitleFooter.setText(getString(title));
+
+        if (icon == 0){
+            mIconFooter.setVisibility(View.GONE);
+        }else{
+            mIconFooter.setImageResource(icon);
+        }
+
+        if (mColorDefault > 0){
+            footerNameColor(mColorDefault);
+            footerIconColor(mColorDefault);
+        }
+
+        return this;
+    };
+
+    /**
+     * Information footer list item
+     * @param title item footer name.
+     * @param icon item footer icon.
+     */
+    public NavigationLiveo footerSecondItem(int title, int icon){
+
+        if (title == 0){
+            throw new RuntimeException(getString(br.liveo.navigationliveo.R.string.title_null_or_empty));
+        }
+
+        mTitleSecondFooter.setText(getString(title));
+
+        if (icon == 0){
+            mIconSecondFooter.setVisibility(View.GONE);
+        }else{
+            mIconSecondFooter.setImageResource(icon);
+        }
+
+        if (mColorDefault > 0){
+            footerSecondNameColor(mColorDefault);
+            footerSecondIconColor(mColorDefault);
+        }
+
+        mFooterSecondDrawer.setVisibility(View.VISIBLE);
+
+        return this;
+    };
+
+    /**
+     * Information footer list item
+     * @param title item footer name.
+     * @param icon item footer icon.
+     * @param colorName item footer name color.
+     * @param colorIcon item footer icon color.
+     * @deprecated
+     */
+    public void setFooterInformationDrawer(int title, int icon, int colorName, int colorIcon){
+
+        if (title == 0){
+            throw new RuntimeException(getString(br.liveo.navigationliveo.R.string.title_null_or_empty));
+        }
+
+        mTitleFooter.setText(title);
+
+        if (colorName > 0) {
+            mTitleFooter.setTextColor(ContextCompat.getColor(this, colorName));
+        }
+
+        if (icon == 0){
+            mIconFooter.setVisibility(View.GONE);
+        }else {
+            mIconFooter.setImageResource(icon);
+
+            if ( colorIcon > 0) {
+                mIconFooter.setColorFilter(ContextCompat.getColor(this, colorIcon));
+            }
+        }
+    };
+
+    /**
+     * Information footer list item
+     * @param title item footer name.
+     * @param icon item footer icon.
+     * @param colorName item footer name color.
+     * @param colorIcon item footer icon color.
+     */
+    public NavigationLiveo footerItem(int title, int icon, int colorName, int colorIcon){
+
+        if (title == 0){
+            throw new RuntimeException(getString(br.liveo.navigationliveo.R.string.title_null_or_empty));
+        }
+
+        mTitleFooter.setText(title);
+
+        if (colorName > 0){
+            mTitleFooter.setTextColor(ContextCompat.getColor(this, colorName));
+        }
+
+        if (icon == 0){
+            mIconFooter.setVisibility(View.GONE);
+        }else{
+            mIconFooter.setImageResource(icon);
+
+            if ( colorIcon > 0) {
+                mIconFooter.setColorFilter(ContextCompat.getColor(this, colorIcon));
+            }
+        }
+        return this;
+    };
+
+    /**
+     * Information footer second list item
+     * @param title item footer name.
+     * @param icon item footer icon.
+     * @param colorName item footer name color.
+     * @param colorIcon item footer icon color.
+     */
+    public NavigationLiveo footerSecondItem(int title, int icon, int colorName, int colorIcon){
+
+        if (title == 0){
+            throw new RuntimeException(getString(br.liveo.navigationliveo.R.string.title_null_or_empty));
+        }
+
+        mTitleSecondFooter.setText(title);
+
+        if (colorName > 0){
+            mTitleSecondFooter.setTextColor(ContextCompat.getColor(this, colorName));
+        }
+
+        if (icon == 0){
+            mIconSecondFooter.setVisibility(View.GONE);
+        }else{
+            mIconSecondFooter.setImageResource(icon);
+
+            if ( colorIcon > 0) {
+                mIconSecondFooter.setColorFilter(ContextCompat.getColor(this, colorIcon));
+            }
+        }
+
+        mFooterSecondDrawer.setVisibility(View.VISIBLE);
+        return this;
+    };
+
+    /**
+     * Information footer list item
+     * @param title item footer name.
+     * @param icon item footer icon.
+     * @param color item footer name and icon color.
+     */
+    public NavigationLiveo footerItem(int title, int icon, int color){
+
+        if (title == 0){
+            throw new RuntimeException(getString(br.liveo.navigationliveo.R.string.title_null_or_empty));
+        }
+
+        mTitleFooter.setText(title);
+
+        if (color > 0){
+            mTitleFooter.setTextColor(ContextCompat.getColor(this, color));
+        }
+
+        if (icon == 0){
+            mIconFooter.setVisibility(View.GONE);
+        }else{
+            mIconFooter.setImageResource(icon);
+
+            if ( color > 0) {
+                mIconFooter.setColorFilter(ContextCompat.getColor(this, color));
+            }
+        }
+        return this;
+    };
+
+    /**
+     * Information footer second list item
+     * @param title item footer name.
+     * @param icon item footer icon.
+     * @param color item footer name and icon color.
+     */
+    public NavigationLiveo footerSecondItem(int title, int icon, int color){
+
+        if (title == 0){
+            throw new RuntimeException(getString(br.liveo.navigationliveo.R.string.title_null_or_empty));
+        }
+
+        mTitleSecondFooter.setText(title);
+
+        if (color > 0){
+            mTitleSecondFooter.setTextColor(ContextCompat.getColor(this, color));
+        }
+
+        if (icon == 0){
+            mIconSecondFooter.setVisibility(View.GONE);
+        }else{
+            mIconSecondFooter.setImageResource(icon);
+
+            if ( color > 0) {
+                mIconSecondFooter.setColorFilter(ContextCompat.getColor(this, color));
+            }
+        }
+
+        mFooterSecondDrawer.setVisibility(View.VISIBLE);
+        return this;
+    };
+
+    /**
+     * Information footer list item
+     * @param title item footer name.
+     * @param icon item footer icon.
+     * @param color item footer name and icon color.
+     */
+    public NavigationLiveo footerItem(String title, int icon, int color){
+
+        if (title == null){
+            throw new RuntimeException(getString(br.liveo.navigationliveo.R.string.title_null_or_empty));
+        }
+
+        if (title.trim().equals("")){
+            throw new RuntimeException(getString(br.liveo.navigationliveo.R.string.title_null_or_empty));
+        }
+
+        mTitleFooter.setText(title);
+
+        if (color > 0){
+            mTitleFooter.setTextColor(ContextCompat.getColor(this, color));
+        }
+
+        if (icon == 0){
+            mIconFooter.setVisibility(View.GONE);
+        }else{
+            mIconFooter.setImageResource(icon);
+
+            if ( color > 0) {
+                mIconFooter.setColorFilter(ContextCompat.getColor(this, color));
+            }
+        }
+        return this;
+    };
+
+    /**
+     * Information footer second list item
+     * @param title item footer name.
+     * @param icon item footer icon.
+     * @param color item footer name and icon color.
+     */
+    public NavigationLiveo footerSecondItem(String title, int icon, int color){
+
+        if (title == null){
+            throw new RuntimeException(getString(br.liveo.navigationliveo.R.string.title_null_or_empty));
+        }
+
+        if (title.trim().equals("")){
+            throw new RuntimeException(getString(br.liveo.navigationliveo.R.string.title_null_or_empty));
+        }
+
+        mTitleSecondFooter.setText(title);
+
+        if (color > 0){
+            mTitleSecondFooter.setTextColor(ContextCompat.getColor(this, color));
+        }
+
+        if (icon == 0){
+            mIconSecondFooter.setVisibility(View.GONE);
+        }else{
+            mIconSecondFooter.setImageResource(icon);
+
+            if ( color > 0) {
+                mIconSecondFooter.setColorFilter(ContextCompat.getColor(this, color));
+            }
+        }
+        return this;
+    };
+
+    /**
+     * If not want to use the footer item just put false
+     * @param visible true or false.
+     */
+    public void setFooterNavigationVisible(boolean visible){
+        this.mFooterDrawer.setVisibility((visible) ? View.VISIBLE : View.GONE);
+    }
+
+    /**
+     * Remove footer
+     */
+    public NavigationLiveo removeFooter(){
+        this.mFooterDrawer.setVisibility(View.GONE);
+        this.mFooterSecondDrawer.setVisibility(View.GONE);
+        return this;
+    }
+
+    /**
+     * Item color selected in the list - name and icon (use before the setNavigationAdapter)
+     * @param colorId color id.
+     * @deprecated
+     */
+    public void setColorSelectedItemNavigation(int colorId){
+        mNavigation.colorSelected = colorId;
+    }
+
+    /**
+     * Item color selected in the list - name, icon and counter
+     * @param colorId color id.
+     */
+    public NavigationLiveo colorItemSelected(int colorId){
+        mNavigation.colorSelected = colorId;
+        return this;
+    }
+
+    /**
+     * Footer name color
+     * @param colorId color id.
+     * @deprecated
+     */
+    public void setFooterNameColorNavigation(int colorId){
+        this.mTitleFooter.setTextColor(ContextCompat.getColor(this, colorId));
+        this.mTitleFooter.setTextColor(ContextCompat.getColor(this, colorId));
+    }
+
+    /**
+     * Footer name color
+     * @param colorId color id.
+     */
+    public NavigationLiveo footerNameColor(int colorId){
+        this.mTitleFooter.setTextColor(ContextCompat.getColor(this, colorId));
+        return this;
+    }
+
+    /**
+     * Footer second name color
+     * @param colorId color id.
+     */
+    public NavigationLiveo footerSecondNameColor(int colorId){
+        this.mTitleSecondFooter.setTextColor(ContextCompat.getColor(this, colorId));
+        return this;
+    }
+
+
+    /**
+     * Footer icon color
+     * @param colorId color id.
+     */
+    public NavigationLiveo footerIconColor(int colorId) {
+        this.mIconFooter.setColorFilter(ContextCompat.getColor(this, colorId));
+        return this;
+    }
+
+    /**
+     * Footer second icon color
+     * @param colorId color id.
+     */
+    public NavigationLiveo footerSecondIconColor(int colorId) {
+        this.mIconSecondFooter.setColorFilter(ContextCompat.getColor(this, colorId));
+        return this;
+    }
+
+
+    /**
+     * Footer icon color
+     * @param colorId color id.
+     * @deprecated
+     */
+    public void setFooterIconColorNavigation(int colorId) {
+        this.mIconFooter.setColorFilter(ContextCompat.getColor(this, colorId));
+    }
+
+    /**
+     * Item color default in the list - name and icon (use before the setNavigationAdapter)
+     * @param colorId color id.
+     * @deprecated
+     */
+    public void setColorDefaultItemNavigation(int colorId){
+        this.mColorDefault = colorId;
+    }
+
+    /**
+     * Item color default in the list - name and icon (use before the setNavigationAdapter)
+     * @param colorId color id.
+     */
+    public NavigationLiveo colorItemDefault(int colorId){
+        this.mColorDefault = colorId;
+        return this;
+    }
+
+    /**
+     * Icon item color in the list - icon (use before the setNavigationAdapter)
+     * @param colorId color id.
+     * @deprecated
+     */
+    public void setColorIconItemNavigation(int colorId){
+        this.mColorIcon = colorId;
+    }
+
+    /**
+     * Icon item color in the list - icon (use before the setNavigationAdapter)
+     * @param colorId color id.
+     */
+    public NavigationLiveo colorItemIcon(int colorId){
+        this.mColorIcon = colorId;
+        return this;
+    }
+
+    /**
+     * Separator item subHeader color in the list - icon (use before the setNavigationAdapter)
+     * @param colorId color id.
+     * @deprecated
+     */
+    public void setColorSeparatorItemSubHeaderNavigation(int colorId){
+        this.mColorSeparator = colorId;
+    }
+
+    /**
+     * Name item subHeader color
+     * @param colorId color id.
+     */
+    public NavigationLiveo colorNameSubHeader(int colorId){
+        this.mColorSubHeader = colorId;
+        return this;
+    }
+
+    /**
+     * Separator item subHeader color in the list - icon
+     * @param colorId color id.
+     */
+    public NavigationLiveo colorLineSeparator(int colorId){
+        this.mColorSeparator = colorId;
+        return this;
+    }
+
+    /**
+     * Counter color in the list (use before the setNavigationAdapter)
+     * @param colorId color id.
+     * @deprecated
+     */
+    public void setColorCounterItemNavigation(int colorId){
+        this.mColorCounter = colorId;
+    }
+
+    /**
+     * Counter color in the list (use before the setNavigationAdapter)
+     * @param colorId color id.
+     */
+    public NavigationLiveo colorItemCounter(int colorId){
+        this.mColorCounter = colorId;
+        return this;
+    }
+
+    /**
+     * Name item color in the list - name (use before the setNavigationAdapter)
+     * @param colorId color id.
+     * @deprecated
+     */
+    public void setColorNameItemNavigation(int colorId){
+        this.mColorName = colorId;
+    }
+
+    /**
+     * Name item color in the list - name (use before the setNavigationAdapter)
+     * @param colorId color id.
+     */
+    public NavigationLiveo colorItemName(int colorId){
+        this.mColorName = colorId;
+        return this;
+    }
+
+    /**
+     * New selector navigation
+     * @param resourceSelector drawable xml - selector.
+     * @deprecated
+     */
+    public void setNewSelectorNavigation(int resourceSelector){
+
+        if (mNavigation.removeSelector){
+            throw new RuntimeException(getString(br.liveo.navigationliveo.R.string.remove_selector_navigation));
+        }
+
+        this.mNewSelector = resourceSelector;
+    }
+
+    /**
+     * New selector navigation
+     * @param resourceSelector drawable xml - selector.
+     */
+    public NavigationLiveo selectorCheck(int resourceSelector){
+
+        if (mNavigation.removeSelector){
+            throw new RuntimeException(getString(br.liveo.navigationliveo.R.string.remove_selector_navigation));
+        }
+
+        this.mNewSelector = resourceSelector;
+        return this;
+    }
+
+    /**
+     * Remove selector navigation
+     * @deprecated
+     */
+    public void removeSelectorNavigation(){
+        mNavigation.removeSelector = true;
+    }
+
+    /**
+     * Remove selector navigation
+     */
+    public NavigationLiveo removeSelector(){
+        mNavigation.removeSelector = true;
+        return this;
+    }
+
+    /**
+     * New name item
+     * @param position item position.
+     * @param name new name
+     */
+    public void setNewName(int position, String name){
+        this.mNavigationAdapter.setNewName(position, name);
+    }
+
+    /**
+     * New name item
+     * @param position item position.
+     * @param name new name
+     */
+    public void setNewName(int position, int name){
+        this.mNavigationAdapter.setNewName(position, getString(name));
+    }
+
+    /**
+     * New name item
+     * @param position item position.
+     * @param icon new icon
+     */
+    public void setNewIcon(int position, int icon){
+        this.mNavigationAdapter.setNewIcon(position, icon);
+    }
+
+    /**
+     * New information item navigation
+     * @param position item position.
+     * @param name new name
+     * @param icon new icon
+     * @param counter new counter
+     */
+    public void setNewInformationItem(int position, int name, int icon, int counter) {
+        this.mNavigationAdapter.setNewInformationItem(position, getString(name), icon, counter);
+    }
+
+    /**
+     * New information item navigation
+     * @param position item position.
+     * @param name new name
+     * @param icon new icon
+     * @param counter new counter
+     */
+
+    public void setNewInformationItem(int position, String name, int icon, int counter) {
+        this.mNavigationAdapter.setNewInformationItem(position, name, icon, counter);
+    }
+
+    /**
+     * New counter value
+     * @param position item position.
+     * @param value new counter value.
+     */
+    public void setNewCounterValue(int position, int value){
+        this.mNavigationAdapter.setNewCounterValue(position, value);
+    }
+
+    /**
+     * Increasing counter value
+     * @param position item position.
+     * @param value new counter value (old value + new value).
+     */
+    public void setIncreasingCounterValue(int position, int value){
+        this.mNavigationAdapter.setIncreasingCounterValue(position, value);
+    }
+
+    /**
+     * Decrease counter value
+     * @param position item position.
+     * @param value new counter value (old value - new value).
+     */
+    public void setDecreaseCountervalue(int position, int value){
+        this.mNavigationAdapter.setDecreaseCountervalue(position, value);
+    }
+
+    /**
+     * Make the item visible navigation or not (default value is true)
+     * @param position item position.
+     * @param visible true or false.
+     */
+    public void setVisibleItemNavigation(int position, boolean visible){
+        this.mNavigationAdapter.setVisibleItemNavigation(position, visible);
+    }
+
+    /**
+     * Remove alpha item navigation (use before the setNavigationAdapter)
+     * @deprecated
+     */
+    public void removeAlphaItemNavigation(){
+        this.mRemoveAlpha = !mRemoveAlpha;
+    }
+
+    /**
+     * Remove alpha item navigation (use before the setNavigationAdapter)
+     */
+    public NavigationLiveo removeAlpha(){
+        this.mRemoveAlpha = !mRemoveAlpha;
+        return this;
+    }
+
+    /**
+     * Remove color filter icon item navigation
+     */
+    public NavigationLiveo removeColorFilter(){
+        this.mRemoveColorFilter = !mRemoveColorFilter;
+        return this;
+    }
+
+    /**
+     * public void setElevation (float elevation)
+     * Added in API level 21
+     * Default value is 15
+     * @param elevation Sets the base elevation of this view, in pixels.
+     */
+    public void setElevationToolBar(float elevation){
+//        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//            this.mElevationToolBar = elevation;
+//            this.getToolbar().setElevation(elevation);
+//        }
+    }
+
+    /**
+     * Remove default Header
+     */
+    public void showDefaultHeader() {
+        if (mHeader == null){
+            throw new RuntimeException(getString(br.liveo.navigationliveo.R.string.header_not_created));
+        }
+
+        mList.addHeaderView(mHeader);
+    }
+
+    /**
+     * Remove default Header
+     */
+    protected void removeDefaultHeader() {
+        if (mHeader == null){
+            throw new RuntimeException(getString(br.liveo.navigationliveo.R.string.header_not_created));
+        }
+
+        mList.removeHeaderView(mHeader);
+    }
+
+    /**
+     * Add custom Header
+     * @param v ...
+     * @deprecated
+     */
+    public void addCustomHeader(View v) {
+        if (v == null){
+            throw new RuntimeException(getString(br.liveo.navigationliveo.R.string.custom_header_not_created));
+        }
+
+        removeDefaultHeader();
+        mList.addHeaderView(v);
+    }
+
+    /**
+     * Add custom Header
+     * @param view ...
+     */
+    public NavigationLiveo customHeader(View view) {
+        if (view == null){
+            throw new RuntimeException(getString(br.liveo.navigationliveo.R.string.custom_header_not_created));
+        }
+
+        this.removeHeader();
+        mCustomHeader = false;
+        mRelativeDrawer.setFitsSystemWindows(true);
+        mList.addHeaderView(view);
+        return this;
+    }
+
+    /**
+     * Remove default Header
+     * @param v ...
+     */
+    public void removeCustomdHeader(View v) {
+        if (v == null){
+            throw new RuntimeException(getString(br.liveo.navigationliveo.R.string.custom_header_not_created));
+        }
+
+        mList.removeHeaderView(v);
+    }
+
+    /**
+     * get listview
+     */
+    public ListView getListView() {
+        return this.mList;
+    }
+
+    /**
+     * get toolbar
+     */
+    public Toolbar getToolbar() {
+        return this.mToolbar;
+    }
+
+    /**
+     * is drawer open
+     */
+    public boolean isDrawerOpen(){
+        return mDrawerLayout.isDrawerOpen(mRelativeDrawer);
+    }
+
+    /**
+     * Open drawer
+     */
+    public void openDrawer() {
+        mDrawerLayout.openDrawer(mRelativeDrawer);
+    }
+
+    /**
+     * Close drawer
+     */
+    public void closeDrawer() {
+        mDrawerLayout.closeDrawer(mRelativeDrawer);
+    }
+
+    public NavigationLiveo setOnItemClick(OnItemClickListener onItemClick){
+        this.mOnItemClickLiveo = onItemClick;
+        return this;
+    }
+
+    public NavigationLiveo setOnPrepareOptionsMenu(OnPrepareOptionsMenuLiveo onPrepareOptionsMenu){
+        this.mOnPrepareOptionsMenu = onPrepareOptionsMenu;
+        return this;
+    }
+
+    public NavigationLiveo setOnClickUser(View.OnClickListener listener){
+        this.userPhoto.setOnClickListener(listener);
+        return this;
+    }
+
+    public NavigationLiveo setOnClickFooter(View.OnClickListener listener){
+        this.mFooterDrawer.setOnClickListener(listener);
+        return this;
+    }
+
+    public NavigationLiveo setOnClickFooterSecond(View.OnClickListener listener){
+        this.mFooterSecondDrawer.setOnClickListener(listener);
+        return this;
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        boolean drawerOpen = mDrawerLayout.isDrawerOpen(mRelativeDrawer);
+        if (drawerOpen) {
+            mDrawerLayout.closeDrawer(mRelativeDrawer);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    // Response options
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == RESULT_OK) {
+            Log.d("EVENT", "event successfully added");
+//            addMapMarkers();
+        } else if (requestCode == Houndify.REQUEST_CODE) {
+            Log.d("Houndify", "Gets response");
+            final HoundSearchResult result = Houndify.get(this).fromActivityResult(resultCode, data);
+
+            if (result.hasResult()) {
+                onResponse( result.getResponse() );
+            }
+            else if (result.getErrorType() != null) {
+                onError(result.getException(), result.getErrorType());
+            }
+            else {
+                Log.d("HoundifyRes","Aborted search");
+            }
+        }
+    }
+
+    /**
+     * Called from onActivityResult() above (Houndify sample)
+     *
+     * @param response
+     */
+    protected void onResponse(final HoundResponse response) {
+        if (response.getResults().size() > 0) {
+            // Required for conversational support
+            StatefulRequestInfoFactory.get(this).setConversationState(response.getResults().get(0).getConversationState());
+
+            Log.d("HoundifyRes","Received response\n\n" + response.getResults().get(0).getWrittenResponse());
+            textToSpeechMgr.speak(response.getResults().get(0).getSpokenResponse());
+
+            /**
+             * "Client Match" analysis code. Modified from sample app
+             *
+             * Houndify client apps can specify their own custom phrases which they want matched using
+             * the "Client Match" feature. This section of code demonstrates how to handle
+             * a "Client Match phrase".  To enable this demo first open the
+             * StatefulRequestInfoFactory.java file in this project and and uncomment the
+             * "Client Match" demo code there.
+             *
+             */
+            if ( response.getResults().size() > 0 ) {
+                CommandResult commandResult = response.getResults().get( 0 );
+                if ( commandResult.getCommandKind().equals("ClientMatchCommand")) {
+                    JsonNode matchedItemNode = commandResult.getJsonNode().findValue("MatchedItem");
+                    String intentValue = matchedItemNode.findValue( "Intent").textValue();
+
+                    if ( intentValue.equals("TURN_LIGHT_ON") ) {
+                        textToSpeechMgr.speak("Client match TURN LIGHT ON successful");
+                    }
+                    else if ( intentValue.equals("TURN_LIGHT_OFF") ) {
+                        textToSpeechMgr.speak("Client match TURN LIGHT OFF successful");
+                    }
+                    else if ( intentValue.equals("ADD_EVENT") ) {
+                        textToSpeechMgr.speak("Client match ADD NEW EVENT successful");
+                    }
+                }
+            }
+        }
+        else {
+            Log.d("HoundifyRes","Received empty response!");
+        }
+    }
+
+    /**
+     * Called from onActivityResult() above
+     *
+     * @param ex
+     * @param errorType
+     */
+    protected void onError(final Exception ex, final VoiceSearchInfo.ErrorType errorType) {
+        Log.d("HoudifyRes", errorType.name() + "\n\n" + exceptionToString(ex));
+    }
+
+    protected static String exceptionToString(final Exception ex) {
+        try {
+            final StringWriter sw = new StringWriter(1024);
+            final PrintWriter pw = new PrintWriter(sw);
+            ex.printStackTrace(pw);
+            pw.close();
+            return sw.toString();
+        }
+        catch (final Exception e) {
+            return "";
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        // start houndify listener
+        startPhraseSpotting();
+        // Add the following line to register the Session Manager Listener onResume
+        mSensorManager.registerListener(mShakeDetector, mAccelerometer,	SensorManager.SENSOR_DELAY_UI);
+
+    }
+
+    @Override
+    public void onPause() {
+        // Add the following line to unregister the Sensor Manager onPause
+        mSensorManager.unregisterListener(mShakeDetector);
+        super.onPause();
+        // if we don't, we must still be listening for "ok hound" so teardown the phrase spotter
+        if ( phraseSpotterReader != null ) {
+            stopPhraseSpotting();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // if we don't, we must still be listening for "ok hound" so teardown the phrase spotter
+        if ( textToSpeechMgr != null ) {
+            textToSpeechMgr.shutdown();
+            textToSpeechMgr = null;
+        }
+    }
+
+    public void handleShakeEvent(int count) {
+        Log.d("SHAKE", "Shaked device: " + count + " times.");
+        if (count <= 2) {
+            textToSpeechMgr.speak("Stop shaking me dude!");
+        }
+        else {
+            textToSpeechMgr.speak("aw, fuck yea!");
+        }
+    }
+
+    /**
+     * Helper class used for managing the TextToSpeech engine (from Houndify sample)
+     */
+    class TextToSpeechMgr implements TextToSpeech.OnInitListener {
+        private TextToSpeech textToSpeech;
+
+        public TextToSpeechMgr( Activity activity ) {
+            textToSpeech = new TextToSpeech( activity, this );
+        }
+
+        @Override
+        public void onInit( int status ) {
+            // Set language to use for playing text
+            if ( status == TextToSpeech.SUCCESS ) {
+                int result = textToSpeech.setLanguage(Locale.US);
+            }
+        }
+
+        public void shutdown() {
+            textToSpeech.shutdown();
+        }
+        /**
+         * Play the text to the device speaker
+         *
+         * @param textToSpeak
+         */
+        public void speak( String textToSpeak ) {
+            textToSpeech.speak(textToSpeak, TextToSpeech.QUEUE_ADD, null);
+        }
     }
 
 }

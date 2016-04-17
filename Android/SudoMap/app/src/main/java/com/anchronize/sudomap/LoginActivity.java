@@ -29,7 +29,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.anchronize.sudomap.objects.User;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.FacebookSdk;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
 import com.firebase.client.AuthData;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
@@ -75,11 +80,35 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     //If sucess, pass this id to global application so other activities can refer to it
     private String currentUserID;
 
+    // Facebook SDK
+    private CallbackManager callbackManager;
+    private LoginButton loginButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        FacebookSdk.sdkInitialize(getApplicationContext());
+        callbackManager = CallbackManager.Factory.create();
         setContentView(R.layout.activity_login);
         Firebase.setAndroidContext(this);
+
+        loginButton = (LoginButton)findViewById(R.id.fb_login_button);
+        loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                Log.d("FB", "Authenticated successful.");
+            }
+
+            @Override
+            public void onCancel() {
+                Log.d("FB", "Failed to authenticate.");
+            }
+
+            @Override
+            public void onError(FacebookException e) {
+
+            }
+        });
 
         // Set up the login form.
         mUsernameView = (AutoCompleteTextView) findViewById(R.id.email);
