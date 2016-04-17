@@ -29,24 +29,6 @@ public class SudoMapApplication extends android.app.Application{
         ref =  new Firebase("https://anchronize.firebaseio.com");
         isAuthenticated = false;    //default it to false when it's created first
         currentUserID = null;
-
-//        if(currentUserID != null){
-//            refCurrentUser = ref.child("users").child(currentUserID);
-//            refCurrentUser.addValueEventListener(new ValueEventListener() {
-//                @Override
-//                public void onDataChange(DataSnapshot dataSnapshot) {
-//                    currentUser = dataSnapshot.getValue(User.class);
-//                }
-//
-//                @Override
-//                public void onCancelled(FirebaseError firebaseError) {
-//
-//                }
-//            });
-//        }
-
-
-
     }
 
     public void setAuthenticateStatus(boolean authStatus) {
@@ -103,6 +85,25 @@ public class SudoMapApplication extends android.app.Application{
 //
 //        });
 
+    }
+
+    //When other activity class call this methods, the application will listen to firebase of currentUser
+    //and store the up-to-date version of the current user local
+    public void StartToUpdateUser(){
+        if(currentUserID != null){
+            refCurrentUser = ref.child("users").child(currentUserID);
+            refCurrentUser.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    currentUser = dataSnapshot.getValue(User.class);
+                }
+
+                @Override
+                public void onCancelled(FirebaseError firebaseError) {
+
+                }
+            });
+        }
     }
 
     public User getCurrentUser() {

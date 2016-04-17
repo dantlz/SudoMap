@@ -420,6 +420,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 // set global auth status to logged in
                 ((SudoMapApplication) getApplication()).setAuthenticateStatus(true);
                 ((SudoMapApplication)getApplication()).setCurrentUserID(currentUserID);
+                ((SudoMapApplication)getApplication()).StartToUpdateUser();
                 startActivity(new Intent(LoginActivity.this, HomeActivity.class));
                 System.out.println(" onPostExecute success");
 
