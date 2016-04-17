@@ -8,6 +8,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.anchronize.sudomap.EventDetailActivity">
+
     <ScrollView
     android:id="@+id/scrollView"
     android:layout_width="match_parent"
@@ -26,6 +27,7 @@
                 android:textSize="40dp"
                 android:layout_marginTop="15dp"
                 android:padding="10dp"
+                android:textColor="@color/white"
                 android:layout_alignParentStart="true"
                 android:background="@drawable/button_border"/>
             <TextView
@@ -34,6 +36,7 @@
                 android:layout_height="wrap_content"
                 android:text="Organizer Placeholder"
                 android:textSize="20dp"
+                android:textColor="@color/white"
                 android:layout_below="@+id/eventTitle"/>
             <RelativeLayout
                 android:id="@+id/eventButtons"
@@ -44,6 +47,7 @@
                 <Button
                     android:id="@+id/bookmarkButton"
                     android:text="Bookmark"
+                    android:textColor="@color/white"
                     android:layout_width="wrap_content"
                     android:layout_height="fill_parent"
                     android:layout_alignParentTop="true"
@@ -52,6 +56,7 @@
                 <Button
                     android:id="@+id/attendingButton"
                     android:text="Attending"
+                    android:textColor="@color/white"
                     android:layout_width="wrap_content"
                     android:layout_height="fill_parent"
                     android:layout_alignParentTop="true"
@@ -73,6 +78,7 @@
                 android:layout_marginTop="15dp"
                 android:textSize="15dp"
                 android:text="Location:"
+                android:textColor="@color/white"
                 android:layout_below="@id/eventsMap"/>
             <TextView
                 android:id="@+id/eventLocationNameTextView"
@@ -81,6 +87,7 @@
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:text="Location name placeholder"
                 android:padding="10dp"
+                android:textColor="@color/white"
                 android:background="@drawable/button_border"
                 android:layout_below="@+id/locationLabel"/>
             <TextView
@@ -89,6 +96,7 @@
                 android:layout_height="20dp"
                 android:layout_marginTop="15dp"
                 android:textSize="15dp"
+                android:textColor="@color/white"
                 android:text="Street Address:"
                 android:layout_below="@id/eventLocationNameTextView"/>
             <TextView
@@ -97,6 +105,7 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:text="Location address placeholder"
+                android:textColor="@color/white"
                 android:padding="10dp"
                 android:background="@drawable/button_border"
                 android:layout_below="@+id/addressLabel"/>
@@ -105,9 +114,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="20dp"
                 android:textSize="15dp"
+                android:textColor="@color/white"
                 android:layout_marginTop="15dp"
                 android:layout_below="@+id/eventLocationAddressTextView"
-                android:textColor="@color/common_google_signin_btn_text_light"
                 android:text="Description:"/>
             <TextView
                 android:id="@+id/eventDescriptionView"
@@ -115,8 +124,7 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="Description placeholder"
-                android:textColor="#000000"
-                android:padding="10dp"
+                android:textColor="@color/white"                android:padding="10dp"
                 android:layout_below="@+id/descriptionLabel"
                 android:background="@drawable/button_border" />
             <TextView
@@ -126,6 +134,7 @@
                 android:layout_marginTop="15dp"
                 android:textSize="15dp"
                 android:text="Attendants:"
+                android:textColor="@color/white"
                 android:layout_below="@id/eventDescriptionView"/>
             <HorizontalScrollView
                 android:id="@+id/attendantsScrollView"
@@ -146,6 +155,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="70dp"
                 android:text="CHAT"
+                android:textColor="@color/white"
                 android:textSize="40dp"
                 android:backgroundTint="@color/white"
                 android:layout_below="@+id/attendantsScrollView"
