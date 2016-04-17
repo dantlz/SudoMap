@@ -1,6 +1,7 @@
 package com.anchronize.sudomap;
 
 import android.app.ListActivity;
+import android.content.Intent;
 import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -23,6 +24,7 @@ public class ChatActivity extends ListActivity {
 
     private ArrayList<String> data = new ArrayList<String>();
     private static final String FIREBASE_URL = "https://anchronize.firebaseio.com";
+    public static final String CHAT_KEY = "SUUUH";
     private String mUsername;
     private String mDescription;
     private Firebase mFirebaseRef;
@@ -33,10 +35,14 @@ public class ChatActivity extends ListActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.chat_message);
+        //get the eventID
+        Intent i = getIntent();
+        String eventID =  i.getStringExtra(CHAT_KEY);
+
 
         //Set up firebase reference
         //this should be changed to be under each event
-        mFirebaseRef = new Firebase(FIREBASE_URL).child("chat");
+        mFirebaseRef = new Firebase(FIREBASE_URL).child("chat").child(eventID);
 
         //TEST
         mDescription = "mDescription.";
