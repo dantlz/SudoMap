@@ -24,7 +24,10 @@ public class ChatActivity extends ListActivity {
 
     private ArrayList<String> data = new ArrayList<String>();
     private static final String FIREBASE_URL = "https://anchronize.firebaseio.com";
-    public static final String CHAT_KEY = "SUUUH";
+    public static final String EVENTID_KEY = "EVENT ID KEY";
+    public static final String EVENTDESC_KEY = "EVENT DESCRIPTION KEY";
+    public static final String USERNAME_KEY = "USERNAME KEY";
+
     private String mUsername;
     private String mDescription;
     private Firebase mFirebaseRef;
@@ -37,17 +40,17 @@ public class ChatActivity extends ListActivity {
         setContentView(R.layout.chat_message);
         //get the eventID
         Intent i = getIntent();
-        String eventID =  i.getStringExtra(CHAT_KEY);
+        String eventID =  i.getStringExtra(EVENTID_KEY);
+        mDescription = i.getStringExtra(EVENTDESC_KEY);
 
 
         //Set up firebase reference
         //this should be changed to be under each event
         mFirebaseRef = new Firebase(FIREBASE_URL).child("chat").child(eventID);
 
-        //TEST
-        mDescription = "mDescription.";
         //main post is replaced by description
         TextView description = (TextView) findViewById(R.id.main_post);
+        description.setText(mDescription);
 
         //set up input text field and send message button listener
         EditText inputText = (EditText) findViewById(R.id.messageInput);
