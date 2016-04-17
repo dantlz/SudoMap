@@ -5,15 +5,12 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Address;
 import android.location.Geocoder;
-import android.net.Uri;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
 import android.widget.HorizontalScrollView;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -26,9 +23,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
 import java.util.Locale;
 
@@ -112,15 +107,15 @@ public class EventDetailActivity extends AppCompatActivity implements
 
     public void bookmarkButtonClicked(){
         User user = ((SudoMapApplication)getApplication()).getCurrentUser();
-        user.addBookmarkedEvent(mEvent);
+        user.addBookmarkedEventID(mEvent.getEventID());
         ((SudoMapApplication)getApplication()).updateCurrentUser(user);
     }
 
     public void attendingButtonClicked(){
         User user = ((SudoMapApplication)getApplication()).getCurrentUser();
-        user.addAttendingEvent(mEvent);
+        user.addAttendingEventID(mEvent.getEventID());
         ((SudoMapApplication)getApplication()).updateCurrentUser(user);
-        mEvent.addAttendant(user);
+        mEvent.addAttendant(user.getUserID());
         //TODO update this event in firebase
     }
 

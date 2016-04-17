@@ -79,7 +79,7 @@ public class User implements Serializable {
         return attendingEventIDs;
     }
 
-    public void addAttendingEvent(String aEI){
+    public void addAttendingEventID(String aEI){
         this.attendingEventIDs.add(aEI);
     }
 
@@ -95,7 +95,7 @@ public class User implements Serializable {
         return bookmarkedEventIDs;
     }
 
-    public void addBookmarkedEvent(String bEI) {
+    public void addBookmarkedEventID(String bEI) {
         this.bookmarkedEventIDs.add(bEI);
     }
 
