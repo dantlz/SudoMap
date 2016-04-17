@@ -45,6 +45,8 @@ public class ChatActivity extends ListActivity {
         Intent i = getIntent();
         String eventID =  i.getStringExtra(EVENTID_KEY);
         mDescription = i.getStringExtra(EVENTDESC_KEY);
+        mUsername = i.getStringExtra(USERNAME_KEY);
+
 
 
         //Set up firebase reference
