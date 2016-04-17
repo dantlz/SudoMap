@@ -165,8 +165,7 @@ public class HomeActivity extends AppCompatActivity
         });
 
 
-//        //add a listener to databse
-//        refEvents.add
+
 
         // ShakeDetector initialization from http://jasonmcreynolds.com/?p=388
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
@@ -185,6 +184,12 @@ public class HomeActivity extends AppCompatActivity
                 handleShakeEvent(count);
             }
         });
+
+//        //test to get current user
+//        Log.d("currentUserID", ((SudoMapApplication)getApplication()).getCurrentUserID());
+//        User user = ((SudoMapApplication)getApplication()).getCurrentUser();
+//        Log.d("user",user.toString() );
+//        Log.d("userid", user.getUserID());
 
     }
 

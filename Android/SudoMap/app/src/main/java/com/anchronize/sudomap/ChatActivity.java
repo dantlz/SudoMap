@@ -1,8 +1,10 @@
 package com.anchronize.sudomap;
 
 import android.app.ListActivity;
+import android.content.Intent;
 import android.database.DataSetObserver;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -13,7 +15,9 @@ import android.widget.TextView;
 import com.firebase.client.Firebase;
 import com.firebase.client.ValueEventListener;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Created by Rohan on 4/13/16.
@@ -23,6 +27,10 @@ public class ChatActivity extends ListActivity {
 
     private ArrayList<String> data = new ArrayList<String>();
     private static final String FIREBASE_URL = "https://anchronize.firebaseio.com";
+    public static final String EVENTID_KEY = "EVENT ID KEY";
+    public static final String EVENTDESC_KEY = "EVENT DESCRIPTION KEY";
+    public static final String USERNAME_KEY = "USERNAME KEY";
+
     private String mUsername;
     private String mDescription;
     private Firebase mFirebaseRef;
@@ -33,15 +41,21 @@ public class ChatActivity extends ListActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.chat_message);
+        //get the eventID
+        Intent i = getIntent();
+        String eventID =  i.getStringExtra(EVENTID_KEY);
+        mDescription = i.getStringExtra(EVENTDESC_KEY);
+        mUsername = i.getStringExtra(USERNAME_KEY);
+
+
 
         //Set up firebase reference
         //this should be changed to be under each event
-        mFirebaseRef = new Firebase(FIREBASE_URL).child("chat");
+        mFirebaseRef = new Firebase(FIREBASE_URL).child("chat").child(eventID);
 
-        //TEST
-        mDescription = "mDescription.";
         //main post is replaced by description
         TextView description = (TextView) findViewById(R.id.main_post);
+        description.setText(mDescription);
 
         //set up input text field and send message button listener
         EditText inputText = (EditText) findViewById(R.id.messageInput);
@@ -87,7 +101,11 @@ public class ChatActivity extends ListActivity {
         String input = inputText.getText().toString();
         if (!input.equals("")) {
             // Create our 'model', a Chat object
+            SimpleDateFormat sdf = new SimpleDateFormat("HH");
+            String hour = sdf.format(new Date());
+            Log.d("timestamp",hour);
             Chat chat = new Chat(input, mUsername);
+            chat.setHour(hour);
             // Create a new, auto-generated child of that chat location, and save our chat data there
             Firebase mPostRef = mFirebaseRef.push();
             //mChatListAdapter.setReference(mPostRef.child("votes"));

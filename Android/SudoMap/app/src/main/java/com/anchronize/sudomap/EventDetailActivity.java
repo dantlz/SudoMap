@@ -5,20 +5,22 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Address;
 import android.location.Geocoder;
-import android.net.Uri;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
 import android.widget.HorizontalScrollView;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.anchronize.sudomap.objects.Event;
 import com.anchronize.sudomap.objects.User;
+import com.firebase.client.DataSnapshot;
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -26,9 +28,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
 import java.util.Locale;
 
@@ -107,20 +107,23 @@ public class EventDetailActivity extends AppCompatActivity implements
 
     public void chatButtonClicked(){
         Intent i = new Intent(this, ChatActivity.class);
+        i.putExtra(ChatActivity.EVENTID_KEY,mEvent.getEventID());
+        i.putExtra(ChatActivity.EVENTDESC_KEY, mEvent.getDescription());
+        i.putExtra(ChatActivity.USERNAME_KEY, ((SudoMapApplication) getApplication()).getCurrentUser().getInAppName());
         startActivity(i);
     }
 
     public void bookmarkButtonClicked(){
         User user = ((SudoMapApplication)getApplication()).getCurrentUser();
-        user.addBookmarkedEvent(mEvent);
+        user.addBookmarkedEventID(mEvent.getEventID());
         ((SudoMapApplication)getApplication()).updateCurrentUser(user);
     }
 
     public void attendingButtonClicked(){
         User user = ((SudoMapApplication)getApplication()).getCurrentUser();
-        user.addAttendingEvent(mEvent);
+        user.addAttendingEventID(mEvent.getEventID());
         ((SudoMapApplication)getApplication()).updateCurrentUser(user);
-        mEvent.addAttendant(user);
+        mEvent.addAttendant(user.getUserID());
         //TODO update this event in firebase
     }
 
@@ -132,25 +135,37 @@ public class EventDetailActivity extends AppCompatActivity implements
 
     public void populateDetails(){
 
+        //get Organizer from Firebase, set organizer's name to textView
+        Firebase ref = new Firebase("https://anchronize.firebaseio.com");
+        Firebase refOrganizer = ref.child("users").child(mEvent.getOrganizerID());
+        refOrganizer.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                User organizer = dataSnapshot.getValue(User.class);
+                //update the organizer text view here
+                organizerView.setText(organizer.getInAppName());
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
+
+
+
         //TODO category
+
         titleView.setText(mEvent.getTitle());
-        //TODO getUserFromID seems to be broken
-        User organizer = (((SudoMapApplication)getApplication()).getUserFromID(mEvent.getOrganizerID()));
-        String organizerName = "";
-        if(organizer == null){
-            organizerName = "null - getUserFromID() returned null bro";
-        }
-        else{
-            organizerName = organizer.getInAppName();
-        }
-        organizerView.setText("Organizer: "+ organizerName);
-        locationNameView.setText(nameFromLatLng(mEvent.getLatitude(),mEvent.getLongitude()));
-        locationAddress.setText(addressFromLatLng(mEvent.getLatitude(), mEvent.getLongitude()));
+        locationNameView.setText(mEvent.getAddressName());
+        locationAddress.setText(mEvent.getAddress());
         descriptionView.setText(mEvent.getDescription());
         mMap.addMarker(new MarkerOptions().position(new
                 LatLng(mEvent.getLatitude(), mEvent.getLongitude())).title("Hello world"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mEvent.getLatitude(), mEvent.getLongitude()),15));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mEvent.getLatitude(), mEvent.getLongitude()), 15));
 
+
+        Toast.makeText(getApplicationContext(), ((SudoMapApplication) getApplication()).getCurrentUser().getInAppName(), Toast.LENGTH_LONG).show();
 //        for(User user: mEvent.getAttendants()){
 //            AttendantsItem item = new AttendantsItem(getApplicationContext());
 //            item.setName(user.getInAppName());

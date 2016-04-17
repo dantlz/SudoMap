@@ -75,42 +75,34 @@ public class User implements Serializable {
         this.userBio = userBio;
     }
 
-//    public UserPreference getUserPreferences() {
-//        return userPreferences;
-//    }
-//
-//    public void setUserPreferences(UserPreference userPreferences) {
-//        this.userPreferences = userPreferences;
-//    }
-//
-    public ArrayList<Event> getAttendingEvents() {
-        return attendingEvents;
+    public ArrayList<String> getAttendingEventIDs() {
+        return attendingEventIDs;
     }
 
-    public void addAttendingEvent(Event attendingEvent){
-        this.attendingEvents.add(attendingEvent);
+    public void addAttendingEventID(String aEI){
+        this.attendingEventIDs.add(aEI);
     }
 
     public void removeAttendingEvent(String eventID){
-        for(Event event: attendingEvents){
-            if(event.getEventID().equals(eventID)){
-                attendingEvents.remove(event);
+        for(String ei: attendingEventIDs){
+            if(ei.equals(eventID)){
+                attendingEventIDs.remove(ei);
             }
         }
     }
 
-    public ArrayList<Event> getBookmarkedEvents() {
-        return bookmarkedEvents;
+    public ArrayList<String> getBookmarkedEvents() {
+        return bookmarkedEventIDs;
     }
 
-    public void addBookmarkedEvent(Event bookmarkedEvent) {
-        this.bookmarkedEvents.add(bookmarkedEvent);
+    public void addBookmarkedEventID(String bEI) {
+        this.bookmarkedEventIDs.add(bEI);
     }
 
     public void removeBookmarkedEvent(String eventID){
-        for(Event event: bookmarkedEvents){
-            if(event.getEventID().equals(eventID)){
-                bookmarkedEvents.remove(event);
+        for(String ei: bookmarkedEventIDs){
+            if(ei.equals(eventID)){
+                bookmarkedEventIDs.remove(ei);
             }
         }
     }
@@ -118,11 +110,9 @@ public class User implements Serializable {
     private boolean premium;
     private String userID;
     private String inAppName;
-    //TODO We don't know if we can store profile image.
     private String profileImgString = "default";
     private String userBio;
-//    private UserPreference userPreferences;
-    private ArrayList<Event> attendingEvents = new ArrayList<Event>();
-    private ArrayList<Event> bookmarkedEvents = new ArrayList<Event>();
+    private ArrayList<String> attendingEventIDs = new ArrayList<String>();
+    private ArrayList<String> bookmarkedEventIDs = new ArrayList<String>();
 }
 

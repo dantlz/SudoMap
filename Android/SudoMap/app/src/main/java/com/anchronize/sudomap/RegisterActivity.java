@@ -330,16 +330,14 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
                 public void onSuccess(Map<String, Object> result) {
                     System.out.println("Successfully created user account with uid: " + result.get("uid"));
                     registerStatus = true;
-
-                    User newUser = new User(result.get("uid").toString());
+                    String uniqueID = result.get("uid").toString();
+                    User newUser = new User(uniqueID);
                     newUser.setPremium(false);
                     newUser.setInAppName(mUsername);
                     newUser.setUserBio("This user has no Bio yet");
-                    Firebase refEvent = ref.child("users");
-                    Firebase temp = refEvent.push();
-                    String id = temp.getKey();
-                    Log.d("id", id);
-                    temp.setValue(newUser);
+                    Firebase refUsers = ref.child("users");
+                    Firebase refNewUser = refUsers.child(uniqueID);
+                    refNewUser.setValue(newUser);
                 }
                 @Override
                 public void onError(FirebaseError firebaseError) {
