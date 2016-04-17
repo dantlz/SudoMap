@@ -97,7 +97,7 @@ public class EventDetailActivity extends AppCompatActivity implements
         Intent i = getIntent();
         if(i.hasExtra(EVENTID_KEY)){
             mEventID = i.getStringExtra(EVENTID_KEY);
-            Log.d("a","sss");
+            Log.d("StringExtra",mEventID);
 
             //TODO Get the event from event ID and set mEvent to the event
             Firebase refEventID = ref.child("events").child(mEventID);
