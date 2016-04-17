@@ -91,7 +91,7 @@ public class User implements Serializable {
         }
     }
 
-    public ArrayList<String> getBookmarkedEvents() {
+    public ArrayList<String> getBookmarkedEventIDs() {
         return bookmarkedEventIDs;
     }
 
