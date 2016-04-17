@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -39,7 +40,7 @@ public class AddEventActivity extends AppCompatActivity{
     private EditText descriptionEditText;
     private Button createEventButton;
     private Spinner categorySpinner;
-    private Spinner privacySpinner;
+    private CheckBox privacyCheckBox;
 
     private TextView locationTV, startDateTV, startTimeTV, endDateTV, endTimeTV;
 
@@ -72,8 +73,7 @@ public class AddEventActivity extends AppCompatActivity{
         descriptionEditText = (EditText)findViewById(R.id.descriptionEditText);
         createEventButton = (Button)findViewById(R.id.createButton);
         categorySpinner = (Spinner)findViewById(R.id.categorySpinner);
-        privacySpinner =(Spinner)findViewById(R.id.privacySpinner);
-        privacySpinner.setSelection(0);
+        privacyCheckBox = (CheckBox)findViewById(R.id.privacyCheckBox);
 
         locationTV = (TextView) findViewById(R.id.locationTextView);
         startDateTV = (TextView) findViewById(R.id.startDateTextView);
@@ -102,7 +102,7 @@ public class AddEventActivity extends AppCompatActivity{
             public void onClick(View v) {
                 String title = titleEditText.getText().toString();
                 String description = descriptionEditText.getText().toString();
-                boolean isPrivate = (boolean) privacySpinner.getSelectedItem();
+                boolean isPrivate = privacyCheckBox.isChecked();
                 String category = categorySpinner.getSelectedItem().toString();
 
 

@@ -176,11 +176,9 @@
             />
 
         <CheckBox
+            android:id="@+id/privacyCheckBox"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:id="@+id/privateCheckbox"/>
-
+            android:layout_height="wrap_content" />
 
     </LinearLayout>
 
@@ -208,7 +206,6 @@
         <Spinner
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="0.8"
             android:entries= "@array/eventCategories"
             android:id="@+id/categorySpinner"
             ></Spinner>
