@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.anchronize.sudomap.objects.Event;
 import com.anchronize.sudomap.objects.User;
@@ -160,8 +161,10 @@ public class EventDetailActivity extends AppCompatActivity implements
         descriptionView.setText(mEvent.getDescription());
         mMap.addMarker(new MarkerOptions().position(new
                 LatLng(mEvent.getLatitude(), mEvent.getLongitude())).title("Hello world"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mEvent.getLatitude(), mEvent.getLongitude()),15));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mEvent.getLatitude(), mEvent.getLongitude()), 15));
 
+
+        Toast.makeText(getApplicationContext(), ((SudoMapApplication) getApplication()).getCurrentUser().getInAppName(), Toast.LENGTH_LONG).show();
 //        for(User user: mEvent.getAttendants()){
 //            AttendantsItem item = new AttendantsItem(getApplicationContext());
 //            item.setName(user.getInAppName());
