@@ -33,6 +33,9 @@ import android.widget.TextView;
 import com.facebook.AccessToken;
 import com.facebook.AccessTokenTracker;
 import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.firebase.client.AuthData;
 import com.firebase.client.Firebase;
@@ -157,22 +160,26 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         ref = new Firebase("https://anchronize.firebaseio.com");
 
         mFacebookLoginButton = (LoginButton)findViewById(R.id.fb_login_button);
-//        mFacebookLoginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
-//            @Override
-//            public void onSuccess(LoginResult loginResult) {
-//                Log.d("FB", "Authenticated successful.");
-//            }
-//
-//            @Override
-//            public void onCancel() {
-//                Log.d("FB", "Failed to authenticate.");
-//            }
-//
-//            @Override
-//            public void onError(FacebookException e) {
-//
-//            }
-//        });
+        mFacebookLoginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                Log.d("FB", "Authenticated successful.");
+                ((SudoMapApplication) getApplication()).setAuthenticateStatus(true);
+                ((SudoMapApplication)getApplication()).setCurrentUserID(currentUserID);
+                ((SudoMapApplication)getApplication()).StartToUpdateUser();
+                startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+            }
+
+            @Override
+            public void onCancel() {
+                Log.d("FB", "Failed to authenticate.");
+            }
+
+            @Override
+            public void onError(FacebookException e) {
+
+            }
+        });
 
         mFacebookAccessTokenTracker = new AccessTokenTracker() {
             @Override
@@ -198,10 +205,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 if (authData != null) {
                     // logs in
                     Log.d("FB", "new intent");
-                    ((SudoMapApplication) getApplication()).setAuthenticateStatus(true);
-                    ((SudoMapApplication)getApplication()).setCurrentUserID(authData.getUid());
-                    ((SudoMapApplication)getApplication()).StartToUpdateUser();
-                    startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+//                    ((SudoMapApplication) getApplication()).setAuthenticateStatus(true);
+//                    ((SudoMapApplication)getApplication()).setCurrentUserID(authData.getUid());
+//                    ((SudoMapApplication)getApplication()).StartToUpdateUser();
+//                    startActivity(new Intent(LoginActivity.this, HomeActivity.class));
                 }
                 else {
                     // fails to log in

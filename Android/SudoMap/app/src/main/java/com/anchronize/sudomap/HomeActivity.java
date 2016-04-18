@@ -121,11 +121,11 @@ public class HomeActivity extends NavigationLiveo implements OnItemClickListener
         mHelpLiveo = new HelpLiveo();
         mHelpLiveo.add(getString(R.string.your_events), R.drawable.ic_event_black_24dp);
         mHelpLiveo.addSeparator(); //Item separator
-        mHelpLiveo.add(getString(R.string.trending), R.drawable.ic_trending_up_black_24dp);
+        mHelpLiveo.add(getString(R.string.trending), R.drawable.ic_trending_up_black_24dp, 10);
         mHelpLiveo.add(getString(R.string.bookmark), R.drawable.address);
         mHelpLiveo.addSeparator(); // Item separator
         mHelpLiveo.add(getString(R.string.settings), R.drawable.ic_settings_black_24dp);
-        mHelpLiveo.add(getString(R.string.add_event), R.drawable.add_note, 120);
+        mHelpLiveo.add(getString(R.string.add_event), R.drawable.add_note);
 
 
         with(this) // default theme is OUR THEME
@@ -137,6 +137,7 @@ public class HomeActivity extends NavigationLiveo implements OnItemClickListener
                 .build();
 
         mAddEventButton = (FloatingActionButton) findViewById(R.id.fab_add_event);
+        mAddEventButton.setImageResource(R.drawable.add_note_white);
         mAddEventButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

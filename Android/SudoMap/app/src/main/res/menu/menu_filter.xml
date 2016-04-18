@@ -4,6 +4,7 @@
 
     <item
         android:id="@+id/event_all"
+        android:icon="@drawable/earth"
         android:title="All" />
     <item
         android:id="@+id/event_fun"
