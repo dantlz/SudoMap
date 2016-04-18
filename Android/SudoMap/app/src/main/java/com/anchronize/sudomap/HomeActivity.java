@@ -350,7 +350,8 @@ public class HomeActivity extends NavigationLiveo implements OnItemClickListener
     @Override
     public void onMapReady(GoogleMap map) {
         mMap = map;
-
+        // GoogleMap.setPadding(left, top, right, bottom) - to get control buttons in scope
+        mMap.setPadding(0, 200, 0, 0);
         mMap.setOnMyLocationButtonClickListener(this);
         enableMyLocation();
 
