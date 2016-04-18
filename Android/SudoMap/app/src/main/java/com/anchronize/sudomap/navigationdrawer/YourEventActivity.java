@@ -33,7 +33,7 @@ public class YourEventActivity extends AppCompatActivity {
 
     private Toolbar toolBar;
     private TabLayout tabLayout;
-    private ViewPager viewPager;
+    private CustomViewPager viewPager;
 
     //FOR TESTING
     private ArrayList<Event> upcomingEvents = new ArrayList<Event>();       //attending
@@ -62,12 +62,12 @@ public class YourEventActivity extends AppCompatActivity {
 
         populateEvents();
 
-        viewPager = (ViewPager) findViewById(R.id.container);
+        viewPager = (CustomViewPager) findViewById(R.id.container);
+        viewPager.setPagingEnabled(false);
         setupViewPager(viewPager);
 
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
-
 
     }
 
