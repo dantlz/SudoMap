@@ -10,10 +10,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
 import com.anchronize.sudomap.R;
+import com.anchronize.sudomap.SudoMapApplication;
 import com.anchronize.sudomap.navigationdrawer.youreventfragments.PastFragment;
 import com.anchronize.sudomap.navigationdrawer.youreventfragments.UpcomingFragment;
 import com.anchronize.sudomap.objects.Event;
+import com.anchronize.sudomap.objects.User;
+import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,7 +51,10 @@ public class YourEventActivity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        //TEST
+        //set context for firebase
+        Firebase.setAndroidContext(this);
+        ref = new Firebase("https://anchronize.firebaseio.com");
+
         populateEvents();
 
         viewPager = (ViewPager) findViewById(R.id.container);
@@ -55,9 +63,7 @@ public class YourEventActivity extends AppCompatActivity {
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
 
-        //set context for firebase
-        Firebase.setAndroidContext(this);
-        ref = new Firebase("https://anchronize.firebaseio.com");
+
     }
 
     private void setupViewPager(ViewPager viewPager){
@@ -110,6 +116,22 @@ public class YourEventActivity extends AppCompatActivity {
 
     //FOR TESTING
     private void populateEvents(){
+        User currentUser = ((SudoMapApplication)getApplication()).getCurrentUser();
+        for(String attendingEventID: currentUser.getAttendingEventIDs()){
+            final Firebase refEvent = ref.child("events").child(attendingEventID);
+            refEvent.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    Event attendingEvent = dataSnapshot.getValue(Event.class);
+                    upcomingEvents.add(attendingEvent);
+                }
+
+                @Override
+                public void onCancelled(FirebaseError firebaseError) {
+
+                }
+            });
+        }
 
         //past events
         Event springFest = new Event();
