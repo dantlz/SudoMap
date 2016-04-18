@@ -9,6 +9,7 @@ public class Chat {
     private String author;
     private String hour;
     private int votes;
+    private String profilePicture;
 
     // Required default constructor for Firebase object mapping
     @SuppressWarnings("unused")
@@ -37,4 +38,12 @@ public class Chat {
     }
 
     public String getHour(){return hour;}
+
+    public String getProfilePicture(){
+        return profilePicture;
+    }
+
+    public void setProfilePicture(String profilePicture) {
+        this.profilePicture = profilePicture;
+    }
 }

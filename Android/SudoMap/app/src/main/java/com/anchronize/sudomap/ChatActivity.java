@@ -81,9 +81,7 @@ public class ChatActivity extends ListActivity {
         //add listadapter to listview
         final ListView listView = getListView();
         // Tell our list adapter that we only want 50 messages at a time
-        User user = ((SudoMapApplication)getApplication()).getCurrentUser();
         mChatListAdapter = new ChatListAdapter(mFirebaseRef.limit(50), this, R.layout.list_item, mUsername);
-        mChatListAdapter.setProfileImg(user.getProfileImageBitMap());
         listView.setAdapter(mChatListAdapter);
         mChatListAdapter.registerDataSetObserver(new DataSetObserver() {
             @Override
@@ -105,6 +103,8 @@ public class ChatActivity extends ListActivity {
             String hour = sdf.format(new Date());
             Log.d("timestamp",hour);
             Chat chat = new Chat(input, mUsername);
+            User user = ((SudoMapApplication)getApplication()).getCurrentUser();
+            chat.setProfilePicture(user.getProfileImgString());
             chat.setHour(hour);
             // Create a new, auto-generated child of that chat location, and save our chat data there
             Firebase mPostRef = mFirebaseRef.push();
