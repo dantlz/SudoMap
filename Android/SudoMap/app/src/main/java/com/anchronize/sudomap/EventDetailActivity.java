@@ -55,7 +55,7 @@ public class EventDetailActivity extends AppCompatActivity implements
     private TextView startDateTextView;
     private HorizontalScrollView attendantsScrollView;
     private LinearLayout attendantsView;
-//    private Button chatButton;
+    private Button chatButton;
     private Button bookmarkButton;
     private Button attendingButton;
 
@@ -89,7 +89,7 @@ public class EventDetailActivity extends AppCompatActivity implements
         attendantsScrollView = (HorizontalScrollView) findViewById(R.id.attendantsScrollView);
         startDateTextView = (TextView)findViewById(R.id.startDateTimeTextView);
         attendantsView = (LinearLayout) findViewById(R.id.attendants);
-       // chatButton = (Button) findViewById(R.id.chatButton);
+        chatButton = (Button) findViewById(R.id.chat_button);
         bookmarkButton = (Button) findViewById(R.id.bookmarkButton);
         attendingButton = (Button) findViewById(R.id.attendingButton);
 
@@ -122,12 +122,12 @@ public class EventDetailActivity extends AppCompatActivity implements
     }
 
     public void addListeners(){
-//        chatButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                chatButtonClicked();
-//            }
-//        });
+        chatButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                chatButtonClicked();
+            }
+        });
         bookmarkButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
