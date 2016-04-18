@@ -2,7 +2,9 @@ package com.anchronize.sudomap.objects;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
+import java.util.Locale;
 
 /**
  * Created by tianlinz on 3/25/16.
@@ -214,6 +216,43 @@ public class Event implements Serializable {
 
     public void setEndYear(int endYear) {
         this.endYear = endYear;
+    }
+
+    public String formattedDateString(){
+        Calendar time = Calendar.getInstance();
+        time.set(Calendar.HOUR_OF_DAY, startHour);
+        time.set(Calendar.MINUTE, startMinute);
+        String startAM_PM = "";
+
+        if(time.get(Calendar.AM_PM) == Calendar.AM)
+            startAM_PM = "AM";
+        else if(time.get(Calendar.AM_PM) == Calendar.PM)
+            startAM_PM = "PM";
+
+        String hour = (time.get(Calendar.HOUR) == 0) ?"12":time.get(Calendar.HOUR)+"";
+        int startHour = Integer.parseInt(hour);
+
+        int selectedMinute = time.get(Calendar.MINUTE);
+        int startMinute = selectedMinute;
+        String sMinute = "00";
+        if(selectedMinute < 10){
+            sMinute = "0" + selectedMinute;
+        } else {
+            sMinute = selectedMinute + "";
+        }
+
+        String timeFirstPart = hour + ":" + sMinute + " " + startAM_PM;
+
+
+        int startYearNew = startYear;
+        int startMonthNew = startMonth;
+        int startDayNew = startDay;
+
+        time.set(Calendar.MONTH, startMonthNew);
+        String month = time.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.US);
+        String date = month + " " + startDayNew + ", " + startYearNew;
+        String toBeRETURN = date + " at " + timeFirstPart;
+        return toBeRETURN;
     }
 
     private String eventID;
