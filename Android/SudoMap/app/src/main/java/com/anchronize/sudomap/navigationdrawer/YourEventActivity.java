@@ -36,8 +36,8 @@ public class YourEventActivity extends AppCompatActivity {
     private ViewPager viewPager;
 
     //FOR TESTING
-    private ArrayList<Event> upcomingEvents = new ArrayList<Event>();
-    private ArrayList<Event> pastEvents = new ArrayList<Event>();
+    private ArrayList<Event> upcomingEvents = new ArrayList<Event>();       //attending
+    private ArrayList<Event> pastEvents = new ArrayList<Event>();           //bookmarked
     public static final String UPCOMING_KEY = "UPCOMING EVENTS";
     public static final String PAST_KEY = "PAST EVENTS";
 
@@ -133,21 +133,23 @@ public class YourEventActivity extends AppCompatActivity {
             });
         }
 
-        //past events
-        Event springFest = new Event();
-        springFest.setTitle("SPRINGFEST 2016!");
-        Event conquest = new Event();
-        conquest.setTitle("Conquest");
-        pastEvents.add(springFest);
-        pastEvents.add(conquest);
+//        for(String bookmarkedEventID: currentUser.getBookmarkedEventIDs()){
+//            final Firebase refEvent = ref.child("events").child(bookmarkedEventID);
+//            refEvent.addListenerForSingleValueEvent(new ValueEventListener() {
+//                @Override
+//                public void onDataChange(DataSnapshot dataSnapshot) {
+//                    Event bookmarkedEvent = dataSnapshot.getValue(Event.class);
+//                    pastEvents.add(bookmarkedEvent);
+//                }
+//
+//                @Override
+//                public void onCancelled(FirebaseError firebaseError) {
+//
+//                }
+//            });
+//        }
 
-        //upcoming events
-        Event lidoConcert = new Event();
-        lidoConcert.setTitle("Lido feat. Snakehips");
-        Event yeezusConcert = new Event();
-        yeezusConcert.setTitle("YEEZUS!!!!!!!!!!");
-        upcomingEvents.add(lidoConcert);
-        upcomingEvents.add(yeezusConcert);
+
     }
 
 }
