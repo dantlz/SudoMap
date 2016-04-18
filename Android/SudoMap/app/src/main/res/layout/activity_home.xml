@@ -58,26 +58,27 @@
             app:miniFabDrawableTint="@color/colorPrimaryDark"
             app:miniFabTitleTextColor="@color/colorPrimaryDark"
             app:miniFabTitleBackgroundTint="@color/white"
-            app:fabBackgroundTint="@color/colorPrimary"
+            app:fabBackgroundTint="#d97020"
             app:miniFabTitlesEnabled="false"
             android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"
             android:layout_marginBottom="100dp"
             android:layout_marginRight="20dp"
-            android:background="@color/transparent"/>
+            android:background="@color/transparent"
+            app:fabDrawable="@drawable/filter_white" />
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab_add_event"
-            android:src="@drawable/ic_add"
             app:fabSize="normal"
-            app:backgroundTint="#CCFF0088"
+            app:backgroundTint="#63c1ba"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|right|end"
             android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"
             android:layout_marginBottom="40dp"
-            android:layout_marginRight="35dp" />
+            android:layout_marginRight="35dp"
+            app:borderWidth="0dp" />
 
     </RelativeLayout>
 
