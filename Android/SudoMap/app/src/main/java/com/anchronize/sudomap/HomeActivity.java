@@ -42,6 +42,7 @@ import com.anchronize.sudomap.navigationdrawer.TrendingActivity;
 import com.anchronize.sudomap.navigationdrawer.YourEventActivity;
 import com.anchronize.sudomap.objects.Event;
 import com.anchronize.sudomap.objects.ShakeDetector;
+import com.arlib.floatingsearchview.FloatingSearchView;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
@@ -102,6 +103,7 @@ public class HomeActivity extends NavigationLiveo implements OnItemClickListener
             closeDrawer();
         }
     };
+    private FloatingSearchView mSearchView;
 
 
 
@@ -143,7 +145,6 @@ public class HomeActivity extends NavigationLiveo implements OnItemClickListener
         });
 
         textToSpeechMgr = new TextToSpeechMgr( this );
-
     }
 
     @Override //The "R.id.container" should be used in "beginTransaction (). Replace"
@@ -257,10 +258,30 @@ public class HomeActivity extends NavigationLiveo implements OnItemClickListener
 
         textToSpeechMgr = new TextToSpeechMgr( this );
 
-//         Normally you'd only have to do this once in your Application#onCreate
-//        Houndify.get(this).setClientId( "7avivQzdymp1dCiyyOBrWw==" );
-//        Houndify.get(this).setClientKey( "TGx0cYDC5N9k7zKH3g2VVibU4uQI2Qpk67STQI43dAMVfSlJ_zh_RicHiMKQFkVOyD37mvW2Ucnof-IKUI2a5w==" );
-//        Houndify.get(this).setRequestInfoFactory(StatefulRequestInfoFactory.get(this));
+        mSearchView = (FloatingSearchView)findViewById(R.id.floating_search_view);
+        mSearchView.setOnLeftMenuClickListener(new FloatingSearchView.OnLeftMenuClickListener() {
+            @Override
+            public void onMenuOpened() {
+                Log.d("SearchView", "onMenuOpened()");
+                openDrawer();
+            }
+
+            @Override
+            public void onMenuClosed() {
+                Log.d("SearchView", "onMenuClosed()");
+                closeDrawer();
+            }
+        });
+
+//        //use this listener to listen to menu clicks when app:floatingSearch_leftAction="showHome"
+//        mSearchView.setOnHomeActionClickListener(new FloatingSearchView.OnHomeActionClickListener() {
+//            @Override
+//            public void onHomeClicked() {
+//
+//                Log.d(TAG, "onHomeClicked()");
+//
+//            }
+//        });
     }
 
     /**
@@ -1801,6 +1822,7 @@ public class HomeActivity extends NavigationLiveo implements OnItemClickListener
      * Close drawer
      */
     public void closeDrawer() {
+        mSearchView.closeMenu(false);
         mDrawerLayout.closeDrawer(mRelativeDrawer);
     }
 
@@ -1973,6 +1995,7 @@ public class HomeActivity extends NavigationLiveo implements OnItemClickListener
             textToSpeechMgr.speak("aw, fuck yea!");
         }
     }
+
 
     /**
      * Helper class used for managing the TextToSpeech engine (from Houndify sample)
