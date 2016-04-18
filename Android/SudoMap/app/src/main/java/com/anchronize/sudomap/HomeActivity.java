@@ -116,7 +116,8 @@ public class HomeActivity extends NavigationLiveo implements OnItemClickListener
 
             }
             else {
-                finish();
+                startActivity(new Intent(HomeActivity.this, LoginActivity.class));
+                HomeActivity.this.finish();
             }
             closeDrawer();
         }
@@ -1925,11 +1926,17 @@ public class HomeActivity extends NavigationLiveo implements OnItemClickListener
      * Open drawer
      */
     public void openDrawer() {
-        this.userName.setText(((SudoMapApplication) getApplication()).getCurrentUsername());
-        if (((SudoMapApplication) getApplication()).getCurrentUser().getProfileImageBitMap() != null) {
-            if (!((SudoMapApplication) getApplication()).getCurrentUser().getProfileImageBitMap().equals("default"))
-                this.userPhoto.setImageBitmap(((SudoMapApplication) getApplication()).getCurrentUser().getProfileImageBitMap());
+        if (((SudoMapApplication) getApplication()).getAuthenticateStatus()) {
+            this.userName.setText(((SudoMapApplication) getApplication()).getCurrentUsername());
+            if (((SudoMapApplication) getApplication()).getCurrentUser().getProfileImageBitMap() != null) {
+                if (!((SudoMapApplication) getApplication()).getCurrentUser().getProfileImageBitMap().equals("default"))
+                    this.userPhoto.setImageBitmap(((SudoMapApplication) getApplication()).getCurrentUser().getProfileImageBitMap());
+            }
+        } else {
+            this.userName.setText("Guest");
+//            this.userPhoto.setImageBitmap(((SudoMapApplication) getApplication()).getCurrentUser().getProfileImageBitMap());
         }
+
         mDrawerLayout.openDrawer(mRelativeDrawer);
     }
 
