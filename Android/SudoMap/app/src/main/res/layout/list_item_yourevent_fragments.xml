@@ -31,9 +31,9 @@
             android:layout_alignParentLeft="true"/>
 
         <TextView
+            android:id="@+id/dateTimeTextView"
             android:layout_marginTop="4dp"
             android:layout_marginBottom="2dp"
-            android:id="@+id/dateTimeTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/list_item_date_time_title"/>
