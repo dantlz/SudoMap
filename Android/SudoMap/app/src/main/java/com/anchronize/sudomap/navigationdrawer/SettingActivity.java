@@ -20,52 +20,44 @@ import android.widget.TextView;
 import com.anchronize.sudomap.R;
 import com.anchronize.sudomap.SudoMapApplication;
 import com.anchronize.sudomap.objects.User;
+import com.firebase.client.Firebase;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class SettingActivity extends AppCompatActivity {
-    private TextView nameTextView;
     private EditText nameEditText;
-    private Button changeNameButton;
+    private Button saveButton;
     private ImageView myImageView;
     private final int SELECT_PHOTO = 1;
     private FloatingActionButton myFab;
     private Bitmap selectedImage;
+    private String imgToSave;
+
+    private Firebase ref, refUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+         ref = new Firebase("https://anchronize.firebaseio.com");
         setContentView(R.layout.activity_setting);
+        initializeComponents();
+        addListeners();
+        popoulateFields();
+    }
 
-//        nameTextView = (TextView) findViewById(R.id.nameTextView);
-//        nameEditText = (EditText) findViewById(R.id.change_name_text);
-//        changeNameButton = (Button) findViewById(R.id.change_name_button);
+    public void initializeComponents(){
+        nameEditText = (EditText) findViewById(R.id.name_editText);
         myFab = (FloatingActionButton) findViewById(R.id.change_pic_button);
         myImageView = (ImageView) findViewById(R.id.profile_pic);
-//
-//        nameEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-//            @Override
-//            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-//                if (event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) {
-//                    String newName = nameEditText.getText().toString();
-//                    nameTextView.setText(newName);
-//                    return true;
-//                }
-//                return false;
-//            }
-//        });
-//
-//        changeNameButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                String newName = nameEditText.getText().toString();
-//                nameTextView.setText(newName);
-//            }
-//        });
+        saveButton = (Button) findViewById(R.id.saveButton);
+    }
 
+    public void addListeners(){
         myFab.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
@@ -73,70 +65,63 @@ public class SettingActivity extends AppCompatActivity {
                 startActivityForResult(photoPickerIntent, SELECT_PHOTO);
             }
         });
+        saveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                saveImageToFB();
+            }
+        });
+    }
+
+    public void popoulateFields(){
+        User current = ((SudoMapApplication)getApplication()).getCurrentUser();
+        nameEditText.setText(current.getInAppName());
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
         super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
-//
-//        /**
-//         * @Rohan
-//         * Delete this commented out code snippet if no problems arise
-//         * IF YOU SEE THIS COMMENTED OUT CODE RIGHT BEFORE WE SUBMIT THEN TELL ROHAN IMMEDIATELY
-//         * */
-////        switch(requestCode) {
-////            case SELECT_PHOTO:
-////                if(resultCode == RESULT_OK){
-////                    try {
-////                        final Uri imageUri = imageReturnedIntent.getData();
-////                        final InputStream imageStream = getContentResolver().openInputStream(imageUri);
-////                        final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
-////                        //TODO set current user profile image to selectedImage.toString or something
-////                        myImageView.setImageBitmap(selectedImage);
-////                        myImageView.getLayoutParams().height = myImageView.getMeasuredHeight();
-////                        myImageView.getLayoutParams().width = myImageView.getMeasuredWidth();
-////                    } catch (FileNotFoundException e) {
-////                        e.printStackTrace();
-////                    }
-////
-////                }
-////        }
         if (resultCode == RESULT_OK) {
             try {
                 Uri imageUri = imageReturnedIntent.getData();
                 InputStream imageStream = getContentResolver().openInputStream(imageUri);
                 selectedImage = BitmapFactory.decodeStream(imageStream);
-
-                /**
-                 * Delete the commented out portion if you do not need it
-                 * */
-//                String[] orientationColumn = {MediaStore.Images.Media.ORIENTATION};
-//                Cursor cur = getContentResolver().query(imageUri, orientationColumn, null, null, null);
-//                int orientation = -1;
-//                if (cur != null && cur.moveToFirst()) {
-//                    orientation = cur.getInt(cur.getColumnIndex(orientationColumn[0]));
-//                }
-//                Matrix matrix = new Matrix();
-//                matrix.postRotate(orientation);
-//                selectedImage = Bitmap.createBitmap(selectedImage, 0, 0, selectedImage.getWidth(), selectedImage.getHeight(), matrix, true);
-
                 changePicOrientation(imageUri, selectedImage);
-
-                // Converting to string to push to firebase
-                Bitmap copySelectedImage = selectedImage;
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                copySelectedImage.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-                byte[] b = baos.toByteArray();
-                String imgString = Base64.encodeToString(b, Base64.DEFAULT);
-                User current = ((SudoMapApplication) getApplication()).getCurrentUser();
-                current.setProfileImgString(imgString);
-                //TODO Update current user
-
-//                myImageView.setImageBitmap(selectedImage);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
         }
+    }
+
+    public void saveImageToFB(){
+        // Converting to string to push to firebase
+        Bitmap copySelectedImage = getResizedBitmap(selectedImage, 500);
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        copySelectedImage.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] b = baos.toByteArray();
+        imgToSave = Base64.encodeToString(b, Base64.DEFAULT);
+        String currentUserID = ((SudoMapApplication)getApplication()).getCurrentUserID();
+        refUser = ref.child("users").child(currentUserID);
+        Map<String, Object> profileIMGStringMap = new HashMap<String, Object>();
+        profileIMGStringMap.put("profileImgString", imgToSave);
+        refUser.updateChildren(profileIMGStringMap);
+        finish();
+    }
+
+    public Bitmap getResizedBitmap(Bitmap image, int maxSize) {
+        int width = image.getWidth();
+        int height = image.getHeight();
+
+        float bitmapRatio = (float) width / (float) height;
+        if (bitmapRatio > 1) {
+            width = maxSize;
+            height = (int) (width / bitmapRatio);
+        } else {
+            height = maxSize;
+            width = (int) (height * bitmapRatio);
+        }
+
+        return Bitmap.createScaledBitmap(image, width, height, true);
     }
 
     // Fixes picture orientation issue so now all pictures show up correctly
@@ -159,7 +144,6 @@ public class SettingActivity extends AppCompatActivity {
 
     public void onClickPic(View view)
     {
-//        Toast.makeText(this, "You clicked me!", Toast.LENGTH_SHORT).show();
         Matrix matrix = new Matrix();
         matrix.postRotate(90);
         selectedImage = Bitmap.createBitmap(selectedImage, 0, 0, selectedImage.getWidth(),
@@ -167,12 +151,4 @@ public class SettingActivity extends AppCompatActivity {
         myImageView.setImageBitmap(selectedImage);
 
     }
-/**
- * @Rohan Delete this code snippet if no errors arise
- * IF YOU SEE THIS COMMENTED OUT CODE RIGHT BEFORE WE SUBMIT THEN TELL ROHAN IMMEDIATELY
- */
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        return true;
-//    }
 }

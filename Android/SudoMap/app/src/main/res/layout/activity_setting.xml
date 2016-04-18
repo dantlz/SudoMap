@@ -29,7 +29,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="0.4"
-                android:background="@android:color/holo_orange_light"
                 android:orientation="horizontal"/>
 
         </LinearLayout>
@@ -61,7 +60,6 @@
             android:layout_marginTop="305dp"
             android:adjustViewBounds="true"
             android:scaleType="centerCrop"
-            android:background="@android:color/holo_orange_light"
             android:src="@mipmap/account"/>
 
         <EditText
@@ -78,7 +76,6 @@
             android:layout_marginTop="395dp"
             android:adjustViewBounds="true"
             android:scaleType="centerCrop"
-            android:background="@android:color/holo_orange_light"
             android:src="@mipmap/phone"/>
 
         <EditText
@@ -95,7 +92,6 @@
             android:layout_marginTop="485dp"
             android:adjustViewBounds="true"
             android:scaleType="centerCrop"
-            android:background="@android:color/holo_orange_light"
             android:src="@mipmap/email"/>
 
         <EditText
@@ -112,7 +108,6 @@
             android:layout_marginTop="575dp"
             android:adjustViewBounds="true"
             android:scaleType="centerCrop"
-            android:background="@android:color/holo_orange_light"
             android:src="@mipmap/address"/>
 
         <EditText
@@ -129,7 +124,6 @@
             android:layout_marginTop="665dp"
             android:adjustViewBounds="true"
             android:scaleType="centerCrop"
-            android:background="@android:color/holo_orange_light"
             android:src="@mipmap/add_note"/>
 
         <EditText
