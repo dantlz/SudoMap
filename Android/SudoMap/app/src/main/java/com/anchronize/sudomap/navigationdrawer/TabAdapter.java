@@ -34,8 +34,11 @@ public class TabAdapter extends ArrayAdapter<Event> {
         }
 
         TextView eventTitleTV = (TextView) convertView.findViewById(R.id.eventTitleTextView);
-
         eventTitleTV.setText(event.getTitle());
+        TextView eventDateTimeTV = (TextView) convertView.findViewById(R.id.dateTimeTextView);
+        eventDateTimeTV.setText(event.formattedDateString);
+        TextView locationTitleTV = (TextView) convertView.findViewById(R.id.locationTextView);
+        locationTitleTV.setText(event.getAddressName());
 
         return convertView;
     }
