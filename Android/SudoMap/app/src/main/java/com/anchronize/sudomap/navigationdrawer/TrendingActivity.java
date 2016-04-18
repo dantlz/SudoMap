@@ -13,7 +13,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.anchronize.sudomap.EventDetailActivity;
 import com.anchronize.sudomap.R;
@@ -115,7 +114,7 @@ public class TrendingActivity extends AppCompatActivity {
                         String[] split = eventID.split("\\*");
                         eventID = split[1];
                         Log.d("eventID", eventID);
-                        Toast.makeText(TrendingActivity.this, "List item was clicked at " + eventID, Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(TrendingActivity.this, "List item was clicked at " + eventID, Toast.LENGTH_SHORT).show();
                         Intent i = new Intent(getApplicationContext(), EventDetailActivity.class);
                         i.putExtra(EventDetailActivity.EVENTID_KEY, eventID);
                         startActivity(i);
@@ -198,7 +197,7 @@ public class TrendingActivity extends AppCompatActivity {
             mainViewholder.button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(getContext(), "Button was clicked for list item " + position, Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getContext(), "Button was clicked for list item " + position, Toast.LENGTH_SHORT).show();
                 }
             });
             String str = getItem((position));
