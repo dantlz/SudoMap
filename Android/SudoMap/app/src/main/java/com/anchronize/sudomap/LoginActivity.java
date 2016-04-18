@@ -164,6 +164,17 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             @Override
             public void onSuccess(LoginResult loginResult) {
                 Log.d("FB", "Authenticated successful.");
+
+                // Create user instance on Firebase
+//                String uniqueID = loginResult.get("uid").toString();
+//                User newUser = new User(uniqueID);
+//                newUser.setPremium(false);
+//                newUser.setInAppName(mUsername);
+//                newUser.setUserBio("This user has no Bio yet");
+//                Firebase refUsers = ref.child("users");
+//                Firebase refNewUser = refUsers.child(uniqueID);
+//                refNewUser.setValue(newUser);
+
                 ((SudoMapApplication) getApplication()).setAuthenticateStatus(true);
                 ((SudoMapApplication)getApplication()).setCurrentUserID(currentUserID);
                 ((SudoMapApplication)getApplication()).StartToUpdateUser();

@@ -35,6 +35,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.anchronize.sudomap.navigationdrawer.AddEventActivity;
 import com.anchronize.sudomap.navigationdrawer.SettingActivity;
@@ -103,6 +104,14 @@ public class HomeActivity extends NavigationLiveo implements OnItemClickListener
     private View.OnClickListener onClickFooter = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+//            closeDrawer();
+            Log.d("nav", "5th element (exit app) clicked");
+            if ( ((SudoMapApplication) getApplication()).getAuthenticateStatus()) {
+                mAddEventButton.performClick();
+            }
+            else {
+                finish();
+            }
             closeDrawer();
         }
     };
@@ -130,30 +139,44 @@ public class HomeActivity extends NavigationLiveo implements OnItemClickListener
         // Creating items navigation
         mHelpLiveo = new HelpLiveo();
         mHelpLiveo.add(getString(R.string.your_events), R.drawable.ic_event_black_24dp);
-        mHelpLiveo.addSeparator(); //Item separator
         mHelpLiveo.add(getString(R.string.trending), R.drawable.ic_trending_up_black_24dp, 10);
-        mHelpLiveo.add(getString(R.string.bookmark), R.drawable.address);
         mHelpLiveo.addSeparator(); // Item separator
         mHelpLiveo.add(getString(R.string.settings), R.drawable.ic_settings_black_24dp);
         mHelpLiveo.add(getString(R.string.add_event), R.drawable.add_note);
 
-
-        with(this) // default theme is OUR THEME
-                .startingPosition(2) //Starting position in the list
-                .addAllHelpItem(mHelpLiveo.getHelp())
-                .setOnClickUser(onClickEvents)
-                .setOnPrepareOptionsMenu(onPrepare)
-                .setOnClickFooter(onClickFooter)
-                .build();
+        if ( ((SudoMapApplication) getApplication()).getAuthenticateStatus()) {
+            with(this) // default theme is OUR THEME
+                    .startingPosition(0)
+                    .addAllHelpItem(mHelpLiveo.getHelp())
+                    .footerItem(R.string.logout, R.drawable.exit_app)
+                    .setOnClickUser(onClickEvents)
+                    .setOnPrepareOptionsMenu(onPrepare)
+                    .setOnClickFooter(onClickFooter)
+                    .build();
+        }
+        else {
+            with(this) // default theme is OUR THEME
+                    .startingPosition(0)
+                    .addAllHelpItem(mHelpLiveo.getHelp())
+                    .setOnClickUser(onClickEvents)
+                    .setOnPrepareOptionsMenu(onPrepare)
+                    .setOnClickFooter(onClickFooter)
+                    .build();
+        }
 
         mAddEventButton = (FloatingActionButton) findViewById(R.id.fab_add_event);
         mAddEventButton.setImageResource(R.drawable.add_note_white);
         mAddEventButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(HomeActivity.this, AddEventActivity.class);
-                int requestCode = 1;
-                startActivityForResult(i, requestCode);
+                if ( ((SudoMapApplication) getApplication()).getAuthenticateStatus()) {
+                    Intent i = new Intent(HomeActivity.this, AddEventActivity.class);
+                    int requestCode = 1;
+                    startActivityForResult(i, requestCode);
+                }
+                else {
+                    Toast.makeText(getApplicationContext(), "You are not logged in!", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -167,26 +190,40 @@ public class HomeActivity extends NavigationLiveo implements OnItemClickListener
         switch (position){
             case 0:
                 Log.d("nav", "0th element (your event) clicked");
-                startActivity(new Intent(HomeActivity.this, YourEventActivity.class));
+                if ( ((SudoMapApplication) getApplication()).getAuthenticateStatus()) {
+                    startActivity(new Intent(HomeActivity.this, YourEventActivity.class));
+                } else {
+                    Toast.makeText(getApplicationContext(), "You are not logged in!", Toast.LENGTH_SHORT).show();
+                }
                 closeDrawer();
                 break;
-            case 2:
-                Log.d("nav", "2nd element (trending) clicked");
-                startActivity(new Intent(HomeActivity.this, TrendingActivity.class));
+            case 1:
+                Log.d("nav", "1st element (trending) clicked");
+                if ( ((SudoMapApplication) getApplication()).getAuthenticateStatus()) {
+                    startActivity(new Intent(HomeActivity.this, TrendingActivity.class));
+                } else {
+                    Toast.makeText(getApplicationContext(), "You are not logged in!", Toast.LENGTH_SHORT).show();
+
+                }
                 closeDrawer();
                 break;
             case 3:
-                Log.d("nav", "3rd element (bookmarks) clicked");
+                Log.d("nav", "3rd element (Settings) clicked");
+                if ( ((SudoMapApplication) getApplication()).getAuthenticateStatus()) {
+                    startActivity(new Intent(HomeActivity.this, SettingActivity.class));
+                } else {
+                    Toast.makeText(getApplicationContext(), "You are not logged in!", Toast.LENGTH_SHORT).show();
+                }
                 closeDrawer();
                 break;
-            case 5:
-                Log.d("nav", "5th element (Settings) clicked");
-                startActivity(new Intent(HomeActivity.this, SettingActivity.class));
-                closeDrawer();
-                break;
-            case 6:
-                Log.d("nav", "6th element (add event) clicked");
-                mAddEventButton.performClick();
+            case 4:
+                Log.d("nav", "4th element (add event) clicked");
+                if ( ((SudoMapApplication) getApplication()).getAuthenticateStatus()) {
+                    mAddEventButton.performClick();
+                }
+                else {
+                    Toast.makeText(getApplicationContext(), "You are not logged in!", Toast.LENGTH_SHORT).show();
+                }
                 closeDrawer();
                 break;
             default:
