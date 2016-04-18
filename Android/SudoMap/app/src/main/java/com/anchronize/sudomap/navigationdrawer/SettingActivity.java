@@ -96,9 +96,8 @@ public class SettingActivity extends AppCompatActivity {
     }
 
     public void saveImageToFB(){
-        if(imgToSave.equals("EMPTY")){
-            discard();
-            return;
+        if(selectedImage == null){
+            finish();
         }
 
 

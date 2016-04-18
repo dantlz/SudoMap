@@ -42,6 +42,7 @@ import com.anchronize.sudomap.navigationdrawer.TrendingActivity;
 import com.anchronize.sudomap.navigationdrawer.YourEventActivity;
 import com.anchronize.sudomap.objects.Event;
 import com.anchronize.sudomap.objects.ShakeDetector;
+import com.anchronize.sudomap.objects.User;
 import com.arlib.floatingsearchview.FloatingSearchView;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.firebase.client.DataSnapshot;
@@ -112,10 +113,19 @@ public class HomeActivity extends NavigationLiveo implements OnItemClickListener
     @Override
     public void onInt(Bundle savedInstanceState) {
         // User Information
-        this.userName.setText("Jason Lin");
-        this.userEmail.setText("uscjlin@gmail.com");
-//        this.userPhoto.setImageResource(R.drawable.miller_web);
-        this.userBackground.setImageResource(R.drawable.ic_user_background_first);
+        User current = ((SudoMapApplication)getApplication()).getCurrentUser();
+        if(current != null) {
+            this.userName.setText(current.getInAppName());
+//            this.userEmail.setText("uscjlin@gmail.com");
+            this.userPhoto.setImageBitmap(current.getProfileImageBitMap());
+            this.userBackground.setImageResource(R.drawable.ic_user_background_first);
+        }
+        else{
+            this.userName.setText("Guest");
+//            this.userEmail.setText("uscjlin@gmail.com");
+//            this.userPhoto.setImageBitmap();
+            this.userBackground.setImageResource(R.drawable.ic_user_background_first);
+        }
 
         // Creating items navigation
         mHelpLiveo = new HelpLiveo();
