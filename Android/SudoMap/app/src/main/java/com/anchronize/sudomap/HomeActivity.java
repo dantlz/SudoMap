@@ -42,6 +42,7 @@ import com.anchronize.sudomap.navigationdrawer.TrendingActivity;
 import com.anchronize.sudomap.navigationdrawer.YourEventActivity;
 import com.anchronize.sudomap.objects.Event;
 import com.anchronize.sudomap.objects.ShakeDetector;
+import com.anchronize.sudomap.objects.User;
 import com.arlib.floatingsearchview.FloatingSearchView;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.firebase.client.DataSnapshot;
@@ -112,10 +113,19 @@ public class HomeActivity extends NavigationLiveo implements OnItemClickListener
     @Override
     public void onInt(Bundle savedInstanceState) {
         // User Information
-        this.userName.setText("Jason Lin");
-        this.userEmail.setText("uscjlin@gmail.com");
-//        this.userPhoto.setImageResource(R.drawable.miller_web);
-        this.userBackground.setImageResource(R.drawable.ic_user_background_first);
+        User current = ((SudoMapApplication)getApplication()).getCurrentUser();
+        if(current != null) {
+            this.userName.setText(current.getInAppName());
+//            this.userEmail.setText("uscjlin@gmail.com");
+            this.userPhoto.setImageBitmap(current.getProfileImageBitMap());
+            this.userBackground.setImageResource(R.drawable.ic_user_background_first);
+        }
+        else{
+            this.userName.setText("Guest");
+//            this.userEmail.setText("uscjlin@gmail.com");
+//            this.userPhoto.setImageBitmap();
+            this.userBackground.setImageResource(R.drawable.ic_user_background_first);
+        }
 
         // Creating items navigation
         mHelpLiveo = new HelpLiveo();
@@ -279,12 +289,10 @@ public class HomeActivity extends NavigationLiveo implements OnItemClickListener
         fabSpeedDial.setMenuListener(new SimpleMenuListenerAdapter() {
             @Override
             public boolean onPrepareMenu(NavigationMenu navigationMenu) {
-                // TODO: Do something with yout menu items, or return false if you don't want to show them
                 return true;
             }
             @Override
             public boolean onMenuItemSelected(MenuItem menuItem) {
-                //TODO: Start some activity
                 if(menuItem.getTitle().equals("All")){
                     selectedFilter = "ALL";
                 }
@@ -424,7 +432,6 @@ public class HomeActivity extends NavigationLiveo implements OnItemClickListener
         Event e = markerEventHashMap.get(lastSelectedMarker);
         Intent i = new Intent(getApplicationContext(), EventDetailActivity.class);
         i.putExtra(EventDetailActivity.EVENT_KEY, e);
-        //// TODO: 4/14/16  startActivity for result
         startActivity(i);
     }
 
@@ -544,7 +551,6 @@ public class HomeActivity extends NavigationLiveo implements OnItemClickListener
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        // TODO Auto-generated method stub
         super.onSaveInstanceState(outState);
         outState.putInt(CURRENT_POSITION, mCurrentPosition);
         outState.putInt(CURRENT_CHECK_POSITION, mCurrentCheckPosition);
@@ -604,7 +610,6 @@ public class HomeActivity extends NavigationLiveo implements OnItemClickListener
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
-        // TODO Auto-generated method stub
         super.onConfigurationChanged(newConfig);
 
         if (mDrawerToggle != null) {

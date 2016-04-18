@@ -33,13 +33,18 @@ public class YourEventActivity extends AppCompatActivity {
 
     private Toolbar toolBar;
     private TabLayout tabLayout;
-    private ViewPager viewPager;
+    private CustomViewPager viewPager;
 
     //FOR TESTING
     private ArrayList<Event> upcomingEvents = new ArrayList<Event>();       //attending
     private ArrayList<Event> pastEvents = new ArrayList<Event>();           //bookmarked
     public static final String UPCOMING_KEY = "UPCOMING EVENTS";
     public static final String PAST_KEY = "PAST EVENTS";
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,12 +62,12 @@ public class YourEventActivity extends AppCompatActivity {
 
         populateEvents();
 
-        viewPager = (ViewPager) findViewById(R.id.container);
+        viewPager = (CustomViewPager) findViewById(R.id.container);
+        viewPager.setPagingEnabled(false);
         setupViewPager(viewPager);
 
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
-
 
     }
 

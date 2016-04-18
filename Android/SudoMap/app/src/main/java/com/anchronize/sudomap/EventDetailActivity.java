@@ -97,9 +97,6 @@ public class EventDetailActivity extends AppCompatActivity implements
         Intent i = getIntent();
         if(i.hasExtra(EVENTID_KEY)){
             mEventID = i.getStringExtra(EVENTID_KEY);
-            Log.d("StringExtra",mEventID);
-
-            //TODO Get the event from event ID and set mEvent to the event
             Firebase refEventID = ref.child("events").child(mEventID);
             refEventID.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
@@ -163,7 +160,7 @@ public class EventDetailActivity extends AppCompatActivity implements
         Map<String, Object> eventBookmarked = new HashMap<String, Object>();
         eventBookmarked.put("bookmarkedEventIDs", user.getBookmarkedEventIDs());
         refUser.updateChildren(eventBookmarked);
-
+        finish();
     }
 
     public void attendingButtonClicked(){
@@ -191,8 +188,7 @@ public class EventDetailActivity extends AppCompatActivity implements
             attendee.put("attendantsID", attendentIDs);
             refEvent.updateChildren(attendee);
         }
-
-
+        finish();
     }
 
 //    @Override
@@ -222,87 +218,33 @@ public class EventDetailActivity extends AppCompatActivity implements
         });
 
 
-
-        //TODO category
-
         titleView.setText(mEvent.getTitle());
         categoryView.setText(mEvent.getCategory() + "     |  ");
         locationNameView.setText(mEvent.getAddressName());
         locationAddress.setText(mEvent.getAddress());
         descriptionView.setText(mEvent.getDescription());
+        startDateTextView.setText(mEvent.formattedDateString());
 
+        for(String userID: mEvent.getattendantsID()){
+            Firebase attendeeRef = ref.child("users").child(userID);
+            attendeeRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    User attendee = dataSnapshot.getValue(User.class);
 
-        Calendar time = Calendar.getInstance();
-        time.set(Calendar.HOUR_OF_DAY, mEvent.getStartHour());
-        time.set(Calendar.MINUTE, mEvent.getStartMinute());
-        String startAM_PM = "";
+                    AttendantsItem item = new AttendantsItem(getApplicationContext());
+                    item.setName(attendee.getInAppName());
+                    item.setPicBitMap(attendee.getProfileImageBitMap());
+                    attendantsView.addView(item);
 
-        if(time.get(Calendar.AM_PM) == Calendar.AM)
-            startAM_PM = "AM";
-        else if(time.get(Calendar.AM_PM) == Calendar.PM)
-            startAM_PM = "PM";
+                }
 
-        String hour = (time.get(Calendar.HOUR) == 0) ?"12":time.get(Calendar.HOUR)+"";
-        int startHour = Integer.parseInt(hour);
+                @Override
+                public void onCancelled(FirebaseError firebaseError) {
 
-        int selectedMinute = time.get(Calendar.MINUTE);
-        int startMinute = selectedMinute;
-        String sMinute = "00";
-        if(selectedMinute < 10){
-            sMinute = "0" + selectedMinute;
-        } else {
-            sMinute = selectedMinute + "";
-        }
+                }
+            });
 
-        String timeFirstPart = hour + ":" + sMinute + " " + startAM_PM;
-
-
-        int startYear = mEvent.getStartYear();
-        int startMonth = mEvent.getStartMonth();
-        int startDay = mEvent.getStartDay();
-
-        time.set(Calendar.MONTH, startMonth);
-        String month = time.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.US);
-        String date = month + " " + startDay + ", " + startYear;
-        startDateTextView.setText(date + " at " + timeFirstPart);
-
-//        for(User user: mEvent.getAttendants()){
-//            AttendantsItem item = new AttendantsItem(getApplicationContext());
-//            item.setName(user.getInAppName());
-//            item.setPicBitMap(user.getProfileImageBitMap());
-//            attendantsView.addView(item);
-//        }
-
-//        for(String userID: mEvent.getAttendants()){
-//            Firebase attendeeRef = ref.child("users").child(userID);
-//            attendeeRef.addListenerForSingleValueEvent(new ValueEventListener() {
-//                @Override
-//                public void onDataChange(DataSnapshot dataSnapshot) {
-//                    User attendee = dataSnapshot.getValue(User.class);
-//
-//                    AttendantsItem item = new AttendantsItem(getApplicationContext());
-//                    item.setName(attendee.getInAppName());
-//
-//                    Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.miller);
-//                    item.setPicBitMap(bitmap);
-//                    attendantsView.addView(item);
-//
-//                }
-//
-//                @Override
-//                public void onCancelled(FirebaseError firebaseError) {
-//
-//                }
-//            });
-//
-//        }
-
-        for(int i = 0; i < 5; i++){
-            AttendantsItem item = new AttendantsItem(getApplicationContext());
-            item.setName(Integer.toString(i)+ " -test- " + Integer.toString(i));
-            Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.miller);
-            item.setPicBitMap(bitmap);
-            attendantsView.addView(item);
         }
     }
 
