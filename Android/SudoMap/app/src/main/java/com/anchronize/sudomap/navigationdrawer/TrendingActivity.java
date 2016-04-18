@@ -71,14 +71,23 @@ public class TrendingActivity extends AppCompatActivity {
                 List<String> eventList = new ArrayList<String>();
                 List<String> eventIDList = new ArrayList<String>();
                 Log.d("EventsMap",map.toString());
+                int j = 0;
                 for (Map.Entry<String, Integer> entry : map.entrySet()) {
                     String id = entry.getKey();
+                    Log.d("EventID2", id);
                     String eventTitle = (String) eventSnapshot.child(id).child("title").getValue();
                     //have to concatenate two strings since adapter accepts only one
                     //list of strings
-                    String eventString = eventTitle.concat("*" + id); //event title first, then eventID
-                    Log.d("EventTitle",eventTitle);
+                    if(eventTitle == null){
+                        Log.d("NullPointerError", "Error");
+                    }
+                    //String eventString = eventTitle.concat("*" + id); //event title first, then eventID
+                    String eventString = eventTitle + "*" + id;
+                    //Log.d("EventTitle",eventTitle);
+                    Log.d("EventString", eventString);
                     eventList.add(eventString);
+                    j++;
+                    Log.d("EventCounter", Integer.toString(j));
                 }
 
                 //calculating category percentage
