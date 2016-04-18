@@ -224,7 +224,7 @@ public class TrendingActivity extends AppCompatActivity {
                 new LinkedList<>(map.entrySet());
         Collections.sort(list, new Comparator<Map.Entry<K, V>>() {
             @Override
-            public int compare(Map.Entry<K, V> o1, Map.Entry<K, V> o2) {
+            public int compare(Map.Entry<K, V> o2, Map.Entry<K, V> o1) {
                 return (o1.getValue()).compareTo(o2.getValue());
             }
         });
