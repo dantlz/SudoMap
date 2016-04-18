@@ -1,5 +1,7 @@
 package com.anchronize.sudomap;
 
+import android.util.Log;
+
 import com.anchronize.sudomap.objects.User;
 import com.facebook.FacebookSdk;
 import com.firebase.client.DataSnapshot;
@@ -18,6 +20,7 @@ public class SudoMapApplication extends android.app.Application{
     private String currentUserID;
 
     private Firebase ref, refCurrentUser;
+    private String currentUsername;
 
 
     @Override
@@ -99,6 +102,8 @@ public class SudoMapApplication extends android.app.Application{
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     currentUser = dataSnapshot.getValue(User.class);
+                    currentUsername = currentUser.getInAppName();
+                    Log.d("currentUsername", currentUsername);
                 }
 
                 @Override
@@ -114,12 +119,21 @@ public class SudoMapApplication extends android.app.Application{
         return currentUser;
     }
 
+    public String getCurrentUsername() {
+
+        return currentUsername;
+    }
+
     public void setCurrentUserID(String currentID) {
         this.currentUserID = currentID;
     }
 
     public String getCurrentUserID() {
         return currentUserID;
+    }
+
+    public void setCurrentUser(User currentUser) {
+        this.currentUser = currentUser;
     }
 
 }

@@ -394,7 +394,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     private boolean isPasswordValid(String password) {
         //TODO: Replace this with your own logic
-        return password.length() >= 8;
+        return password.length() >= 6;
     }
 
     /**

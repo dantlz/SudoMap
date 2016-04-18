@@ -107,7 +107,13 @@ public class HomeActivity extends NavigationLiveo implements OnItemClickListener
 //            closeDrawer();
             Log.d("nav", "5th element (exit app) clicked");
             if ( ((SudoMapApplication) getApplication()).getAuthenticateStatus()) {
-                mAddEventButton.performClick();
+                ((SudoMapApplication)getApplication()).setAuthenticateStatus(false);
+                ((SudoMapApplication)getApplication()).setCurrentUserID(null);
+                ((SudoMapApplication)getApplication()).setCurrentUser(null);
+//                finish();
+                startActivity(new Intent(HomeActivity.this, LoginActivity.class));
+                HomeActivity.this.finish();
+
             }
             else {
                 finish();
@@ -119,12 +125,29 @@ public class HomeActivity extends NavigationLiveo implements OnItemClickListener
 
 
     public void populateNavDrawerInfo(){
-        // User Information
+
+
         User current = ((SudoMapApplication)getApplication()).getCurrentUser();
-        if(current != null) {
-            this.userName.setText(current.getInAppName());
+        if (((SudoMapApplication)getApplication()).getAuthenticateStatus()) {
+            // User Information
+//            String currentUserID_ = ((SudoMapApplication)getApplication()).getCurrentUserID();
+//            Firebase refCurrentUserRef = ref.child("users").child(currentUserID_);
+//            refCurrentUserRef.addListenerForSingleValueEvent(new ValueEventListener() {
+//                @Override
+//                public void onDataChange(DataSnapshot dataSnapshot) {
+//                    User currentUser = dataSnapshot.getValue(User.class);
+//                    //do whatever you want to do here
+//                    HomeActivity.this.userName.setText(currentUser.getInAppName());
+//                }
+//
+//                @Override
+//                public void onCancelled(FirebaseError firebaseError) {
+//
+//                }
+//            });
+//            this.userName.setText(((SudoMapApplication) getApplication()).getCurrentUsername());
 //            this.userEmail.setText("uscjlin@gmail.com");
-            this.userPhoto.setImageBitmap(current.getProfileImageBitMap());
+//            this.userPhoto.setImageBitmap(current.getProfileImageBitMap());
             this.userBackground.setImageResource(R.drawable.ic_user_background_first);
         }
         else{
@@ -161,6 +184,7 @@ public class HomeActivity extends NavigationLiveo implements OnItemClickListener
             with(this) // default theme is OUR THEME
                     .startingPosition(0)
                     .addAllHelpItem(mHelpLiveo.getHelp())
+                    .footerItem(R.string.exit_app, R.drawable.exit_app)
                     .setOnClickUser(onClickEvents)
                     .setOnPrepareOptionsMenu(onPrepare)
                     .setOnClickFooter(onClickFooter)
@@ -1901,6 +1925,11 @@ public class HomeActivity extends NavigationLiveo implements OnItemClickListener
      * Open drawer
      */
     public void openDrawer() {
+        this.userName.setText(((SudoMapApplication) getApplication()).getCurrentUsername());
+        if (((SudoMapApplication) getApplication()).getCurrentUser().getProfileImageBitMap() != null) {
+            if (!((SudoMapApplication) getApplication()).getCurrentUser().getProfileImageBitMap().equals("default"))
+                this.userPhoto.setImageBitmap(((SudoMapApplication) getApplication()).getCurrentUser().getProfileImageBitMap());
+        }
         mDrawerLayout.openDrawer(mRelativeDrawer);
     }
 
@@ -2078,7 +2107,7 @@ public class HomeActivity extends NavigationLiveo implements OnItemClickListener
             textToSpeechMgr.speak("Stop shaking me dude!");
         }
         else {
-            textToSpeechMgr.speak("aw, fuck yea!");
+            textToSpeechMgr.speak("Jeff, you are a very good looking man.");
         }
     }
 

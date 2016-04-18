@@ -108,11 +108,11 @@ public class StatefulRequestInfoFactory extends DefaultRequestInfoFactory {
         // Client matching for creating events
         ClientMatch clientMatch3 = new ClientMatch();
 
-        clientMatch3.setExpression("([1/100 (\"can\"|\"could\"|\"will\"|\"would\").\"you\"].[1/10 \"please\"].(\"add\"|\"create\"|\"submit\").[\"a\"|\"an\"].[\"fucking\"].\"new\".(\"event\").[1/20 \"for\".\"me\"].[1/20 \"please\"]) \n" +
+        clientMatch3.setExpression("([1/100 (\"can\"|\"could\"|\"will\"|\"would\").\"you\"].[1/10 \"please\"].(\"add\"|\"create\"|\"submit\").[\"a\"|\"an\"].\"new\".(\"event\").[1/20 \"for\".\"me\"].[1/20 \"please\"]) \n" +
                 "| \n" +
                 "(((\"i\".(\"want\"|\"like\"))|(((\"i\".[\"would\"])|(\"i'd\")).(\"like\"|\"want\"))).[\"a\"].\"new\".(\"event\").[\"created\"|\"generated\"].[1/20\"please\"]) ");
 
-        clientMatch3.setSpokenResponse("Ok, I'm adding a fucking new event.");
+        clientMatch3.setSpokenResponse("Ok, I'm adding a new event.");
         clientMatch3.setSpokenResponseLong("Ok, I am adding a new event for you.");
         clientMatch3.setWrittenResponse("Ok, I'm adding a new event.");
         clientMatch3.setWrittenResponseLong("Ok, I am adding a new event for you.");
