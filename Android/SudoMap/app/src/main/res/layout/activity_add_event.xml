@@ -225,7 +225,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Create"
-        android:backgroundTint="@color/skyBlue"
+        android:backgroundTint="@color/colorAccent"
         android:id="@+id/createButton"/>
         </LinearLayout>
     </ScrollView>
