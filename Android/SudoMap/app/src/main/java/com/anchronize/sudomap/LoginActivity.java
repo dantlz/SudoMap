@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.LoaderManager.LoaderCallbacks;
+import android.app.ProgressDialog;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
@@ -29,11 +30,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.facebook.AccessToken;
+import com.facebook.AccessTokenTracker;
 import com.facebook.CallbackManager;
-import com.facebook.FacebookCallback;
-import com.facebook.FacebookException;
-import com.facebook.FacebookSdk;
-import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.firebase.client.AuthData;
 import com.firebase.client.Firebase;
@@ -43,6 +42,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static android.Manifest.permission.READ_CONTACTS;
+
+//import com.facebook.CallbackManager;
 
 /**
  * A login screen that offers login via email/password.
@@ -81,34 +82,133 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private String currentUserID;
 
     // Facebook SDK
+    /* The callback manager for Facebook */
     private CallbackManager callbackManager;
-    private LoginButton loginButton;
+    /* The login button for Facebook */
+    private LoginButton mFacebookLoginButton;
+    /* Used to track user logging in/out off Facebook */
+    private AccessTokenTracker mFacebookAccessTokenTracker;
+    private ProgressDialog mAuthProgressDialog;
+    /* Listener for Firebase session changes */
+    private Firebase.AuthStateListener mAuthStateListener;
+
+    /**
+     * Utility class for authentication results
+     */
+    private class AuthResultHandler implements Firebase.AuthResultHandler {
+
+        private final String provider;
+
+        public AuthResultHandler(String provider) {
+            this.provider = provider;
+        }
+
+        @Override
+        public void onAuthenticated(AuthData authData) {
+            mAuthProgressDialog.hide();
+            Log.i("FB", provider + " auth successful");
+            ((SudoMapApplication) getApplication()).setAuthenticateStatus(true);
+            ((SudoMapApplication)getApplication()).setCurrentUserID(authData.getUid());
+        }
+
+        @Override
+        public void onAuthenticationError(FirebaseError firebaseError) {
+            mAuthProgressDialog.hide();
+            Log.d("Fail", "FB failed to login");
+        }
+    }
+
+    /* ************************************
+   *             FACEBOOK               *
+   **************************************
+   */
+    public void onFacebookAccessTokenChange(AccessToken token) {
+        if (token != null) {
+            mAuthProgressDialog.show();
+            ref.authWithOAuthToken("facebook", token.getToken(), new AuthResultHandler("facebook"));
+        } else {
+            // Logged out of Facebook and currently authenticated with Firebase using Facebook, so do a logout
+            Log.d("Fail", "FB failed to logout");
+//            if (this.mAuthData != null && this.mAuthData.getProvider().equals("facebook")) {
+//                ref.unauth();
+//                setAuthenticatedUser(null);
+//            }
+        }
+    }
+
+    /**
+     * This method fires when any startActivityForResult finishes. The requestCode maps to
+     * the value passed into startActivityForResult.
+     */
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+            /* Otherwise, it's probably the request by the Facebook login button, keep track of the session */
+            callbackManager.onActivityResult(requestCode, resultCode, data);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        FacebookSdk.sdkInitialize(getApplicationContext());
+//        FacebookSdk.sdkInitialize(getApplicationContext());
         callbackManager = CallbackManager.Factory.create();
         setContentView(R.layout.activity_login);
         Firebase.setAndroidContext(this);
+        ref = new Firebase("https://anchronize.firebaseio.com");
 
-        loginButton = (LoginButton)findViewById(R.id.fb_login_button);
-        loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+        mFacebookLoginButton = (LoginButton)findViewById(R.id.fb_login_button);
+//        mFacebookLoginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+//            @Override
+//            public void onSuccess(LoginResult loginResult) {
+//                Log.d("FB", "Authenticated successful.");
+//            }
+//
+//            @Override
+//            public void onCancel() {
+//                Log.d("FB", "Failed to authenticate.");
+//            }
+//
+//            @Override
+//            public void onError(FacebookException e) {
+//
+//            }
+//        });
+
+        mFacebookAccessTokenTracker = new AccessTokenTracker() {
             @Override
-            public void onSuccess(LoginResult loginResult) {
-                Log.d("FB", "Authenticated successful.");
+            protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken, AccessToken currentAccessToken) {
+                Log.i("Facebook", "Facebook.AccessTokenTracker.OnCurrentAccessTokenChanged");
+                LoginActivity.this.onFacebookAccessTokenChange(currentAccessToken);
             }
+        };
 
+        /* Setup the progress dialog that is displayed later when authenticating with Firebase */
+        /* API sample from Firebase' Github */
+        mAuthProgressDialog = new ProgressDialog(this);
+        mAuthProgressDialog.setTitle("Loading");
+        mAuthProgressDialog.setMessage("Authenticating with Facebook...");
+        mAuthProgressDialog.setCancelable(false);
+        mAuthProgressDialog.show();
+
+        mAuthStateListener = new Firebase.AuthStateListener() {
             @Override
-            public void onCancel() {
-                Log.d("FB", "Failed to authenticate.");
+            public void onAuthStateChanged(AuthData authData) {
+                mAuthProgressDialog.hide();
+//                LoginActivity.class.
+                if (authData != null) {
+                    // logs in
+                    Log.d("FB", "new intent");
+                    ((SudoMapApplication) getApplication()).setAuthenticateStatus(true);
+                    ((SudoMapApplication)getApplication()).setCurrentUserID(authData.getUid());
+                    ((SudoMapApplication)getApplication()).StartToUpdateUser();
+                    startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+                }
+                else {
+                    // fails to log in
+                }
             }
-
-            @Override
-            public void onError(FacebookException e) {
-
-            }
-        });
+        };
+        ref.addAuthStateListener(mAuthStateListener);
 
         // Set up the login form.
         mUsernameView = (AutoCompleteTextView) findViewById(R.id.email);
@@ -157,7 +257,18 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mProgressView = findViewById(R.id.login_progress);
 
 
+    }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // if user logged in with Facebook, stop tracking their token
+        if (mFacebookAccessTokenTracker != null) {
+            mFacebookAccessTokenTracker.stopTracking();
+        }
+
+        // if changing configurations, stop tracking firebase session.
+        ref.removeAuthStateListener(mAuthStateListener);
     }
 
     private void populateAutoComplete() {
@@ -380,7 +491,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         @Override
         protected Boolean doInBackground(Void... params) {
             //A firebaseError will occur whenever the authentication fails.
-            ref = new Firebase("https://anchronize.firebaseio.com");
+//            ref = new Firebase("https://anchronize.firebaseio.com");
             ref.authWithPassword(mUsername, mPassword, new Firebase.AuthResultHandler() {
                 @Override
                 public void onAuthenticated(AuthData authData) {

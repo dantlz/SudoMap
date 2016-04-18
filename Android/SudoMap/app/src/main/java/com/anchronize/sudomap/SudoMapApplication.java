@@ -1,6 +1,7 @@
 package com.anchronize.sudomap;
 
 import com.anchronize.sudomap.objects.User;
+import com.facebook.FacebookSdk;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
@@ -18,13 +19,17 @@ public class SudoMapApplication extends android.app.Application{
 
     private Firebase ref, refCurrentUser;
 
+
     @Override
     public void onCreate() {
         super.onCreate();
+        FacebookSdk.sdkInitialize(getApplicationContext());
         Firebase.setAndroidContext(this);
         ref =  new Firebase("https://anchronize.firebaseio.com");
         isAuthenticated = false;    //default it to false when it's created first
         currentUserID = null;
+
+
 
         Houndify.get(this).setClientId( Constants.CLIENT_ID );
         Houndify.get(this).setClientKey( Constants.CLIENT_KEY );
@@ -38,8 +43,6 @@ public class SudoMapApplication extends android.app.Application{
     public boolean getAuthenticateStatus() {
         return isAuthenticated;
     }
-
-
 
 
     public void updateCurrentUser(final User user){

@@ -38,13 +38,13 @@
             app:floatingSearch_leftActionMode="showHamburger"
             app:floatingSearch_menu="@menu/menu_searchbar"/>
 
-        <com.hound.android.fd.HoundifyButton
-            android:title="@string/action_voice_rec"
-            android:orderInCategory="1"
-            app:showAsAction="always"
-            android:icon="@drawable/ic_keyboard_voice_black_24dp"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content" />
+        <!--<com.hound.android.fd.HoundifyButton-->
+            <!--android:title="@string/action_voice_rec"-->
+            <!--android:orderInCategory="1"-->
+            <!--app:showAsAction="always"-->
+            <!--android:icon="@drawable/ic_keyboard_voice_black_24dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_width="wrap_content" />-->
 
         <io.github.yavski.fabspeeddial.FabSpeedDial
             android:layout_width="wrap_content"
@@ -62,7 +62,8 @@
             android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"
             android:layout_marginBottom="100dp"
-            android:layout_marginRight="20dp" />
+            android:layout_marginRight="20dp"
+            android:background="@color/transparent"/>
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab_add_event"

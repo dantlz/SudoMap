@@ -19,7 +19,6 @@ import android.speech.tts.TextToSpeech;
 import android.support.annotation.NonNull;
 import android.support.design.internal.ScrimInsetsFrameLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -38,7 +37,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.anchronize.sudomap.navigationdrawer.AddEventActivity;
+import com.anchronize.sudomap.navigationdrawer.SettingActivity;
 import com.anchronize.sudomap.navigationdrawer.TrendingActivity;
+import com.anchronize.sudomap.navigationdrawer.YourEventActivity;
 import com.anchronize.sudomap.objects.Event;
 import com.anchronize.sudomap.objects.ShakeDetector;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -88,9 +89,10 @@ public class HomeActivity extends NavigationLiveo implements OnItemClickListener
         public void onPrepareOptionsMenu(Menu menu, int position, boolean visible) {
         }
     };
-    private View.OnClickListener onClickPhoto = new View.OnClickListener() {
+    private View.OnClickListener onClickEvents = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+//            startActivity(new Intent(getApplicationContext(), TrendingActivity.class));
             closeDrawer();
         }
     };
@@ -100,6 +102,8 @@ public class HomeActivity extends NavigationLiveo implements OnItemClickListener
             closeDrawer();
         }
     };
+
+
 
     @Override
     public void onInt(Bundle savedInstanceState) {
@@ -123,7 +127,7 @@ public class HomeActivity extends NavigationLiveo implements OnItemClickListener
         with(this) // default theme is OUR THEME
                 .startingPosition(2) //Starting position in the list
                 .addAllHelpItem(mHelpLiveo.getHelp())
-                .setOnClickUser(onClickPhoto)
+                .setOnClickUser(onClickEvents)
                 .setOnPrepareOptionsMenu(onPrepare)
                 .setOnClickFooter(onClickFooter)
                 .build();
@@ -144,23 +148,33 @@ public class HomeActivity extends NavigationLiveo implements OnItemClickListener
 
     @Override //The "R.id.container" should be used in "beginTransaction (). Replace"
     public void onItemClick(int position) {
-        FragmentManager mFragmentManager = getSupportFragmentManager();
-        Log.d("nav", "1enters onclick listener");
+//        FragmentManager mFragmentManager = getSupportFragmentManager();
+        Log.d("nav", "enters onclick listener");
         switch (position){
-            case 1:
-                Log.d("nav", "1st element clicked");
+            case 0:
+                Log.d("nav", "0th element (your event) clicked");
+                startActivity(new Intent(HomeActivity.this, YourEventActivity.class));
+                closeDrawer();
                 break;
             case 2:
-                Intent i = new Intent(HomeActivity.this, TrendingActivity.class);
-                startActivity(i);
+                Log.d("nav", "2nd element (trending) clicked");
+                startActivity(new Intent(HomeActivity.this, TrendingActivity.class));
+                closeDrawer();
                 break;
             case 3:
-                Log.d("nav", "3rd element clicked");
+                Log.d("nav", "3rd element (bookmarks) clicked");
+                closeDrawer();
                 break;
-            case 4:
-                Log.d("nav", "4th element clicked");
+            case 5:
+                Log.d("nav", "5th element (Settings) clicked");
+                startActivity(new Intent(HomeActivity.this, SettingActivity.class));
+                closeDrawer();
                 break;
-
+            case 6:
+                Log.d("nav", "6th element (add event) clicked");
+                mAddEventButton.performClick();
+                closeDrawer();
+                break;
             default:
 //                mFragment = MainFragment.newInstance(mHelpLiveo.get(position).getName());
                 break;
@@ -184,9 +198,9 @@ public class HomeActivity extends NavigationLiveo implements OnItemClickListener
             setCurrentCheckPosition(savedInstanceState.getInt(CURRENT_CHECK_POSITION));
         }
 
-        if (savedInstanceState == null) {
-            mOnItemClickLiveo.onItemClick(mCurrentPosition);
-        }
+//        if (savedInstanceState == null) {
+//            mOnItemClickLiveo.onItemClick(mCurrentPosition);
+//        }
 
         setCheckedItemNavigation(mCurrentCheckPosition, true);
 
@@ -552,6 +566,7 @@ public class HomeActivity extends NavigationLiveo implements OnItemClickListener
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
+            Log.d("nav", "HEY I GOT CLICKED!");
             int mPosition = (!mRemoveHeader || !mCustomHeader ? position - 1 : position);
 
             if (mPosition == -1){
@@ -562,12 +577,12 @@ public class HomeActivity extends NavigationLiveo implements OnItemClickListener
             HelpItem helpItem = mHelpItem.get(mPosition);
             if (!helpItem.isHeader()) {
                 if (position != 0 || (mRemoveHeader && mCustomHeader)) {
-                    setCurrentPosition(mPosition);
+//                    setCurrentPosition(mPosition);
 
-                    if (helpItem.isCheck()) {
-                        setCurrentCheckPosition(mPosition);
-                        setCheckedItemNavigation(mPosition, true);
-                    }
+//                    if (helpItem.isCheck()) {
+//                        setCurrentCheckPosition(mPosition);
+//                        setCheckedItemNavigation(mPosition, true);
+//                    }
                     mOnItemClickLiveo.onItemClick(mPosition);
                 }
 
@@ -583,39 +598,7 @@ public class HomeActivity extends NavigationLiveo implements OnItemClickListener
 //        }
 //    }
 
-    /**
-     * @deprecated
-     */
-    public void setAdapterNavigation(){
 
-        if (mOnItemClickLiveo == null){
-            throw new RuntimeException(getString(br.liveo.navigationliveo.R.string.start_navigation_listener));
-        }
-
-        this.addHeaderView();
-
-        List<Integer> mListExtra = new ArrayList<>();
-        mListExtra.add(0, mNewSelector);
-        mListExtra.add(1, mColorDefault);
-        mListExtra.add(2, mColorIcon);
-        mListExtra.add(3, mColorName);
-        mListExtra.add(4, mColorSeparator);
-        mListExtra.add(5, mColorCounter);
-        mListExtra.add(6, mSelectorDefault);
-        mListExtra.add(7, mColorSubHeader);
-
-        List<Boolean> mListRemove = new ArrayList<>();
-        mListRemove.add(0, mRemoveAlpha);
-        mListRemove.add(1, mRemoveColorFilter);
-
-        if (mHelpItem != null){
-            mNavigationAdapter = new NavigationLiveoAdapter(this, NavigationLiveoList.getNavigationAdapter(this, mHelpItem, mNavigation.colorSelected, mNavigation.removeSelector), mListRemove, mListExtra);
-        }else {
-            mNavigationAdapter = new NavigationLiveoAdapter(this, NavigationLiveoList.getNavigationAdapter(this, mNavigation), mListRemove, mListExtra);
-        }
-
-        mList.setAdapter(mNavigationAdapter);
-    }
 
     public void build(){
 
@@ -723,18 +706,18 @@ public class HomeActivity extends NavigationLiveo implements OnItemClickListener
         return this;
     };
 
-    /**
-     * Starting listener navigation
-     * @param listener listener.
-     * @param theme theme.
-     */
-    public NavigationLiveo with(OnItemClickListener listener, int theme){
-//        setContentView(theme == Navigation.THEME_DARK ? br.liveo.navigationliveo.R.layout.navigation_main_dark : br.liveo.navigationliveo.R.layout.navigation_main_light);
-        setContentView(R.layout.activity_home);
-        this.mOnItemClickLiveo = listener;
-        configureFindView();
-        return this;
-    };
+//    /**
+//     * Starting listener navigation
+//     * @param listener listener.
+//     * @param theme theme.
+//     */
+//    public NavigationLiveo with(OnItemClickListener listener, int theme){
+////        setContentView(theme == Navigation.THEME_DARK ? br.liveo.navigationliveo.R.layout.navigation_main_dark : br.liveo.navigationliveo.R.layout.navigation_main_light);
+//        setContentView(R.layout.activity_home);
+//        this.mOnItemClickLiveo = listener;
+//        configureFindView();
+//        return this;
+//    };
 
     /**
      * @param listHelpItem list HelpItem.
