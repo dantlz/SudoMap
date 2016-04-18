@@ -110,9 +110,7 @@ public class HomeActivity extends NavigationLiveo implements OnItemClickListener
     private FloatingSearchView mSearchView;
 
 
-
-    @Override
-    public void onInt(Bundle savedInstanceState) {
+    public void populateNavDrawerInfo(){
         // User Information
         User current = ((SudoMapApplication)getApplication()).getCurrentUser();
         if(current != null) {
@@ -127,6 +125,11 @@ public class HomeActivity extends NavigationLiveo implements OnItemClickListener
 //            this.userPhoto.setImageBitmap();
             this.userBackground.setImageResource(R.drawable.ic_user_background_first);
         }
+    }
+
+    @Override
+    public void onInt(Bundle savedInstanceState) {
+        populateNavDrawerInfo();
 
         // Creating items navigation
         mHelpLiveo = new HelpLiveo();
