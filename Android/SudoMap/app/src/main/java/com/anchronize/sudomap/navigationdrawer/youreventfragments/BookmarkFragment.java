@@ -20,7 +20,7 @@ import java.util.ArrayList;
 /**
  * Created by glarencezhao on 4/14/16.
  */
-public class PastFragment extends Fragment {
+public class BookmarkFragment extends Fragment {
 
     private ArrayList<Event> _pastEvents;
     public static final String PAST_KEY = "PAST EVENTS";
@@ -31,7 +31,7 @@ public class PastFragment extends Fragment {
 
     public static final String EVENT_KEY = "com.anchronize.sudomap.EventDetailActivity.event";
 
-    public PastFragment(){}
+    public BookmarkFragment(){}
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -41,7 +41,7 @@ public class PastFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_past, container, false);
+        View view = inflater.inflate(R.layout.fragment_bookmark, container, false);
 
         pastEventsLV = (ListView) view.findViewById(R.id.pastEventsListView);
 
@@ -65,7 +65,7 @@ public class PastFragment extends Fragment {
                 Event event = _pastEvents.get(position);
                 Intent i = new Intent(getActivity().getApplicationContext(), EventDetailActivity.class);
                 System.out.println(event.getTitle());
-                i.putExtra(EVENT_KEY, event);
+                i.putExtra(EventDetailActivity.EVENT_KEY, event);
                 startActivity(i);
             }
         });

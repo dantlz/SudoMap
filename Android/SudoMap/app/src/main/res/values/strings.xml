@@ -39,8 +39,8 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <!-- Strings related to tabs -->
-    <string name="upcoming_fragment_title">Upcoming</string>
-    <string name="past_fragment_title">Past</string>
+    <string name="attending_fragment_title">Attending</string>
+    <string name="bookmark_fragment_title">Bookmarked</string>
     <string name="list_item_event_title">Event Title</string>
     <string name="list_item_date_time_title">Date and Time Title</string>
     <string name="list_item_location_title">Location Title</string>
