@@ -97,9 +97,6 @@ public class EventDetailActivity extends AppCompatActivity implements
         Intent i = getIntent();
         if(i.hasExtra(EVENTID_KEY)){
             mEventID = i.getStringExtra(EVENTID_KEY);
-            Log.d("StringExtra",mEventID);
-
-            //TODO Get the event from event ID and set mEvent to the event
             Firebase refEventID = ref.child("events").child(mEventID);
             refEventID.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
@@ -221,17 +218,12 @@ public class EventDetailActivity extends AppCompatActivity implements
         });
 
 
-
-        //TODO category
-
         titleView.setText(mEvent.getTitle());
         categoryView.setText(mEvent.getCategory() + "     |  ");
         locationNameView.setText(mEvent.getAddressName());
         locationAddress.setText(mEvent.getAddress());
         descriptionView.setText(mEvent.getDescription());
-
         startDateTextView.setText(mEvent.formattedDateString());
-
 
         for(String userID: mEvent.getattendantsID()){
             Firebase attendeeRef = ref.child("users").child(userID);

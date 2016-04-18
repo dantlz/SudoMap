@@ -288,12 +288,10 @@ public class HomeActivity extends NavigationLiveo implements OnItemClickListener
         fabSpeedDial.setMenuListener(new SimpleMenuListenerAdapter() {
             @Override
             public boolean onPrepareMenu(NavigationMenu navigationMenu) {
-                // TODO: Do something with yout menu items, or return false if you don't want to show them
                 return true;
             }
             @Override
             public boolean onMenuItemSelected(MenuItem menuItem) {
-                //TODO: Start some activity
                 if(menuItem.getTitle().equals("All")){
                     selectedFilter = "ALL";
                 }
@@ -433,7 +431,6 @@ public class HomeActivity extends NavigationLiveo implements OnItemClickListener
         Event e = markerEventHashMap.get(lastSelectedMarker);
         Intent i = new Intent(getApplicationContext(), EventDetailActivity.class);
         i.putExtra(EventDetailActivity.EVENT_KEY, e);
-        //// TODO: 4/14/16  startActivity for result
         startActivity(i);
     }
 
@@ -553,7 +550,6 @@ public class HomeActivity extends NavigationLiveo implements OnItemClickListener
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        // TODO Auto-generated method stub
         super.onSaveInstanceState(outState);
         outState.putInt(CURRENT_POSITION, mCurrentPosition);
         outState.putInt(CURRENT_CHECK_POSITION, mCurrentCheckPosition);
@@ -613,7 +609,6 @@ public class HomeActivity extends NavigationLiveo implements OnItemClickListener
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
-        // TODO Auto-generated method stub
         super.onConfigurationChanged(newConfig);
 
         if (mDrawerToggle != null) {
