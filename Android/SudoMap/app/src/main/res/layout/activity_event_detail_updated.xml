@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
     tools:context="com.anchronize.sudomap.EventDetailActivity">
 
     <ScrollView
@@ -12,7 +11,6 @@
         android:scrollbars="none">
 
         <RelativeLayout
-            android:background="@color/white"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -32,14 +30,12 @@
 
             <LinearLayout
                 android:padding="16dp"
-                android:background="@color/white"
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/eventIconIV">
 
                 <TextView
-                    android:background="@color/white"
                     android:id="@+id/eventTitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -47,7 +43,6 @@
                     android:textSize="24sp"/>
 
                 <LinearLayout
-                    android:background="@color/white"
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -55,7 +50,6 @@
                     android:layout_marginStart="8dp">
 
                     <TextView
-                        android:background="@color/white"
                         android:id="@+id/categoryTextView"
                         android:layout_marginEnd="8dp"
                         android:layout_width="wrap_content"
@@ -63,7 +57,6 @@
                         android:text="Category"/>
 
                     <TextView
-                        android:background="@color/white"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/organizerInfo"
@@ -72,7 +65,6 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:background="@color/white"
                     android:orientation="horizontal"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
@@ -100,7 +92,6 @@
                 </LinearLayout>
 
                 <TextView
-                    android:background="@color/white"
                     android:layout_marginTop="20dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -109,7 +100,6 @@
                     android:textSize="18sp"/>
 
                 <TextView
-                    android:background="@color/white"
                     android:layout_marginTop="20dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -127,7 +117,6 @@
                     android:text="Street Address"/>
 
                 <TextView
-                    android:background="@color/white"
                     android:layout_marginTop="20dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -135,7 +124,6 @@
                     android:textSize="18sp"/>
 
                 <TextView
-                    android:background="@color/white"
                     android:id="@+id/eventDescriptionView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -144,7 +132,6 @@
                     android:text="Details"/>
 
                 <TextView
-                    android:background="@color/white"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
@@ -164,11 +151,9 @@
                         android:id="@+id/attendants"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:background="@color/white">
+                        android:orientation="horizontal">
                     </LinearLayout>
                 </HorizontalScrollView>
-
 
             </LinearLayout>
 
