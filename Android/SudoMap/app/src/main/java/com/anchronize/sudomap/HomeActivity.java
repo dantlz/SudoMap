@@ -2,6 +2,7 @@ package com.anchronize.sudomap;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -60,6 +61,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.hound.android.fd.HoundSearchResult;
 import com.hound.android.fd.Houndify;
+import com.hound.android.fd.HoundifyButton;
 import com.hound.android.libphs.PhraseSpotterReader;
 import com.hound.android.sdk.VoiceSearchInfo;
 import com.hound.android.sdk.audio.SimpleAudioByteStreamSource;
@@ -123,6 +125,8 @@ public class HomeActivity extends NavigationLiveo implements OnItemClickListener
         }
     };
     private FloatingSearchView mSearchView;
+    private FragmentTransaction ft;
+    private HoundifyButton hb;
 
 
     public void populateNavDrawerInfo(){
@@ -275,6 +279,11 @@ public class HomeActivity extends NavigationLiveo implements OnItemClickListener
             isSaveInstance = true;
             setCurrentPosition(savedInstanceState.getInt(CURRENT_POSITION));
             setCurrentCheckPosition(savedInstanceState.getInt(CURRENT_CHECK_POSITION));
+        } else {
+            ft = getFragmentManager().beginTransaction();
+            testFragment newFragment = new testFragment();
+            ft.add(R.id.embedded, newFragment);
+            ft.commit();
         }
 
 //        if (savedInstanceState == null) {
@@ -334,6 +343,9 @@ public class HomeActivity extends NavigationLiveo implements OnItemClickListener
 
         textToSpeechMgr = new TextToSpeechMgr( this );
 
+        final HoundifyButton hb = (HoundifyButton) findViewById(R.id.voice_rec_button);
+        if(hb!=null)hb.setVisibility(View.INVISIBLE);
+
         mSearchView = (FloatingSearchView)findViewById(R.id.floating_search_view);
         mSearchView.setOnLeftMenuClickListener(new FloatingSearchView.OnLeftMenuClickListener() {
             @Override
@@ -348,6 +360,16 @@ public class HomeActivity extends NavigationLiveo implements OnItemClickListener
                 closeDrawer();
             }
         });
+        mSearchView.setOnMenuItemClickListener(new FloatingSearchView.OnMenuItemClickListener() {
+            @Override
+            public void onActionMenuItemSelected(MenuItem item) {
+//                if(item.getTitle().equals("action voice rec")){
+                    Log.d("searchview", "voice rec button clicked");
+                    hb.performClick();
+//                }
+            }
+        });
+
 
         FabSpeedDial fabSpeedDial = (FabSpeedDial) findViewById(R.id.homeFAB);
         fabSpeedDial.setMenuListener(new SimpleMenuListenerAdapter() {
@@ -533,13 +555,58 @@ public class HomeActivity extends NavigationLiveo implements OnItemClickListener
         //clean up the marker -> Event map
         markerEventHashMap.clear();
         for(Event e : allEventsToDisplay){
-            Marker marker = mMap.addMarker(new MarkerOptions()
-                    .anchor(0.0f, 1.0f)
-                    .position(new LatLng(e.getLatitude(), e.getLongitude()))
-                    .title(e.getTitle())
-                    .snippet(e.getCategory())
-                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)))
-                    ;
+            Marker marker;
+            switch(e.getCategory()) {
+                case "FUN":
+                    marker = mMap.addMarker(new MarkerOptions()
+                            .anchor(0.0f, 1.0f)
+                            .position(new LatLng(e.getLatitude(), e.getLongitude()))
+                            .title(e.getTitle())
+                            .snippet(e.getCategory())
+                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ROSE)));
+                    break;
+                case "DANGEROUS":
+                    marker = mMap.addMarker(new MarkerOptions()
+                            .anchor(0.0f, 1.0f)
+                            .position(new LatLng(e.getLatitude(), e.getLongitude()))
+                            .title(e.getTitle())
+                            .snippet(e.getCategory())
+                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+                    break;
+                case "POLICE":
+                    marker = mMap.addMarker(new MarkerOptions()
+                            .anchor(0.0f, 1.0f)
+                            .position(new LatLng(e.getLatitude(), e.getLongitude()))
+                            .title(e.getTitle())
+                            .snippet(e.getCategory())
+                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET)));
+                    break;
+                case "NEW":
+                    marker = mMap.addMarker(new MarkerOptions()
+                            .anchor(0.0f, 1.0f)
+                            .position(new LatLng(e.getLatitude(), e.getLongitude()))
+                            .title(e.getTitle())
+                            .snippet(e.getCategory())
+                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+                    break;
+                case "FIRE":
+                    marker = mMap.addMarker(new MarkerOptions()
+                            .anchor(0.0f, 1.0f)
+                            .position(new LatLng(e.getLatitude(), e.getLongitude()))
+                            .title(e.getTitle())
+                            .snippet(e.getCategory())
+                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)));
+                    break;
+                default:
+                    marker = mMap.addMarker(new MarkerOptions()
+                            .anchor(0.0f, 1.0f)
+                            .position(new LatLng(e.getLatitude(), e.getLongitude()))
+                            .title(e.getTitle())
+                            .snippet(e.getCategory())
+                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+                    break;
+
+            }
             markerEventHashMap.put(marker, e);
         }
     }
@@ -1989,22 +2056,28 @@ public class HomeActivity extends NavigationLiveo implements OnItemClickListener
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (resultCode == RESULT_OK) {
-            Log.d("EVENT", "event successfully added");
-//            addMapMarkers();
-        } else if (requestCode == Houndify.REQUEST_CODE) {
-            Log.d("Houndify", "Gets response");
-            final HoundSearchResult result = Houndify.get(this).fromActivityResult(resultCode, data);
+        switch(requestCode){
+            case RESULT_OK:
+                Log.d("EVENT", "event successfully added");
+                addMapMarkers();
+                break;
+            case Houndify.REQUEST_CODE:
+                Log.d("Houndify", "Gets response");
+                final HoundSearchResult result = Houndify.get(this).fromActivityResult(resultCode, data);
 
-            if (result.hasResult()) {
-                onResponse( result.getResponse() );
-            }
-            else if (result.getErrorType() != null) {
-                onError(result.getException(), result.getErrorType());
-            }
-            else {
-                Log.d("HoundifyRes","Aborted search");
-            }
+                if (result.hasResult()) {
+                    onResponse( result.getResponse() );
+                }
+                else if (result.getErrorType() != null) {
+//                    textToSpeechMgr.speak("Sorry, I didn't get that.");
+                    onError(result.getException(), result.getErrorType());
+                }
+                else {
+                    Log.d("HoundifyRes","Aborted search");
+                }
+                break;
+            default:
+                break;
         }
     }
 
@@ -2019,7 +2092,7 @@ public class HomeActivity extends NavigationLiveo implements OnItemClickListener
             StatefulRequestInfoFactory.get(this).setConversationState(response.getResults().get(0).getConversationState());
 
             Log.d("HoundifyRes","Received response\n\n" + response.getResults().get(0).getWrittenResponse());
-            textToSpeechMgr.speak(response.getResults().get(0).getSpokenResponse());
+//            textToSpeechMgr.speak(response.getResults().get(0).getSpokenResponse());
 
             /**
              * "Client Match" analysis code. Modified from sample app
@@ -2044,12 +2117,28 @@ public class HomeActivity extends NavigationLiveo implements OnItemClickListener
                         textToSpeechMgr.speak("Client match TURN LIGHT OFF successful");
                     }
                     else if ( intentValue.equals("ADD_EVENT") ) {
-                        textToSpeechMgr.speak("Client match ADD NEW EVENT successful");
+//                        textToSpeechMgr.speak("Client match ADD NEW EVENT successful");
+                        if ( ((SudoMapApplication) getApplication()).getAuthenticateStatus()) {
+                            textToSpeechMgr.speak(response.getResults().get(0).getSpokenResponse());
+                            textToSpeechMgr.speak("Client match ADD NEW EVENT successful");
+                            Intent i = new Intent(HomeActivity.this, AddEventActivity.class);
+                            int requestCode = 1;
+                            startActivityForResult(i, requestCode);
+                        }
+                        else {
+                            textToSpeechMgr.speak("Sorry, but you are not logged in.");
+                        }
                     }
+                }
+                else {
+                    // Actual error message
+//                    textToSpeechMgr.speak(response.getResults().get(0).getWrittenResponse());
+                    textToSpeechMgr.speak("Sorry, I didn't get that.");
                 }
             }
         }
         else {
+            textToSpeechMgr.speak("Sorry, I didn't get that.");
             Log.d("HoundifyRes","Received empty response!");
         }
     }
@@ -2111,11 +2200,29 @@ public class HomeActivity extends NavigationLiveo implements OnItemClickListener
     public void handleShakeEvent(int count) {
         Log.d("SHAKE", "Shaked device: " + count + " times.");
         if (count <= 2) {
-            textToSpeechMgr.speak("Stop shaking me dude!");
+//            textToSpeechMgr.speak("Stop shaking me dude!");
+            // TODO: modify speech to reflect randomly selected "popular" event
+            textToSpeechMgr.speak("It looks like a lot of fun is going around.");
         }
         else {
             textToSpeechMgr.speak("Jeff, you are a very good looking man.");
         }
+        ft = getFragmentManager().beginTransaction();
+        testFragment newFragment = new testFragment();
+        ft.add(R.id.embedded, newFragment);
+        ft.commit();
+
+        // TODO: Update popular event suggestion on shake
+//        showDialog();
+//        android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
+//        TrendingFragment dialogFragment = new TrendingFragment();
+//        dialogFragment.show(fm, "Test Fragment");
+    }
+
+    void showDialog() {
+        // Create the fragment and show it as a dialog.
+        testFragment newFragment = new testFragment();
+        newFragment.show(getFragmentManager(), "dialog");
     }
 
 

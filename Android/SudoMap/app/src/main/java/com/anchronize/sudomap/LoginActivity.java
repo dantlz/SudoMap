@@ -268,6 +268,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 ((SudoMapApplication)getApplication()).setAuthenticateStatus(false);
                 Intent i = new Intent(LoginActivity.this, HomeActivity.class);
                 startActivity(i);
+                LoginActivity.this.finish();
             }
         });
 
@@ -581,6 +582,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 ((SudoMapApplication)getApplication()).StartToUpdateUser();
                 startActivity(new Intent(LoginActivity.this, HomeActivity.class));
                 System.out.println(" onPostExecute success");
+                LoginActivity.this.finish();
 
             } else {
                 System.out.println(" onPostExecute not success");
