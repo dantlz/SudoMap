@@ -230,40 +230,7 @@ public class EventDetailActivity extends AppCompatActivity implements
         locationAddress.setText(mEvent.getAddress());
         descriptionView.setText(mEvent.getDescription());
 
-
-        Calendar time = Calendar.getInstance();
-        time.set(Calendar.HOUR_OF_DAY, mEvent.getStartHour());
-        time.set(Calendar.MINUTE, mEvent.getStartMinute());
-        String startAM_PM = "";
-
-        if(time.get(Calendar.AM_PM) == Calendar.AM)
-            startAM_PM = "AM";
-        else if(time.get(Calendar.AM_PM) == Calendar.PM)
-            startAM_PM = "PM";
-
-        String hour = (time.get(Calendar.HOUR) == 0) ?"12":time.get(Calendar.HOUR)+"";
-        int startHour = Integer.parseInt(hour);
-
-        int selectedMinute = time.get(Calendar.MINUTE);
-        int startMinute = selectedMinute;
-        String sMinute = "00";
-        if(selectedMinute < 10){
-            sMinute = "0" + selectedMinute;
-        } else {
-            sMinute = selectedMinute + "";
-        }
-
-        String timeFirstPart = hour + ":" + sMinute + " " + startAM_PM;
-
-
-        int startYear = mEvent.getStartYear();
-        int startMonth = mEvent.getStartMonth();
-        int startDay = mEvent.getStartDay();
-
-        time.set(Calendar.MONTH, startMonth);
-        String month = time.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.US);
-        String date = month + " " + startDay + ", " + startYear;
-        startDateTextView.setText(date + " at " + timeFirstPart);
+        startDateTextView.setText(mEvent.formattedDateString());
 
 
         for(String userID: mEvent.getattendantsID()){
