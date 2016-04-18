@@ -53,6 +53,7 @@
             android:id="@+id/homeFAB"
             app:fabGravity="bottom_end"
             app:fabMenu="@menu/menu_filter"
+            android:backgroundTint="@color/transparent"
             app:miniFabBackgroundTint="@android:color/white"
             app:miniFabDrawableTint="@color/colorPrimaryDark"
             app:miniFabTitleTextColor="@color/colorPrimaryDark"

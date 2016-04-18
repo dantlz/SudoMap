@@ -17,6 +17,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.support.annotation.NonNull;
+import android.support.design.internal.NavigationMenu;
 import android.support.design.internal.ScrimInsetsFrameLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
@@ -34,7 +35,6 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.anchronize.sudomap.navigationdrawer.AddEventActivity;
 import com.anchronize.sudomap.navigationdrawer.SettingActivity;
@@ -76,6 +76,8 @@ import br.liveo.interfaces.OnPrepareOptionsMenuLiveo;
 import br.liveo.model.HelpItem;
 import br.liveo.model.HelpLiveo;
 import br.liveo.navigationliveo.NavigationLiveoList;
+import io.github.yavski.fabspeeddial.FabSpeedDial;
+import io.github.yavski.fabspeeddial.SimpleMenuListenerAdapter;
 
 /**
  * Created by jasonlin on 4/17/16.
@@ -110,7 +112,7 @@ public class HomeActivity extends NavigationLiveo implements OnItemClickListener
         // User Information
         this.userName.setText("Jason Lin");
         this.userEmail.setText("uscjlin@gmail.com");
-        this.userPhoto.setImageResource(R.drawable.miller_web);
+//        this.userPhoto.setImageResource(R.drawable.miller_web);
         this.userBackground.setImageResource(R.drawable.ic_user_background_first);
 
         // Creating items navigation
@@ -210,6 +212,7 @@ public class HomeActivity extends NavigationLiveo implements OnItemClickListener
         mapFragment.getMapAsync(this);
 
         allEventsinFirebase = new ArrayList<Event>();
+        allEventsToDisplay = new ArrayList<Event>();
         markerEventHashMap = new HashMap<Marker,Event>();
         //set context for firebase
         ref = new Firebase("https://anchronize.firebaseio.com");
@@ -218,12 +221,10 @@ public class HomeActivity extends NavigationLiveo implements OnItemClickListener
         Firebase refUsers = ref.child("user");
 
         //query data once for to get all the events
-        refEvents.addListenerForSingleValueEvent(new ValueEventListener() {
+        refEvents.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
                 allEventsinFirebase.clear();
-//                System.out.println(snapshot.getValue());
-//                System.out.println("There are " + snapshot.getChildrenCount() + " events");
                 for (DataSnapshot postSnapshot: snapshot.getChildren()) {
                     Event event = postSnapshot.getValue(Event.class);
                     allEventsinFirebase.add(event);
@@ -257,6 +258,26 @@ public class HomeActivity extends NavigationLiveo implements OnItemClickListener
 
         textToSpeechMgr = new TextToSpeechMgr( this );
 
+        FabSpeedDial fabSpeedDial = (FabSpeedDial) findViewById(R.id.homeFAB);
+        fabSpeedDial.setMenuListener(new SimpleMenuListenerAdapter() {
+            @Override
+            public boolean onPrepareMenu(NavigationMenu navigationMenu) {
+                // TODO: Do something with yout menu items, or return false if you don't want to show them
+                return true;
+            }
+            @Override
+            public boolean onMenuItemSelected(MenuItem menuItem) {
+                //TODO: Start some activity
+                if(menuItem.getTitle().equals("All")){
+                    selectedFilter = "ALL";
+                }
+                else{
+                    selectedFilter = menuItem.getTitle().toString();
+                }
+                addMapMarkers();
+                return true;
+            }
+        });
 //         Normally you'd only have to do this once in your Application#onCreate
 //        Houndify.get(this).setClientId( "7avivQzdymp1dCiyyOBrWw==" );
 //        Houndify.get(this).setClientKey( "TGx0cYDC5N9k7zKH3g2VVibU4uQI2Qpk67STQI43dAMVfSlJ_zh_RicHiMKQFkVOyD37mvW2Ucnof-IKUI2a5w==" );
@@ -377,7 +398,7 @@ public class HomeActivity extends NavigationLiveo implements OnItemClickListener
 
     @Override
     public boolean onMyLocationButtonClick() {
-        Toast.makeText(this, "MyLocation button clicked", Toast.LENGTH_SHORT).show();
+
         // Return false so that we don't consume the event and the default behavior still occurs
         // (the camera animates to the user's current position).
         return false;
@@ -394,18 +415,32 @@ public class HomeActivity extends NavigationLiveo implements OnItemClickListener
 
     @Override
     public void onInfoWindowClose(Marker marker) {
-        Toast.makeText(this, "Info window closed", Toast.LENGTH_SHORT).show();
     }
 
-    protected void addMapMarkers(){
-        markerEventHashMap.clear();
-        for(Event e : allEventsinFirebase){
+    private void addMapMarkers(){
+        allEventsToDisplay.clear();
 
+        //Filter events
+        for(Event e: allEventsinFirebase){
+            if(selectedFilter.equals("ALL") || e.getCategory().equals(selectedFilter.toUpperCase())){
+                allEventsToDisplay.add(e);
+            }
+        }
+        //clean up all the marker
+        for(Marker marker: markerEventHashMap.keySet()){
+            marker.remove();
+        }
+
+        //clean up the marker -> Event map
+        markerEventHashMap.clear();
+        for(Event e : allEventsToDisplay){
             Marker marker = mMap.addMarker(new MarkerOptions()
+                    .anchor(0.0f, 1.0f)
                     .position(new LatLng(e.getLatitude(), e.getLongitude()))
                     .title(e.getTitle())
                     .snippet(e.getCategory())
-                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)))
+                    ;
             markerEventHashMap.put(marker, e);
         }
     }
