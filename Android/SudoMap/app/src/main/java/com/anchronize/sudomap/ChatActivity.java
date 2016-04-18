@@ -113,4 +113,9 @@ public class ChatActivity extends ListActivity {
             inputText.setText("");
         }
     }
+
+    @Override
+    public void onBackPressed(){
+        super.onBackPressed();
+    }
 }
