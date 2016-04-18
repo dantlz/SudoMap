@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 
 import com.anchronize.sudomap.R;
 import com.anchronize.sudomap.SudoMapApplication;
@@ -53,6 +54,12 @@ public class YourEventActivity extends AppCompatActivity {
 
         toolBar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolBar);
+        toolBar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
