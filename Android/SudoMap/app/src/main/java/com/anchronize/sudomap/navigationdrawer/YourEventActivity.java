@@ -118,7 +118,7 @@ public class YourEventActivity extends AppCompatActivity {
     private void populateEvents(){
         User currentUser = ((SudoMapApplication)getApplication()).getCurrentUser();
         for(String attendingEventID: currentUser.getAttendingEventIDs()){
-            final Firebase refEvent = ref.child("events").child(attendingEventID);
+            Firebase refEvent = ref.child("events").child(attendingEventID);
             refEvent.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
@@ -133,22 +133,21 @@ public class YourEventActivity extends AppCompatActivity {
             });
         }
 
-//        for(String bookmarkedEventID: currentUser.getBookmarkedEventIDs()){
-//            final Firebase refEvent = ref.child("events").child(bookmarkedEventID);
-//            refEvent.addListenerForSingleValueEvent(new ValueEventListener() {
-//                @Override
-//                public void onDataChange(DataSnapshot dataSnapshot) {
-//                    Event bookmarkedEvent = dataSnapshot.getValue(Event.class);
-//                    pastEvents.add(bookmarkedEvent);
-//                }
-//
-//                @Override
-//                public void onCancelled(FirebaseError firebaseError) {
-//
-//                }
-//            });
-//        }
+        for(String bookmarkedEventID: currentUser.getBookmarkedEventIDs()){
+            Firebase refEvent = ref.child("events").child(bookmarkedEventID);
+            refEvent.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    Event bookmarkedEvent = dataSnapshot.getValue(Event.class);
+                    pastEvents.add(bookmarkedEvent);
+                }
 
+                @Override
+                public void onCancelled(FirebaseError firebaseError) {
+
+                }
+            });
+        }
 
     }
 
