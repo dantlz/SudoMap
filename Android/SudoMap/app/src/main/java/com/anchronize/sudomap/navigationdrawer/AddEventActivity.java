@@ -38,6 +38,7 @@ public class AddEventActivity extends AppCompatActivity{
     private EditText titleEditText;
     private EditText descriptionEditText;
     private Button createEventButton;
+    //TODO Spinner is populated in XML hardcode, make it be programmatically populated
     private Spinner categorySpinner;
     private CheckBox privacyCheckBox;
 

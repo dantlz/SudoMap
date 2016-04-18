@@ -121,6 +121,8 @@ public abstract class NavigationLiveo extends AppCompatActivity
     protected Firebase ref;
     protected ArrayList<Event> allEventsinFirebase;   //store all events in database
     protected HashMap<Marker, Event> markerEventHashMap; //maintain a map from maker to event
+    protected ArrayList<Event> allEventsToDisplay;  //store all events to be displayed
+    protected String selectedFilter = "ALL"; //Default the selectedFilter to all events
 
     // Searchview
     private final String TAG = "HomeActivity";
