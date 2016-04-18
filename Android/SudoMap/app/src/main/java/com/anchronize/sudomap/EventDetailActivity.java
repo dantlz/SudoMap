@@ -164,6 +164,7 @@ public class EventDetailActivity extends AppCompatActivity implements
         eventBookmarked.put("bookmarkedEventIDs", user.getBookmarkedEventIDs());
         refUser.updateChildren(eventBookmarked);
 
+        finish();
     }
 
     public void attendingButtonClicked(){
@@ -192,7 +193,7 @@ public class EventDetailActivity extends AppCompatActivity implements
             refEvent.updateChildren(attendee);
         }
 
-
+        finish();
     }
 
 //    @Override
