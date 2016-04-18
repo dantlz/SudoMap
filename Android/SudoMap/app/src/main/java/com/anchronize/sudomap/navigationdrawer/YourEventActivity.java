@@ -42,6 +42,11 @@ public class YourEventActivity extends AppCompatActivity {
     public static final String PAST_KEY = "PAST EVENTS";
 
     @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_your_event);

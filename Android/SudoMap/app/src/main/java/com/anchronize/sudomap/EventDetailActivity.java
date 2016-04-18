@@ -163,7 +163,6 @@ public class EventDetailActivity extends AppCompatActivity implements
         Map<String, Object> eventBookmarked = new HashMap<String, Object>();
         eventBookmarked.put("bookmarkedEventIDs", user.getBookmarkedEventIDs());
         refUser.updateChildren(eventBookmarked);
-
         finish();
     }
 
@@ -192,7 +191,6 @@ public class EventDetailActivity extends AppCompatActivity implements
             attendee.put("attendantsID", attendentIDs);
             refEvent.updateChildren(attendee);
         }
-
         finish();
     }
 
@@ -267,43 +265,27 @@ public class EventDetailActivity extends AppCompatActivity implements
         String date = month + " " + startDay + ", " + startYear;
         startDateTextView.setText(date + " at " + timeFirstPart);
 
-//        for(User user: mEvent.getAttendants()){
-//            AttendantsItem item = new AttendantsItem(getApplicationContext());
-//            item.setName(user.getInAppName());
-//            item.setPicBitMap(user.getProfileImageBitMap());
-//            attendantsView.addView(item);
-//        }
 
-//        for(String userID: mEvent.getAttendants()){
-//            Firebase attendeeRef = ref.child("users").child(userID);
-//            attendeeRef.addListenerForSingleValueEvent(new ValueEventListener() {
-//                @Override
-//                public void onDataChange(DataSnapshot dataSnapshot) {
-//                    User attendee = dataSnapshot.getValue(User.class);
-//
-//                    AttendantsItem item = new AttendantsItem(getApplicationContext());
-//                    item.setName(attendee.getInAppName());
-//
-//                    Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.miller);
-//                    item.setPicBitMap(bitmap);
-//                    attendantsView.addView(item);
-//
-//                }
-//
-//                @Override
-//                public void onCancelled(FirebaseError firebaseError) {
-//
-//                }
-//            });
-//
-//        }
+        for(String userID: mEvent.getattendantsID()){
+            Firebase attendeeRef = ref.child("users").child(userID);
+            attendeeRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    User attendee = dataSnapshot.getValue(User.class);
 
-        for(int i = 0; i < 5; i++){
-            AttendantsItem item = new AttendantsItem(getApplicationContext());
-            item.setName(Integer.toString(i)+ " -test- " + Integer.toString(i));
-            Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.miller);
-            item.setPicBitMap(bitmap);
-            attendantsView.addView(item);
+                    AttendantsItem item = new AttendantsItem(getApplicationContext());
+                    item.setName(attendee.getInAppName());
+                    item.setPicBitMap(attendee.getProfileImageBitMap());
+                    attendantsView.addView(item);
+
+                }
+
+                @Override
+                public void onCancelled(FirebaseError firebaseError) {
+
+                }
+            });
+
         }
     }
 
