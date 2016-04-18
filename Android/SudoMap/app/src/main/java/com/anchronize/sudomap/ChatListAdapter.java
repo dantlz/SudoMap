@@ -5,9 +5,11 @@ package com.anchronize.sudomap;
  */
 
 import android.app.Activity;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.firebase.client.Firebase;
@@ -21,6 +23,7 @@ public class ChatListAdapter extends FirebaseListAdapter<Chat> {
     private Button voteButton;
     private int i = 0;
     private View mView;
+    private Bitmap profileImge;
 
     public ChatListAdapter(Query ref, Activity activity, int layout, String mUsername) {
         super(ref, Chat.class, layout, activity);
@@ -53,5 +56,12 @@ public class ChatListAdapter extends FirebaseListAdapter<Chat> {
         ((TextView) view.findViewById(R.id.list_item_text)).setText(chat.getMessage());
         //display votes
         ((TextView) view.findViewById(R.id.list_item_counter)).setText(Integer.toString(chat.getVotes()));
+
+
+        ((ImageView) view.findViewById(R.id.list_item_thumbnail)).setImageBitmap(profileImge);
+    }
+
+    public void setProfileImg(Bitmap bitmap){
+        profileImge = bitmap;
     }
 }
