@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.anchronize.sudomap.objects.User;
 import com.firebase.client.Firebase;
 import com.firebase.client.ValueEventListener;
 
@@ -48,7 +49,6 @@ public class ChatActivity extends ListActivity {
         mUsername = i.getStringExtra(USERNAME_KEY);
 
 
-
         //Set up firebase reference
         //this should be changed to be under each event
         mFirebaseRef = new Firebase(FIREBASE_URL).child("chat").child(eventID);
@@ -81,7 +81,9 @@ public class ChatActivity extends ListActivity {
         //add listadapter to listview
         final ListView listView = getListView();
         // Tell our list adapter that we only want 50 messages at a time
+        User user = ((SudoMapApplication)getApplication()).getCurrentUser();
         mChatListAdapter = new ChatListAdapter(mFirebaseRef.limit(50), this, R.layout.list_item, mUsername);
+        mChatListAdapter.setProfileImg(user.getProfileImageBitMap());
         listView.setAdapter(mChatListAdapter);
         mChatListAdapter.registerDataSetObserver(new DataSetObserver() {
             @Override
@@ -93,8 +95,6 @@ public class ChatActivity extends ListActivity {
 
 
     }
-
-
 
     private void sendMessage() {
         EditText inputText = (EditText) findViewById(R.id.messageInput);
