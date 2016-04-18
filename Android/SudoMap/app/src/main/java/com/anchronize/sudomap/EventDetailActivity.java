@@ -55,7 +55,7 @@ public class EventDetailActivity extends AppCompatActivity implements
     private TextView startDateTextView;
     private HorizontalScrollView attendantsScrollView;
     private LinearLayout attendantsView;
-//    private Button chatButton;
+    private Button chatButton;
     private Button bookmarkButton;
     private Button attendingButton;
 
@@ -89,7 +89,7 @@ public class EventDetailActivity extends AppCompatActivity implements
         attendantsScrollView = (HorizontalScrollView) findViewById(R.id.attendantsScrollView);
         startDateTextView = (TextView)findViewById(R.id.startDateTimeTextView);
         attendantsView = (LinearLayout) findViewById(R.id.attendants);
-       // chatButton = (Button) findViewById(R.id.chatButton);
+        chatButton = (Button) findViewById(R.id.chat_button);
         bookmarkButton = (Button) findViewById(R.id.bookmarkButton);
         attendingButton = (Button) findViewById(R.id.attendingButton);
 
@@ -122,12 +122,12 @@ public class EventDetailActivity extends AppCompatActivity implements
     }
 
     public void addListeners(){
-//        chatButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                chatButtonClicked();
-//            }
-//        });
+        chatButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                chatButtonClicked();
+            }
+        });
         bookmarkButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -163,7 +163,7 @@ public class EventDetailActivity extends AppCompatActivity implements
         Map<String, Object> eventBookmarked = new HashMap<String, Object>();
         eventBookmarked.put("bookmarkedEventIDs", user.getBookmarkedEventIDs());
         refUser.updateChildren(eventBookmarked);
-
+        finish();
     }
 
     public void attendingButtonClicked(){
@@ -191,8 +191,7 @@ public class EventDetailActivity extends AppCompatActivity implements
             attendee.put("attendantsID", attendentIDs);
             refEvent.updateChildren(attendee);
         }
-
-
+        finish();
     }
 
 //    @Override
@@ -233,43 +232,27 @@ public class EventDetailActivity extends AppCompatActivity implements
 
         startDateTextView.setText(mEvent.formattedDateString());
 
-//        for(User user: mEvent.getAttendants()){
-//            AttendantsItem item = new AttendantsItem(getApplicationContext());
-//            item.setName(user.getInAppName());
-//            item.setPicBitMap(user.getProfileImageBitMap());
-//            attendantsView.addView(item);
-//        }
 
-//        for(String userID: mEvent.getAttendants()){
-//            Firebase attendeeRef = ref.child("users").child(userID);
-//            attendeeRef.addListenerForSingleValueEvent(new ValueEventListener() {
-//                @Override
-//                public void onDataChange(DataSnapshot dataSnapshot) {
-//                    User attendee = dataSnapshot.getValue(User.class);
-//
-//                    AttendantsItem item = new AttendantsItem(getApplicationContext());
-//                    item.setName(attendee.getInAppName());
-//
-//                    Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.miller);
-//                    item.setPicBitMap(bitmap);
-//                    attendantsView.addView(item);
-//
-//                }
-//
-//                @Override
-//                public void onCancelled(FirebaseError firebaseError) {
-//
-//                }
-//            });
-//
-//        }
+        for(String userID: mEvent.getattendantsID()){
+            Firebase attendeeRef = ref.child("users").child(userID);
+            attendeeRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    User attendee = dataSnapshot.getValue(User.class);
 
-        for(int i = 0; i < 5; i++){
-            AttendantsItem item = new AttendantsItem(getApplicationContext());
-            item.setName(Integer.toString(i)+ " -test- " + Integer.toString(i));
-            Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.miller);
-            item.setPicBitMap(bitmap);
-            attendantsView.addView(item);
+                    AttendantsItem item = new AttendantsItem(getApplicationContext());
+                    item.setName(attendee.getInAppName());
+                    item.setPicBitMap(attendee.getProfileImageBitMap());
+                    attendantsView.addView(item);
+
+                }
+
+                @Override
+                public void onCancelled(FirebaseError firebaseError) {
+
+                }
+            });
+
         }
     }
 
