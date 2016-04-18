@@ -8,11 +8,12 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 
 import com.anchronize.sudomap.R;
 import com.anchronize.sudomap.SudoMapApplication;
-import com.anchronize.sudomap.navigationdrawer.youreventfragments.PastFragment;
-import com.anchronize.sudomap.navigationdrawer.youreventfragments.UpcomingFragment;
+import com.anchronize.sudomap.navigationdrawer.youreventfragments.BookmarkFragment;
+import com.anchronize.sudomap.navigationdrawer.youreventfragments.AttendingFragment;
 import com.anchronize.sudomap.objects.Event;
 import com.anchronize.sudomap.objects.User;
 import com.firebase.client.DataSnapshot;
@@ -53,6 +54,12 @@ public class YourEventActivity extends AppCompatActivity {
 
         toolBar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolBar);
+        toolBar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -63,7 +70,7 @@ public class YourEventActivity extends AppCompatActivity {
         populateEvents();
 
         viewPager = (CustomViewPager) findViewById(R.id.container);
-        viewPager.setPagingEnabled(false);
+        viewPager.setPagingEnabled(true);
         setupViewPager(viewPager);
 
         tabLayout = (TabLayout) findViewById(R.id.tabs);
@@ -74,8 +81,8 @@ public class YourEventActivity extends AppCompatActivity {
     private void setupViewPager(ViewPager viewPager){
         ViewPagerAdapter viewPageAdapter = new ViewPagerAdapter(getSupportFragmentManager());
 
-        UpcomingFragment upcomingFragment = new UpcomingFragment();
-        PastFragment pastFragment = new PastFragment();
+        AttendingFragment upcomingFragment = new AttendingFragment();
+        BookmarkFragment pastFragment = new BookmarkFragment();
         //setup Array passing
         Bundle upcomingBundle = new Bundle();
         upcomingBundle.putSerializable(UPCOMING_KEY, upcomingEvents);
@@ -84,8 +91,8 @@ public class YourEventActivity extends AppCompatActivity {
         pastBundle.putSerializable(PAST_KEY, pastEvents);
         pastFragment.setArguments(pastBundle);
 
-        viewPageAdapter.addFragment(upcomingFragment, getResources().getString(R.string.upcoming_fragment_title));
-        viewPageAdapter.addFragment(pastFragment, getResources().getString(R.string.past_fragment_title));
+        viewPageAdapter.addFragment(upcomingFragment, getResources().getString(R.string.attending_fragment_title));
+        viewPageAdapter.addFragment(pastFragment, getResources().getString(R.string.bookmark_fragment_title));
         viewPager.setAdapter(viewPageAdapter);
     }
 
@@ -155,5 +162,4 @@ public class YourEventActivity extends AppCompatActivity {
         }
 
     }
-
 }

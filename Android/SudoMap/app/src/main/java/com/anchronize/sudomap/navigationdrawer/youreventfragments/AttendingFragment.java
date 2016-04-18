@@ -20,7 +20,7 @@ import java.util.ArrayList;
 /**
  * Created by glarencezhao on 4/14/16.
  */
-public class UpcomingFragment extends Fragment {
+public class AttendingFragment extends Fragment {
 
     private ArrayList<Event> _upcomingEvents;
     public static final String UPCOMING_KEY = "UPCOMING EVENTS";
@@ -31,7 +31,7 @@ public class UpcomingFragment extends Fragment {
 
     public static final String EVENT_KEY = "com.anchronize.sudomap.EventDetailActivity.event";
 
-    public UpcomingFragment(){}
+    public AttendingFragment(){}
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -41,7 +41,7 @@ public class UpcomingFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_past, container, false);
+        View view = inflater.inflate(R.layout.fragment_bookmark, container, false);
 
         upcomingEventsLV = (ListView) view.findViewById(R.id.pastEventsListView);
 
@@ -64,7 +64,7 @@ public class UpcomingFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Event event = _upcomingEvents.get(position);
                 Intent i = new Intent(getActivity().getApplicationContext(), EventDetailActivity.class);
-                i.putExtra(EVENT_KEY, event);
+                i.putExtra(EventDetailActivity.EVENT_KEY, event);
                 startActivity(i);
             }
         });
