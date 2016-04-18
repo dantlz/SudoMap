@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.anchronize.sudomap.objects.User;
 import com.firebase.client.Firebase;
 import com.firebase.client.ValueEventListener;
 
@@ -46,7 +47,6 @@ public class ChatActivity extends ListActivity {
         String eventID =  i.getStringExtra(EVENTID_KEY);
         mDescription = i.getStringExtra(EVENTDESC_KEY);
         mUsername = i.getStringExtra(USERNAME_KEY);
-
 
 
         //Set up firebase reference
@@ -94,8 +94,6 @@ public class ChatActivity extends ListActivity {
 
     }
 
-
-
     private void sendMessage() {
         EditText inputText = (EditText) findViewById(R.id.messageInput);
         String input = inputText.getText().toString();
@@ -105,6 +103,8 @@ public class ChatActivity extends ListActivity {
             String hour = sdf.format(new Date());
             Log.d("timestamp",hour);
             Chat chat = new Chat(input, mUsername);
+            User user = ((SudoMapApplication)getApplication()).getCurrentUser();
+            chat.setProfilePicture(user.getProfileImgString());
             chat.setHour(hour);
             // Create a new, auto-generated child of that chat location, and save our chat data there
             Firebase mPostRef = mFirebaseRef.push();

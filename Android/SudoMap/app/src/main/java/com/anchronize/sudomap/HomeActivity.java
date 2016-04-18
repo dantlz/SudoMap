@@ -118,9 +118,7 @@ public class HomeActivity extends NavigationLiveo implements OnItemClickListener
     private FloatingSearchView mSearchView;
 
 
-
-    @Override
-    public void onInt(Bundle savedInstanceState) {
+    public void populateNavDrawerInfo(){
         // User Information
         User current = ((SudoMapApplication)getApplication()).getCurrentUser();
         if(current != null) {
@@ -135,6 +133,11 @@ public class HomeActivity extends NavigationLiveo implements OnItemClickListener
 //            this.userPhoto.setImageBitmap();
             this.userBackground.setImageResource(R.drawable.ic_user_background_first);
         }
+    }
+
+    @Override
+    public void onInt(Bundle savedInstanceState) {
+        populateNavDrawerInfo();
 
         // Creating items navigation
         mHelpLiveo = new HelpLiveo();
@@ -278,8 +281,7 @@ public class HomeActivity extends NavigationLiveo implements OnItemClickListener
                     Event event = postSnapshot.getValue(Event.class);
                     allEventsinFirebase.add(event);
                 }
-                if ( ((SudoMapApplication)getApplication()).getAuthenticateStatus() == true)
-                    addMapMarkers();
+                addMapMarkers();
             }
             @Override
             public void onCancelled(FirebaseError firebaseError) {
@@ -466,6 +468,11 @@ public class HomeActivity extends NavigationLiveo implements OnItemClickListener
 
     @Override
     public void onInfoWindowClick(Marker marker) {
+        if (!((SudoMapApplication)getApplication()).getAuthenticateStatus()) {
+            Toast.makeText(getApplicationContext(), "You are not logged in!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         Event e = markerEventHashMap.get(lastSelectedMarker);
         Intent i = new Intent(getApplicationContext(), EventDetailActivity.class);
         i.putExtra(EventDetailActivity.EVENT_KEY, e);
@@ -482,7 +489,15 @@ public class HomeActivity extends NavigationLiveo implements OnItemClickListener
         //Filter events
         for(Event e: allEventsinFirebase){
             if(selectedFilter.equals("ALL") || e.getCategory().equals(selectedFilter.toUpperCase())){
-                allEventsToDisplay.add(e);
+                //Registered vs Guest
+                if(e.getPrivacy()){
+                    if ( ((SudoMapApplication)getApplication()).getAuthenticateStatus() == true){
+                        allEventsToDisplay.add(e);
+                    }
+                }
+                else {
+                    allEventsToDisplay.add(e);
+                }
             }
         }
         //clean up all the marker

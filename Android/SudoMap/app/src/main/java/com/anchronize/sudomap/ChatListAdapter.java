@@ -5,9 +5,13 @@ package com.anchronize.sudomap;
  */
 
 import android.app.Activity;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.firebase.client.Firebase;
@@ -53,5 +57,9 @@ public class ChatListAdapter extends FirebaseListAdapter<Chat> {
         ((TextView) view.findViewById(R.id.list_item_text)).setText(chat.getMessage());
         //display votes
         ((TextView) view.findViewById(R.id.list_item_counter)).setText(Integer.toString(chat.getVotes()));
+
+        byte [] encodeByte = Base64.decode(chat.getProfilePicture(),Base64.DEFAULT);
+        Bitmap bitmap= BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
+        ((ImageView) view.findViewById(R.id.list_item_thumbnail)).setImageBitmap(bitmap);
     }
 }

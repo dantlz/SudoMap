@@ -13,7 +13,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.anchronize.sudomap.EventDetailActivity;
 import com.anchronize.sudomap.R;
@@ -71,14 +70,23 @@ public class TrendingActivity extends AppCompatActivity {
                 List<String> eventList = new ArrayList<String>();
                 List<String> eventIDList = new ArrayList<String>();
                 Log.d("EventsMap",map.toString());
+                int j = 0;
                 for (Map.Entry<String, Integer> entry : map.entrySet()) {
                     String id = entry.getKey();
+                    Log.d("EventID2", id);
                     String eventTitle = (String) eventSnapshot.child(id).child("title").getValue();
                     //have to concatenate two strings since adapter accepts only one
                     //list of strings
-                    String eventString = eventTitle.concat("*" + id); //event title first, then eventID
-                    Log.d("EventTitle",eventTitle);
+                    if(eventTitle == null){
+                        Log.d("NullPointerError", "Error");
+                    }
+                    //String eventString = eventTitle.concat("*" + id); //event title first, then eventID
+                    String eventString = eventTitle + "*" + id;
+                    //Log.d("EventTitle",eventTitle);
+                    Log.d("EventString", eventString);
                     eventList.add(eventString);
+                    j++;
+                    Log.d("EventCounter", Integer.toString(j));
                 }
 
                 //calculating category percentage
@@ -106,7 +114,7 @@ public class TrendingActivity extends AppCompatActivity {
                         String[] split = eventID.split("\\*");
                         eventID = split[1];
                         Log.d("eventID", eventID);
-                        Toast.makeText(TrendingActivity.this, "List item was clicked at " + eventID, Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(TrendingActivity.this, "List item was clicked at " + eventID, Toast.LENGTH_SHORT).show();
                         Intent i = new Intent(getApplicationContext(), EventDetailActivity.class);
                         i.putExtra(EventDetailActivity.EVENTID_KEY, eventID);
                         startActivity(i);
@@ -189,7 +197,7 @@ public class TrendingActivity extends AppCompatActivity {
             mainViewholder.button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(getContext(), "Button was clicked for list item " + position, Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getContext(), "Button was clicked for list item " + position, Toast.LENGTH_SHORT).show();
                 }
             });
             String str = getItem((position));
@@ -215,7 +223,7 @@ public class TrendingActivity extends AppCompatActivity {
                 new LinkedList<>(map.entrySet());
         Collections.sort(list, new Comparator<Map.Entry<K, V>>() {
             @Override
-            public int compare(Map.Entry<K, V> o1, Map.Entry<K, V> o2) {
+            public int compare(Map.Entry<K, V> o2, Map.Entry<K, V> o1) {
                 return (o1.getValue()).compareTo(o2.getValue());
             }
         });
