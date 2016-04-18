@@ -96,8 +96,10 @@ public class SettingActivity extends AppCompatActivity {
     }
 
     public void saveImageToFB(){
-        if(imgToSave.equals("EMPTY"))
-            finish();
+        if(imgToSave.equals("EMPTY")){
+            discard();
+            return;
+        }
 
 
         // Converting to string to push to firebase
@@ -111,6 +113,10 @@ public class SettingActivity extends AppCompatActivity {
         Map<String, Object> profileIMGStringMap = new HashMap<String, Object>();
         profileIMGStringMap.put("profileImgString", imgToSave);
         refUser.updateChildren(profileIMGStringMap);
+        finish();
+    }
+
+    public void discard(){
         finish();
     }
 
@@ -151,6 +157,9 @@ public class SettingActivity extends AppCompatActivity {
     public void onClickPic(View view) {
         if(selectedImage == null){
             return;
+        }
+        else if(imgToSave.equals("EMPTY")){
+            finish();
         }
 
         Matrix matrix = new Matrix();
