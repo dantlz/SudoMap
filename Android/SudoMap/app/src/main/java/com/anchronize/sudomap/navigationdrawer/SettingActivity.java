@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.anchronize.sudomap.R;
 import com.anchronize.sudomap.SudoMapApplication;
@@ -43,7 +44,6 @@ public class SettingActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-         ref = new Firebase("https://anchronize.firebaseio.com");
         setContentView(R.layout.activity_setting);
         initializeComponents();
         addListeners();
@@ -55,6 +55,8 @@ public class SettingActivity extends AppCompatActivity {
         myFab = (FloatingActionButton) findViewById(R.id.change_pic_button);
         myImageView = (ImageView) findViewById(R.id.profile_pic);
         saveButton = (Button) findViewById(R.id.saveButton);
+        ref = new Firebase("https://anchronize.firebaseio.com");
+        imgToSave = "EMPTY";
     }
 
     public void addListeners(){
@@ -94,6 +96,10 @@ public class SettingActivity extends AppCompatActivity {
     }
 
     public void saveImageToFB(){
+        if(imgToSave.equals("EMPTY"))
+            finish();
+
+
         // Converting to string to push to firebase
         Bitmap copySelectedImage = getResizedBitmap(selectedImage, 500);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -142,8 +148,11 @@ public class SettingActivity extends AppCompatActivity {
     }
 
 
-    public void onClickPic(View view)
-    {
+    public void onClickPic(View view) {
+        if(selectedImage == null){
+            return;
+        }
+
         Matrix matrix = new Matrix();
         matrix.postRotate(90);
         selectedImage = Bitmap.createBitmap(selectedImage, 0, 0, selectedImage.getWidth(),
