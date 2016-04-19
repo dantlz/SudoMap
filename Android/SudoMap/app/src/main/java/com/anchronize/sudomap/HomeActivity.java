@@ -198,6 +198,10 @@ public class HomeActivity extends NavigationLiveo implements OnItemClickListener
 
         mAddEventButton = (FloatingActionButton) findViewById(R.id.fab_add_event);
         mAddEventButton.setImageResource(R.drawable.add_note_white);
+        if ( !((SudoMapApplication) getApplication()).getAuthenticateStatus()) {
+            mAddEventButton.setVisibility(View.INVISIBLE);
+        }
+
         mAddEventButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
