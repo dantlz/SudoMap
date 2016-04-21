@@ -45,9 +45,10 @@
 
         <ImageView
             android:id="@+id/profile_pic"
-            android:layout_width="460dp"
+            android:layout_width="match_parent"
             android:layout_height="290dp"
             android:layout_marginLeft="-25dp"
+            android:layout_marginRight="-25dp"
             android:adjustViewBounds="true"
             android:scaleType="centerCrop"
             android:clickable="true"
@@ -57,7 +58,7 @@
         <ImageView
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_marginTop="305dp"
+            android:layout_marginTop="300dp"
             android:adjustViewBounds="true"
             android:scaleType="centerCrop"
             android:src="@mipmap/account"/>
@@ -66,14 +67,14 @@
             android:id="@+id/name_editText"
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:layout_marginTop="305dp"
+            android:layout_marginTop="300dp"
             android:layout_marginLeft="40dp"
             android:hint="Name"/>
 
         <ImageView
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_marginTop="395dp"
+            android:layout_marginTop="360dp"
             android:adjustViewBounds="true"
             android:scaleType="centerCrop"
             android:src="@mipmap/phone"/>
@@ -82,14 +83,14 @@
             android:id="@+id/phone_editText"
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:layout_marginTop="395dp"
+            android:layout_marginTop="360dp"
             android:layout_marginLeft="40dp"
             android:hint="Phone"/>
 
         <ImageView
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_marginTop="485dp"
+            android:layout_marginTop="420dp"
             android:adjustViewBounds="true"
             android:scaleType="centerCrop"
             android:src="@mipmap/email"/>
@@ -98,14 +99,14 @@
             android:id="@+id/email_editText"
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:layout_marginTop="485dp"
+            android:layout_marginTop="420dp"
             android:layout_marginLeft="40dp"
             android:hint="Email"/>
 
         <ImageView
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_marginTop="575dp"
+            android:layout_marginTop="480dp"
             android:adjustViewBounds="true"
             android:scaleType="centerCrop"
             android:src="@mipmap/address"/>
@@ -114,14 +115,14 @@
             android:id="@+id/address_editText"
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:layout_marginTop="575dp"
+            android:layout_marginTop="480dp"
             android:layout_marginLeft="40dp"
             android:hint="Address"/>
 
         <ImageView
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_marginTop="665dp"
+            android:layout_marginTop="540dp"
             android:adjustViewBounds="true"
             android:scaleType="centerCrop"
             android:src="@mipmap/add_note"/>
@@ -130,7 +131,7 @@
             android:id="@+id/note_editText"
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:layout_marginTop="665dp"
+            android:layout_marginTop="540dp"
             android:layout_marginLeft="40dp"
             android:hint="Add Note"/>
 

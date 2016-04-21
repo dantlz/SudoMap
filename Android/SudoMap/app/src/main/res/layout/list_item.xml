@@ -9,6 +9,8 @@
         android:id="@+id/list_item_thumbnail"
         android:layout_width="80dp"
         android:layout_height="80dp"
+        android:layout_marginTop="10dp"
+        android:paddingRight="@dimen/activity_horizontal_margin"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true"
         android:src="@mipmap/ic_launcher"
@@ -19,6 +21,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="AUTHOR"
+        android:layout_marginTop="15dp"
         android:id="@+id/list_item_author"
         android:layout_toEndOf="@+id/list_item_thumbnail" />
 
@@ -27,7 +30,7 @@
         android:layout_height="wrap_content"
         android:text="This is row number 15"
         android:id="@+id/list_item_text"
-        android:layout_marginTop="55dp"
+        android:layout_marginTop="45dp"
         android:layout_toRightOf="@+id/list_item_thumbnail"
         android:layout_toEndOf="@+id/list_item_thumbnail" />
 
@@ -39,9 +42,9 @@
         android:textColor="@color/colorPrimary"
         android:textAlignment="center"
         android:textSize="14dp"
-        android:layout_marginTop="52dp"
+        android:layout_marginTop="38dp"
         android:id="@+id/list_item_counter"
-        android:layout_marginLeft="329dp" />
+        android:layout_marginLeft="275dp" />
 
     <Button
         android:layout_width="60dp"
@@ -56,7 +59,7 @@
         android:layout_width="60dp"
         android:layout_height="40dp"
         android:layout_alignParentRight="true"
-        android:layout_marginTop="90dp"
+        android:layout_marginTop="60dp"
         android:rotation="180"
         android:background="@drawable/swipe_up"
         android:backgroundTint="@color/colorPrimaryDark"
