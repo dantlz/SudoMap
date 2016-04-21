@@ -11,12 +11,11 @@ import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.anchronize.sudomap.R;
 import com.anchronize.sudomap.SudoMapApplication;
@@ -36,7 +35,7 @@ public class SettingActivity extends AppCompatActivity {
     private ImageView myImageView;
     private final int SELECT_PHOTO = 1;
     private FloatingActionButton myFab;
-    private Bitmap selectedImage;
+    private Bitmap selectedImage = null;
     private String imgToSave;
 
     private Firebase ref, refUser;
@@ -97,22 +96,24 @@ public class SettingActivity extends AppCompatActivity {
 
     public void saveImageToFB(){
         if(selectedImage == null){
+            Log.d("save", "trying to say hi");
+            finish();
+            return;
+        }
+        else {
+            // Converting to string to push to firebase
+            Bitmap copySelectedImage = getResizedBitmap(selectedImage, 500);
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            copySelectedImage.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+            byte[] b = baos.toByteArray();
+            imgToSave = Base64.encodeToString(b, Base64.DEFAULT);
+            String currentUserID = ((SudoMapApplication) getApplication()).getCurrentUserID();
+            refUser = ref.child("users").child(currentUserID);
+            Map<String, Object> profileIMGStringMap = new HashMap<String, Object>();
+            profileIMGStringMap.put("profileImgString", imgToSave);
+            refUser.updateChildren(profileIMGStringMap);
             finish();
         }
-
-
-        // Converting to string to push to firebase
-        Bitmap copySelectedImage = getResizedBitmap(selectedImage, 500);
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        copySelectedImage.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-        byte[] b = baos.toByteArray();
-        imgToSave = Base64.encodeToString(b, Base64.DEFAULT);
-        String currentUserID = ((SudoMapApplication)getApplication()).getCurrentUserID();
-        refUser = ref.child("users").child(currentUserID);
-        Map<String, Object> profileIMGStringMap = new HashMap<String, Object>();
-        profileIMGStringMap.put("profileImgString", imgToSave);
-        refUser.updateChildren(profileIMGStringMap);
-        finish();
     }
 
     public void discard(){
@@ -166,6 +167,7 @@ public class SettingActivity extends AppCompatActivity {
         selectedImage = Bitmap.createBitmap(selectedImage, 0, 0, selectedImage.getWidth(),
                 selectedImage.getHeight(), matrix, true);
         myImageView.setImageBitmap(selectedImage);
+        myImageView.setTag(selectedImage);
 
     }
 }
