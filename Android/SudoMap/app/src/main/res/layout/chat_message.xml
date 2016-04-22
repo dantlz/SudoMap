@@ -38,11 +38,11 @@
     <View
         android:id="@+id/main_post_separtor"
         android:layout_width="match_parent"
-        android:layout_height="2dp"
+        android:layout_height="3dp"
         android:layout_below="@+id/main_post"
         android:layout_marginLeft="-30dp"
         android:layout_marginRight="-30dp"
-        android:background="@color/dark_gray" />
+        android:background="@color/light_gray" />
 
     <ListView
         android:id="@android:id/list"
@@ -50,7 +50,7 @@
         android:layout_height="370dp"
         android:layout_above="@+id/messageInput"
         android:background="@color/white"
-        android:divider="@color/dark_gray"
+        android:divider="@color/light_gray"
         android:dividerHeight="1dp"
         android:layout_below="@+id/main_post_separtor"/>
 
@@ -60,7 +60,7 @@
         android:layout_above="@+id/messageInput"
         android:layout_marginLeft="-30dp"
         android:layout_marginRight="-30dp"
-        android:background="@color/dark_gray" />
+        android:background="@color/light_gray" />
 
     <EditText
         android:id="@+id/messageInput"
