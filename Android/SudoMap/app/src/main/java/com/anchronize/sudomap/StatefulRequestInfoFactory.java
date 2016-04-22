@@ -109,8 +109,12 @@ public class StatefulRequestInfoFactory extends DefaultRequestInfoFactory {
         ClientMatch clientMatch3 = new ClientMatch();
 
         clientMatch3.setExpression("([1/100 (\"can\"|\"could\"|\"will\"|\"would\").\"you\"].[1/10 \"please\"].(\"add\"|\"create\"|\"submit\").[\"a\"|\"an\"].\"new\".(\"event\").[1/20 \"for\".\"me\"].[1/20 \"please\"]) \n" +
-                "| \n" +
-                "(((\"i\".(\"want\"|\"like\"))|(((\"i\".[\"would\"])|(\"i'd\")).(\"like\"|\"want\"))).[\"a\"].\"new\".(\"event\").[\"created\"|\"generated\"].[1/20\"please\"]) ");
+                "| \n" + // can you please create a new event
+                "(((\"i\".(\"want\"|\"like\"))|(((\"i\".[\"would\"])|(\"i'd\")).(\"like\"|\"want\"))).[\"a\"].\"new\".(\"event\").[\"created\"|\"generated\"].[1/20\"please\"]) \n" +
+                "| \n" + // I would like a new event created.
+                "([1/100 (\"I'd\"|(\"i\".\"would\")|\"would\")].[1/10 (\"like\".\"to\")].(\"add\"|\"create\"|\"submit\").[\"a\"|\"an\"].\"new\".(\"event\").[1/20 \"for\".\"me\"].[1/20 \"please\"]) \n" +
+                "| \n" + // I want to add a new event.
+                "([1/100 ((\"i\".\"want\")|\"want\")].[1/10 \"to\"].(\"add\"|\"create\"|\"submit\").[\"a\"|\"an\"].\"new\".(\"event\").[1/20 \"please\"]) ");
 
         clientMatch3.setSpokenResponse("Ok, I'm adding a new event.");
         clientMatch3.setSpokenResponseLong("Ok, I am adding a new event for you.");
