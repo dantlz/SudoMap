@@ -54,7 +54,7 @@
         android:layout_alignParentRight="true"
         android:layout_marginTop="-5dp"
         android:background="@drawable/swipe_up"
-        android:backgroundTint="@color/colorPrimaryDark"
+        android:backgroundTint="@color/dark_gray"
         android:id="@+id/list_item_btn_up"/>
 
     <Button
@@ -64,6 +64,6 @@
         android:layout_marginTop="90dp"
         android:rotation="180"
         android:background="@drawable/swipe_up"
-        android:backgroundTint="@color/colorPrimaryDark"
+        android:backgroundTint="@color/dark_gray"
         android:id="@+id/list_item_btn_down"/>
 </RelativeLayout>
