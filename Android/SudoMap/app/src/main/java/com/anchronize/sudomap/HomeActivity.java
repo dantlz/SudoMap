@@ -2263,14 +2263,14 @@ public class HomeActivity extends NavigationLiveo implements OnItemClickListener
 
     public void handleShakeEvent(int count) {
         Log.d("SHAKE", "Shaked device: " + count + " times.");
-        if (count <= 2) {
+//        if (count <= 2) {
 //            textToSpeechMgr.speak("Stop shaking me dude!");
             // TODO: modify speech to reflect randomly selected "popular" event
             textToSpeechMgr.speak("It looks like a lot of fun is going around.");
-        }
-        else {
-            textToSpeechMgr.speak("Jeff, you are a very good looking man.");
-        }
+//        }
+//        else {
+//            textToSpeechMgr.speak("Jeff, you are a very good looking man.");
+//        }
         ft = getFragmentManager().beginTransaction();
         testFragment newFragment = new testFragment();
         ft.add(R.id.embedded, newFragment);

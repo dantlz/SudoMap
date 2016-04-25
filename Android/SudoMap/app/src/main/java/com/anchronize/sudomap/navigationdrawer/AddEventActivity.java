@@ -71,7 +71,7 @@ public class AddEventActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_event);
         titleEditText = (EditText)findViewById(R.id.titleEditText);
-        if(getIntent().getExtras().getString("eventName") != null) {
+        if(getIntent().getExtras() != null) {
             titleEditText.setText(getIntent().getExtras().getString("eventName"));
         }
         descriptionEditText = (EditText)findViewById(R.id.descriptionEditText);

@@ -16,7 +16,7 @@
         android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Lorem ipsum dolor sit amet..."
+        android:text="NEW! Welcome to CSCI201."
         android:textSize="20dp" />
 
     <Button
