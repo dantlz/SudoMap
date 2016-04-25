@@ -1,86 +1,90 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_layout_chat_message"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.anchronize.sudomap.ChatActivity"
     android:clipToPadding="false"
-    android:id="@+id/main_layout_chat_message">
+    tools:context="com.anchronize.sudomap.ChatActivity">
 
     <TextView
         android:id="@+id/chat_title"
         android:layout_width="match_parent"
-        android:layout_height="35dp"
-        android:fontFamily="Myriad Pro"
+        android:layout_height="45dp"
         android:layout_centerHorizontal="true"
-        android:shadowColor="@android:color/darker_gray"
-        android:text="       Chat"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textSize="25dp"
-        android:textStyle="bold"
-        android:textColor="@color/white"
         android:layout_marginLeft="-30dp"
         android:layout_marginRight="-30dp"
         android:layout_marginTop="-17dp"
-        android:background="@color/colorPrimary"/>
+        android:background="@color/colorPrimary"
+        android:fontFamily="Myriad Pro"
+        android:shadowColor="@android:color/darker_gray"
+        android:text="              Chat"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="@color/white"
+        android:textSize="25dp"
+        android:textStyle="bold"
+        android:paddingTop="12dp"/>
 
     <TextView
         android:id="@+id/main_post"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="70dp"
         android:layout_marginTop="40dp"
-        android:text="MAIN_POST" />
+        android:layout_marginLeft="22dp"
+        android:textSize="13dp"
+        android:text="MAIN_POST"
+        />
 
 
     <View
+        android:id="@+id/main_post_separtor"
         android:layout_width="match_parent"
-        android:layout_height="2dp"
+        android:layout_height="3dp"
+        android:layout_below="@+id/main_post"
         android:layout_marginLeft="-30dp"
         android:layout_marginRight="-30dp"
-        android:layout_below="@+id/main_post"
-        android:background="@color/colorPrimary" />
+        android:background="@color/light_gray" />
 
-
-    <RelativeLayout
+    <ListView
+        android:id="@android:id/list"
         android:layout_width="match_parent"
-        android:layout_height="470dp"
-        android:layout_marginTop="145dp">
+        android:layout_height="370dp"
+        android:layout_above="@+id/messageInput"
+        android:background="@color/white"
+        android:divider="@color/light_gray"
+        android:dividerHeight="1dp"
+        android:layout_below="@+id/main_post_separtor"/>
 
-        <ListView
-            android:id="@android:id/list"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/white"
-            android:divider="@color/colorPrimary"
-            android:dividerHeight="1dp"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_above="@+id/messageInput"
+        android:layout_marginLeft="-30dp"
+        android:layout_marginRight="-30dp"
+        android:background="@color/light_gray" />
 
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/listFooter"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+    <EditText
+        android:id="@+id/messageInput"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_alignLeft="@+id/sendButton"
         android:layout_alignParentBottom="true"
-        android:orientation="horizontal">
+        android:layout_alignParentLeft="true"
+        android:inputType="textShortMessage"
+        android:lines="1"
+        android:singleLine="true"
+        android:hint="Chat"
+        android:background="@android:color/transparent"
+        android:layout_marginLeft="15dp"/>
 
-        <EditText
-            android:id="@+id/messageInput"
-            android:layout_width="290dp"
-            android:layout_height="wrap_content"
-            android:inputType="textShortMessage"
-            android:lines="1"
-            android:singleLine="true" />
+    <ImageButton
+        android:id="@+id/sendButton"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:background="@drawable/round_button"
+        android:backgroundTint="@color/colorPrimaryDark"
+        android:src="@drawable/send" />
 
-        <ImageButton
-            android:id="@+id/sendButton"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_toRightOf="@+id/messageInput"
-            android:background="@drawable/round_button"
-            android:backgroundTint="@color/colorPrimaryDark"
-            android:src="@drawable/send" />
-    </RelativeLayout>
+
 </RelativeLayout>
