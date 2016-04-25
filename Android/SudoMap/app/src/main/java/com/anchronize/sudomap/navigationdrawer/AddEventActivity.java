@@ -71,6 +71,9 @@ public class AddEventActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_event);
         titleEditText = (EditText)findViewById(R.id.titleEditText);
+        if(getIntent().getExtras().getString("eventName") != null) {
+            titleEditText.setText(getIntent().getExtras().getString("eventName"));
+        }
         descriptionEditText = (EditText)findViewById(R.id.descriptionEditText);
         createEventButton = (Button)findViewById(R.id.createButton);
         categorySpinner = (Spinner)findViewById(R.id.categorySpinner);

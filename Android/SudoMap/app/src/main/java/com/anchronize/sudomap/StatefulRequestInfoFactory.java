@@ -114,7 +114,9 @@ public class StatefulRequestInfoFactory extends DefaultRequestInfoFactory {
                 "| \n" + // I would like a new event created.
                 "([1/100 (\"I'd\"|(\"i\".\"would\")|\"would\")].[1/10 (\"like\".\"to\")].(\"add\"|\"create\"|\"submit\").[\"a\"|\"an\"].\"new\".(\"event\").[1/20 \"for\".\"me\"].[1/20 \"please\"]) \n" +
                 "| \n" + // I want to add a new event.
-                "([1/100 ((\"i\".\"want\")|\"want\")].[1/10 \"to\"].(\"add\"|\"create\"|\"submit\").[\"a\"|\"an\"].\"new\".(\"event\").[1/20 \"please\"]) ");
+                "([1/100 ((\"i\".\"want\")|\"want\")].[1/10 \"to\"].(\"add\"|\"create\"|\"submit\").[\"a\"|\"an\"].\"new\".(\"event\").[1/20 \"please\"]) \n" +
+                "| \n" +
+                "(\"add\".\"event\")");
 
         clientMatch3.setSpokenResponse("Ok, I'm adding a new event.");
         clientMatch3.setSpokenResponseLong("Ok, I am adding a new event for you.");
@@ -125,6 +127,23 @@ public class StatefulRequestInfoFactory extends DefaultRequestInfoFactory {
         result3Node.put("Intent", "ADD_EVENT");
         clientMatch3.setResult(result3Node);
         clientMatchList.add(clientMatch3);
+
+        // Client match for event name ("Call it ...");
+        ClientMatch clientMatch4 = new ClientMatch();
+//        Log.d("EVENT", clientMatch4.getExpression());
+//        clientMatch4.toString();
+        clientMatch4.setExpression("springfest");
+
+        clientMatch4.setSpokenResponse("Ok, I'm adding the event Springfest.");
+        clientMatch4.setSpokenResponseLong("Ok, I'm adding the event Springfest.");
+        clientMatch4.setWrittenResponse("Ok, I'm adding the event Springfest.");
+        clientMatch4.setWrittenResponseLong("Ok, I'm adding the event Springfest.");
+
+        ObjectNode result4Node = nodeFactory.objectNode();
+        result4Node.put("Intent", "EVENT_NAME");
+        clientMatch4.setResult(result4Node);
+        clientMatchList.add(clientMatch4);
+
 
         // add the list of matches to the request info object
         requestInfo.setClientMatches(clientMatchList);

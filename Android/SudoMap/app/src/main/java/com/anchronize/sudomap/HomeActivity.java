@@ -2124,15 +2124,75 @@ public class HomeActivity extends NavigationLiveo implements OnItemClickListener
 //                        textToSpeechMgr.speak("Client match ADD NEW EVENT successful");
                         if ( ((SudoMapApplication) getApplication()).getAuthenticateStatus()) {
                             textToSpeechMgr.speak(response.getResults().get(0).getSpokenResponse());
-                            textToSpeechMgr.speak("Client match ADD NEW EVENT successful");
-                            Intent i = new Intent(HomeActivity.this, AddEventActivity.class);
-                            int requestCode = 1;
-                            startActivityForResult(i, requestCode);
+//                            textToSpeechMgr.speak("Client match ADD NEW EVENT successful");
+                            textToSpeechMgr.speak("What do you want to call it?");
+//                            Handler handler = new Handler();
+//                            handler.postDelayed(new Runnable() {
+//                                public void run() {
+//                                    // Actions to do after 10 seconds
+//                                }
+//                            }, 10000);
+                            new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    // TODO Auto-generated method stub
+                                    try {
+                                        Thread.sleep(3500);
+                                        Houndify.get( HomeActivity.this ).voiceSearch( HomeActivity.this );
+                                    } catch (InterruptedException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            }).run();
+
+//                            Houndify.get( HomeActivity.this ).voiceSearch( HomeActivity.this );
+//                            Intent i = new Intent(HomeActivity.this, AddEventActivity.class);
+//                            int requestCode = 1;
+//                            startActivityForResult(i, requestCode);
                         }
                         else {
                             textToSpeechMgr.speak("Sorry, but you are not logged in.");
                         }
                     }
+                    else if ( intentValue.equals("EVENT_NAME") ) {
+//                        textToSpeechMgr.speak("Client match ADD NEW EVENT successful");
+                        if ( ((SudoMapApplication) getApplication()).getAuthenticateStatus()) {
+                            textToSpeechMgr.speak(response.getResults().get(0).getSpokenResponse());
+//                            textToSpeechMgr.speak("Client match ADD NEW EVENT successful");
+                            textToSpeechMgr.speak("Please select a time and location.");
+
+                            Intent i = new Intent(HomeActivity.this, AddEventActivity.class);
+                            i.putExtra("eventName", "Springfest");
+                            int requestCode = 1;
+                            startActivityForResult(i, requestCode);
+//                            Handler handler = new Handler();
+//                            handler.postDelayed(new Runnable() {
+//                                public void run() {
+//                                    // Actions to do after 10 seconds
+//                                }
+//                            }, 10000);
+//                            new Thread(new Runnable() {
+//                                @Override
+//                                public void run() {
+//                                    // TODO Auto-generated method stub
+//                                    try {
+//                                        Thread.sleep(2500);
+//                                        Houndify.get( HomeActivity.this ).voiceSearch( HomeActivity.this );
+//                                    } catch (InterruptedException e) {
+//                                        e.printStackTrace();
+//                                    }
+//                                }
+//                            }).run();
+//                            Houndify.get( HomeActivity.this ).voiceSearch( HomeActivity.this );
+//                            Intent i = new Intent(HomeActivity.this, AddEventActivity.class);
+//                            int requestCode = 1;
+//                            startActivityForResult(i, requestCode);
+                        }
+                        else {
+                            textToSpeechMgr.speak("Sorry, but you are not logged in.");
+                        }
+                    }
+
                 }
                 else {
                     // Actual error message
