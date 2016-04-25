@@ -1,24 +1,31 @@
 package com.anchronize.sudomap;
 
 import android.app.ListActivity;
+import android.content.Context;
 import android.content.Intent;
 import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.anchronize.sudomap.objects.User;
 import com.firebase.client.Firebase;
 import com.firebase.client.ValueEventListener;
 
+import org.w3c.dom.Text;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by Rohan on 4/13/16.
@@ -47,7 +54,6 @@ public class ChatActivity extends ListActivity {
         String eventID =  i.getStringExtra(EVENTID_KEY);
         mDescription = i.getStringExtra(EVENTDESC_KEY);
         mUsername = i.getStringExtra(USERNAME_KEY);
-
 
         //Set up firebase reference
         //this should be changed to be under each event
