@@ -26,7 +26,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="240dp"
                 android:scaleType="centerCrop"
-                android:src="@mipmap/test_theme"/>
+                android:src="@drawable/event_top"/>
 
             <LinearLayout
                 android:padding="16dp"
@@ -81,7 +81,7 @@
                         android:layout_weight="1"/>
 
                     <Button
-                        android:background="#FDC313"
+                        android:background="@color/colorPrimary"
                         android:id="@+id/attendingButton"
 
                         android:text="Attend"
@@ -132,6 +132,7 @@
                     android:text="Details"/>
 
                 <TextView
+                    android:id="@+id/attendants_textView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
@@ -159,13 +160,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Chat"
-                    android:background="#FDC313"
+                    android:background="@color/colorPrimary"
                     android:id="@+id/chat_button" />
 
             </LinearLayout>
-
         </RelativeLayout>
-
     </ScrollView>
-
 </RelativeLayout>

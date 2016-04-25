@@ -6,11 +6,17 @@
     android:padding="2dp"
     android:layout_margin="2dp">
 
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/picView"
-        android:layout_width="fill_parent"
-        android:layout_height="150dp"
-        android:padding="2dp"/>
+        android:layout_width="100dp"
+        android:layout_height="160dp"
+        android:src="@mipmap/ic_launcher"
+        app:border_color="@color/white"
+        app:border_width="3dp"
+        />
+
+
     <TextView
         android:id="@+id/nameView"
         android:text="PlaceHolder"
